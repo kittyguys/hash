@@ -1,13 +1,19 @@
 import * as React from "react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { render } from "react-dom";
 import Input from "./components/common/Form/Input";
+import Logo from "./components/common/Logo";
+import Tag from "./components/common/Tag";
 import { createGlobalStyle } from "styled-components";
 
 const App = () => {
+  const [tags, setTags] = useState(["string", "Harry"]);
+
   return (
     <Fragment>
-      <Input width="200px" height="40px" />
+      <Logo />
+      <Input width="640px" height="42px" />
+      <Tag tags={tags} />
       <GlobalStyle />
     </Fragment>
   );
