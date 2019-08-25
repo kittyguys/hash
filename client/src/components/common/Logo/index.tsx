@@ -1,6 +1,5 @@
 import * as React from "react";
 import styled from "styled-components";
-import console = require("console");
 
 const Logo = () => {
   return (

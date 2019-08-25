@@ -1,11 +1,32 @@
 import * as React from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import console = require("console");
 
-const Input = ({ width, height }: { width?: string; height?: string }) => {
+const Input = ({
+  width,
+  height,
+  handleSetTags,
+  handleSetBox,
+  tags,
+  box
+}: {
+  width?: string;
+  height?: string;
+  handleSetTags: any;
+  handleSetBox: any;
+  tags: any;
+  box: any;
+}) => {
+  const [name, setName] = useState("");
   return (
     <InputWrapper>
-      <InputText width={width} height={height} />
+      <InputText
+        value={name}
+        width={width}
+        height={height}
+        onChange={e => handleOnChange(e, handleSetTags, setName)}
+        onKeyDown={e => handleOnKeyDown(e, handleSetBox, tags, box, setName)}
+      />
     </InputWrapper>
   );
 };
@@ -28,5 +49,30 @@ const InputText = styled.input`
     border: 1px solid #38a1f3;
   }
 `;
+
+const handleOnChange = (e: any, setTags: any, setName: any) => {
+  const value = e.target.value;
+  let tags = value.split(" ");
+  if (tags[0].length === 0) {
+    tags = [];
+  }
+  setName(value);
+  setTags(tags);
+  return;
+};
+
+const handleOnKeyDown = (
+  e: any,
+  handleSetBox: any,
+  tags: any,
+  box: any,
+  setName: any
+) => {
+  if (e.key === "Enter") {
+    handleSetBox([...box, tags]);
+    setName("");
+  }
+  return;
+};
 
 export default Input;
