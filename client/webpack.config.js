@@ -1,9 +1,9 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   mode: "development",
-  entry: './src/main.tsx',
+  entry: "./src/main.tsx",
   output: {
     filename: "bundle.js",
     path: __dirname + "/dist"
@@ -20,24 +20,24 @@ module.exports = {
       {
         test: /\.tsx$/,
         exclude: /node_modules/,
-        use: 
-          {
-            loader: "ts-loader",
-          }
+        use: {
+          loader: "ts-loader"
+        }
       }
     ]
   },
   devServer: {
-    openPage: "./dist/index.html",//自動で指定したページを開く
-    contentBase: path.join(__dirname, 'public'),// HTML等コンテンツのルートディレクトリ
-    watchContentBase: true,//コンテンツの変更監視をする
+    openPage: "./dist/index.html", //自動で指定したページを開く
+    contentBase: path.join(__dirname, "public"), // HTML等コンテンツのルートディレクトリ
+    watchContentBase: true, //コンテンツの変更監視をする
     historyApiFallback: true,
+    port: 3000
   },
   plugins: [
     //以下追記
     new HtmlWebpackPlugin({
       template: __dirname + "/dist/index.html",
-      filename: 'index.html'
+      filename: "index.html"
     })
   ]
-}
+};
