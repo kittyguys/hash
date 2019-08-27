@@ -1,16 +1,41 @@
 package auth
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 	"time"
 
 	jwtmiddleware "github.com/auth0/go-jwt-middleware"
 	jwt "github.com/dgrijalva/jwt-go"
+	utils "github.com/kittyguys/hash/api/utils/crypto"
 )
 
+type User struct {
+	Uid      string `json:"uid"`
+	Password string `json:"password"`
+}
+
 // GetTokenHandler get token
-var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+var Login = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+	var u User
+	if r.Body == nil {
+		http.Error(w, "Please send a request body", 400)
+		return
+	}
+	err := json.NewDecoder(r.Body).Decode(&u)
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		return
+	}
+
+	pws := []byte(u.Password)
+	hash := utils.HashAndSalt(pws)
+	fmt.Println(hash)
+
+	fmt.Println(utils.ComparePasswords(hash, []byte("a")))
 
 	// headerのセット
 	token := jwt.New(jwt.SigningMethodHS256)

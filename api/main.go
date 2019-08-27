@@ -41,7 +41,7 @@ func main() {
 	// localhost:8080/publicでpublicハンドラーを実行
 	r.Handle("/public", public).Methods("GET", "POST")
 	r.Handle("/private", auth.JwtMiddleware.Handler(private))
-	r.Handle("/auth", auth.GetTokenHandler)
+	r.Handle("/login", auth.Login).Methods("POST")
 	fmt.Println("Server starts on 8080")
 
 	//サーバー起動
@@ -53,17 +53,6 @@ func main() {
 type User interface{}
 
 var public = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	var u User
-	if r.Body == nil {
-		http.Error(w, "Please send a request body", 400)
-		return
-	}
-	err := json.NewDecoder(r.Body).Decode(&u)
-	if err != nil {
-		http.Error(w, err.Error(), 400)
-		return
-	}
-	fmt.Println(u)
 	post := &post{
 		Title: "VueCLIからVue.js入門①【VueCLIで出てくるファイルを概要図で理解】",
 		Tag:   "Vue.js",
