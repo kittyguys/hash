@@ -1,13 +1,10 @@
 import * as React from "react";
 import { Fragment, useState, useEffect } from "react";
-import { render } from "react-dom";
-import Input from "./components/common/Form/Input";
-import Logo from "./components/common/Logo";
-import Box from "./components/common/Tag/box";
-import Display from "./components/common/Tag/display";
-import { createGlobalStyle } from "styled-components";
+import Input from "../components/common/Form/Input";
+import Logo from "../components/common/Logo";
+import Box from "../components/common/Tag/box";
 
-const App = () => {
+const Home = () => {
   const [tags, setTags] = useState([]);
   const [box, setBox] = useState([]);
   const displayBox = box.map((box, i) => {
@@ -28,17 +25,9 @@ const App = () => {
       {box.map((box, i) => {
         return <Box tags={box} key={i} />;
       })}
-      <GlobalStyle />
     </Fragment>
   );
 };
 
-const GlobalStyle = createGlobalStyle`
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-`;
+export default Home;
 
-render(<App />, document.getElementById("app"));
