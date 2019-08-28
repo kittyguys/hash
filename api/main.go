@@ -10,11 +10,9 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/kittyguys/hash/api/auth"
-	"github.com/kittyguys/hash/api/db"
 )
 
 var private = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r)
 	post := &post{
 		Title: "VGolangとGoogle Cloud Vision APIで画像から文字認識するCLIを速攻でつくる",
 		Tag:   "Go",
@@ -30,18 +28,12 @@ type post struct {
 }
 
 func main() {
-	mysql := db.Conn()
-	db.Insert(mysql)
-	defer func() {
-		fmt.Println("Disconnected from db")
-		mysql.Close()
-	}()
 
 	r := mux.NewRouter()
 	// localhost:8080/publicでpublicハンドラーを実行
 	r.Handle("/public", public).Methods("GET", "POST")
 	r.Handle("/private", auth.JwtMiddleware.Handler(private))
-	r.Handle("/login", auth.Login).Methods("POST")
+	r.Handle("/signup", auth.SignUp).Methods("POST")
 	fmt.Println("Server starts on 8080")
 
 	//サーバー起動
@@ -49,8 +41,6 @@ func main() {
 		log.Fatal("ListenAndServe:", nil)
 	}
 }
-
-type User interface{}
 
 var public = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	post := &post{
