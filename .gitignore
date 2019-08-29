@@ -104,3 +104,6 @@ typings/
 .dynamodb/
 client/dist/bundle.js
 client/dist/bundle.js.map
+
+# macOS
+.DS_Store
