@@ -4,11 +4,7 @@ import styled from "styled-components";
 
 import SignupForm from "../components/Signup/SignupForm";
 
-type Props = {
-  msg: string;
-};
-
-const Signup: React.FC<Props> = () => {
+const Signup: React.FC = () => {
   return (
     <Layout>
       <SignupForm />
