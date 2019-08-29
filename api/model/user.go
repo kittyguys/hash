@@ -1,5 +1,6 @@
-package schema
+package model
 
+// User UserSchema
 type User struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
