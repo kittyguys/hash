@@ -22,8 +22,8 @@ const Home: React.FC = () => {
         centering
       />
       <Input
-        width="640px"
-        height="42px"
+        inputWidth={640}
+        inputHeight={42}
         handleSetTags={setTags}
         handleSetBox={setBox}
         tags={tags}

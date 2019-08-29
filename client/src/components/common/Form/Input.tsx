@@ -2,28 +2,31 @@ import * as React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 
-const Input = ({
-  width,
-  height,
-  handleSetTags,
-  handleSetBox,
-  tags,
-  box
-}: {
-  width?: string;
-  height?: string;
+type Props = {
+  inputWidth: number;
+  inputHeight: number;
   handleSetTags: any;
   handleSetBox: any;
-  tags: any;
+  tags: string[];
   box: any;
-}) => {
+};
+
+const Input: React.FC<Props> = props => {
+  const {
+    inputWidth,
+    inputHeight,
+    handleSetTags,
+    handleSetBox,
+    tags,
+    box
+  } = props;
   const [name, setName] = useState("");
   return (
     <InputWrapper>
       <InputText
         value={name}
-        width={width}
-        height={height}
+        inputWidth={inputWidth}
+        inputHeight={inputHeight}
         onChange={e => handleOnChange(e, handleSetTags, setName)}
         onKeyDown={e => handleOnKeyDown(e, handleSetBox, tags, box, setName)}
       />
@@ -36,9 +39,14 @@ const InputWrapper = styled.div`
   margin: 0 auto;
 `;
 
-const InputText = styled.input`
-  width: ${({ width }) => width};
-  height: ${({ height }) => height};
+type InputTextType = {
+  inputWidth: number;
+  inputHeight: number;
+};
+
+const InputText = styled.input<InputTextType>`
+  width: ${props => props.inputWidth}px;
+  height: ${props => props.inputHeight}px;
   color: #555;
   font-size: 16px;
   padding: 16px;
