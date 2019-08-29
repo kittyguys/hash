@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/gorilla/mux"
-	"github.com/kittyguys/hash/api/auth"
 	"github.com/kittyguys/hash/api/model"
+	"github.com/kittyguys/hash/api/route"
 )
 
 func init() {
@@ -19,12 +19,15 @@ func init() {
 func main() {
 	defer model.DB.Close()
 
-	r := mux.NewRouter()
-	r.Handle("/signup", auth.Login).Methods("POST")
-
 	// サーバー起動
-	if err := http.ListenAndServe(":8080", r); err != nil {
-		log.Fatal("ListenAndServe:", nil)
+	l, err := net.Listen("tcp", ":8080")
+	if err != nil {
+		log.Fatal(err)
 	}
-	fmt.Println("Server starts on 8080")
+	fmt.Println("Server is running")
+	if err := http.Serve(l, route.HandleRoutes()); err != nil {
+		log.Fatal("ListenAndServe:", nil)
+	} else {
+		fmt.Println("Server starts on 8080")
+	}
 }
