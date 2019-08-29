@@ -46,10 +46,8 @@ var SignUp = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		panic(err.Error())
 	}
 
-	// headerのセット
 	token := jwt.New(jwt.SigningMethodHS256)
 
-	// claimsのセット
 	claims := token.Claims.(jwt.MapClaims)
 	claims["admin"] = true
 	claims["sub"] = "54546557354"
@@ -57,10 +55,8 @@ var SignUp = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	claims["iat"] = time.Now()
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 
-	// 電子署名
 	tokenString, _ := token.SignedString([]byte(os.Getenv("SUSHI")))
 
-	// JWTを返却
 	w.Write([]byte(tokenString))
 })
 
@@ -83,21 +79,15 @@ var Login = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(utils.ComparePasswords(hash, []byte("a")))
 
-	// headerのセット
 	token := jwt.New(jwt.SigningMethodHS256)
 
-	// claimsのセット
 	claims := token.Claims.(jwt.MapClaims)
 	claims["admin"] = true
 	claims["sub"] = "54546557354"
 	claims["name"] = "taro"
 	claims["iat"] = time.Now()
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
-
-	// 電子署名
 	tokenString, _ := token.SignedString([]byte(os.Getenv("SUSHI")))
-
-	// JWTを返却
 	w.Write([]byte(tokenString))
 })
 

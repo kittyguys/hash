@@ -31,12 +31,6 @@ func NewDB() *DB {
 }
 
 func (d *DB) connect() *gorm.DB {
-	//
-	// ex) MySQL
-	// https://github.com/go-sql-driver/mysql#examples
-	//
-	// ex) MySQL Parameters
-	// https://github.com/go-sql-driver/mysql#parameters
 	db, err := gorm.Open("mysql", d.Username+":"+d.Password+"@tcp("+d.Host+")/"+d.DBName+"?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		panic(err.Error())
@@ -76,31 +70,3 @@ func (db *DB) Save(value interface{}) *gorm.DB {
 func (db *DB) Where(query interface{}, args ...interface{}) *gorm.DB {
 	return db.Connect.Where(query, args...)
 }
-
-// func (mysql *MySQL) Conn() (db *sql.DB) {
-// 	db, err := sql.Open("mysql", "root:@/hash")
-// 	if err != nil {
-// 		log.Fatal("db error.")
-// 	}
-// 	mysql.db = db
-// 	return mysql.db
-// }
-
-// func (mysql *MySQL) SignUp(u schema.User) int64 {
-// 	fmt.Println(u)
-
-// 	stmt, err := mysql.db.Prepare("INSERT users SET name=?, email=?, password=?")
-// 	if err != nil {
-// 		log.Fatal("db error")
-// 	}
-// 	res, err := stmt.Exec(u.Name, u.Email, u.Password)
-// 	if err != nil {
-// 		log.Fatal("db error")
-// 	}
-// 	id, err := res.LastInsertId()
-// 	if err != nil {
-// 		log.Fatal("db error")
-// 	}
-// 	fmt.Println(id)
-// 	return id
-// }
