@@ -3,15 +3,16 @@ import styled from "styled-components";
 
 type Props = {
   content: string;
+  contentSize?: number;
   btnWidth: number;
   btnHeight: number;
   btnColor: string;
 };
 
 const NormalButton: React.FC<Props> = props => {
-  const { content, btnWidth, btnHeight, btnColor } = props;
+  const { content, btnWidth, btnHeight, btnColor, contentSize } = props;
   return (
-    <Button btnWidth={btnWidth} btnHeight={btnHeight} btnColor={btnColor}>
+    <Button btnWidth={btnWidth} btnHeight={btnHeight} btnColor={btnColor} contentSize={contentSize}>
       {content}
     </Button>
   );
@@ -21,6 +22,7 @@ type ButtonType = {
   btnWidth: number;
   btnHeight: number;
   btnColor: string;
+  contentSize?: number;
 };
 
 const Button = styled.div<ButtonType>`
@@ -28,6 +30,7 @@ const Button = styled.div<ButtonType>`
   height: ${props => props.btnHeight}px;
   line-height: ${props => props.btnHeight}px;
   background-color: ${props => props.btnColor};
+  font-size: ${props => props.contentSize}px;
   display: inline-block;
   text-align: center;
   border-radius: 4px;

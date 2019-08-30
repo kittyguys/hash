@@ -26,7 +26,7 @@ const SignupForm: React.FC = () => {
                 <LabelInput label="パスワード確認" inputWidth={200} inputHeight={32} />
             </Layout1>
             <Layout3>
-                <NormalButton content="次へ" btnWidth={180} btnHeight={40} btnColor="#4285f4" />
+                <NormalButton content="次へ" contentSize={20} btnWidth={180} btnHeight={40} btnColor="#4285f4" />
             </Layout3>
         </Wrapper>
     );
