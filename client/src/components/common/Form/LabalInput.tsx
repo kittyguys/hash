@@ -5,6 +5,8 @@ type Props = {
   label: string;
   inputWidth: number;
   inputHeight: number;
+  inputValue?: string,
+  handleChange?: (value: string)=> void,
 };
 
 const LabelInput: React.FC<Props> = props => {
@@ -15,6 +17,7 @@ const LabelInput: React.FC<Props> = props => {
         type="text"
         inputWidth={props.inputWidth}
         inputHeight={props.inputHeight}
+        onChange={e => props.handleChange(e.target.value)}
       />
     </Wrapper>
   );
