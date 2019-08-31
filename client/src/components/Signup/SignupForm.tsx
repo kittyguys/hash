@@ -6,22 +6,20 @@ import LabelInput from "../common/Form/LabalInput";
 import NormalButton from "../common/Button/NormalButton";
 import { useDispatch } from "react-redux";
 import { profileChange } from "../../redux/Signup/action";
+import { withRouter, RouteComponentProps } from "react-router";
 
 type Props = {
   profile: any;
-};
+} & RouteComponentProps;
 
-const SignupForm: React.FC<Props> = props => {
+const SignupForm: React.FC<Props> = ({ history, ...props }) => {
   const dispatch = useDispatch();
 
-  const lastnameChange = (value: string) => {
-    dispatch(profileChange({ ...props.profile, lastName: value }));
-  };
-  const firstnameChange = (value: string) => {
-    dispatch(profileChange({ ...props.profile, firstName: value }));
-  };
   const usernameChange = (value: string) => {
     dispatch(profileChange({ ...props.profile, userName: value }));
+  };
+  const emailChange = (value: string) => {
+    dispatch(profileChange({ ...props.profile, email: value }));
   };
   const passwordChange = (value: string) => {
     dispatch(profileChange({ ...props.profile, password: value }));
@@ -30,24 +28,6 @@ const SignupForm: React.FC<Props> = props => {
     <Wrapper>
       <Logo logoFontSize="28px" />
       <Title>hashアカウントの作成</Title>
-      <Layout1>
-        <LabelInput
-          label="姓"
-          inputWidth={200}
-          inputHeight={32}
-          inputValue={props.profile.lastname}
-          handleChange={value => lastnameChange(value)}
-        />
-      </Layout1>
-      <Layout1>
-        <LabelInput
-          label="名"
-          inputWidth={200}
-          inputHeight={32}
-          inputValue={props.profile.firstname}
-          handleChange={value => firstnameChange(value)}
-        />
-      </Layout1>
       <Layout2>
         <LabelInput
           label="ユーザー名"
@@ -55,6 +35,15 @@ const SignupForm: React.FC<Props> = props => {
           inputHeight={32}
           inputValue={props.profile.username}
           handleChange={value => usernameChange(value)}
+        />
+      </Layout2>
+      <Layout2>
+        <LabelInput
+          label="メールアドレス"
+          inputWidth={410}
+          inputHeight={32}
+          inputValue={props.profile.username}
+          handleChange={value => emailChange(value)}
         />
       </Layout2>
       <Layout1>
@@ -76,6 +65,7 @@ const SignupForm: React.FC<Props> = props => {
           btnWidth={180}
           btnHeight={40}
           btnColor="#4285f4"
+          handleClick={() => history.push("/signup/confirm")}
         />
       </Layout3>
     </Wrapper>
@@ -110,4 +100,4 @@ const Title = styled.div`
   font-size: 26px;
 `;
 
-export default SignupForm;
+export default withRouter(SignupForm);

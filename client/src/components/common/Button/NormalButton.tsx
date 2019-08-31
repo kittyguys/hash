@@ -7,12 +7,26 @@ type Props = {
   btnWidth: number;
   btnHeight: number;
   btnColor: string;
+  handleClick?: () => void;
 };
 
 const NormalButton: React.FC<Props> = props => {
-  const { content, btnWidth, btnHeight, btnColor, contentSize } = props;
+  const {
+    content,
+    btnWidth,
+    btnHeight,
+    btnColor,
+    contentSize,
+    handleClick
+  } = props;
   return (
-    <Button btnWidth={btnWidth} btnHeight={btnHeight} btnColor={btnColor} contentSize={contentSize}>
+    <Button
+      btnWidth={btnWidth}
+      btnHeight={btnHeight}
+      btnColor={btnColor}
+      contentSize={contentSize}
+      onClick={handleClick}
+    >
       {content}
     </Button>
   );

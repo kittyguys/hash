@@ -1,17 +1,15 @@
 type State = {
-    profile: {
-        firstName: string,
-        lastName: string,
-        userName: string,
-        password: string,
-    }
-}
+  profile: {
+    userName: string;
+    email: string;
+    password: string;
+  };
+};
 
 const initialState: State = {
   profile: {
-    firstName: "",
-    lastName: "",
     userName: "",
+    email: "",
     password: ""
   }
 };
