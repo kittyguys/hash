@@ -2,7 +2,6 @@ package auth
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -16,9 +15,8 @@ import (
 
 // SignUp ユーザー登録
 var SignUp = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	utils.EnableCors(&w)
 	var u model.User
-	db := model.New()
+	db := model.DB
 	if r.Body == nil {
 		http.Error(w, "Please send a request body", 400)
 		return
@@ -59,33 +57,35 @@ var SignUp = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 // Login ログイン
 var Login = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
 	var u model.User
+	db := model.DB
 	if r.Body == nil {
 		http.Error(w, "Please send a request body", 400)
 		return
 	}
 	err := json.NewDecoder(r.Body).Decode(&u)
-	fmt.Println(u)
 	if err != nil {
 		http.Error(w, err.Error(), 400)
 		return
 	}
-	pws := []byte(u.Password)
-	hash := utils.HashAndSalt(pws)
+	pwd := []byte(u.Password)
 
-	fmt.Println(utils.ComparePasswords(hash, []byte("a")))
+	db.Find(&u, model.User{Name: "Harry"})
 
-	token := jwt.New(jwt.SigningMethodHS256)
-
-	claims := token.Claims.(jwt.MapClaims)
-	claims["admin"] = true
-	claims["sub"] = "54546557354"
-	claims["name"] = "taro"
-	claims["iat"] = time.Now()
-	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
-	tokenString, _ := token.SignedString([]byte(os.Getenv("YOUONLYLIVEONCE")))
-	w.Write([]byte(tokenString))
+	if utils.ComparePasswords(u.Password, pwd) {
+		token := jwt.New(jwt.SigningMethodHS256)
+		claims := token.Claims.(jwt.MapClaims)
+		claims["admin"] = true
+		claims["sub"] = "54546557354"
+		claims["name"] = "taro"
+		claims["iat"] = time.Now()
+		claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+		tokenString, _ := token.SignedString([]byte(os.Getenv("YOUONLYLIVEONCE")))
+		w.Write([]byte(tokenString))
+	} else {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("401 - Unauthorized"))
+	}
 })
 
 // JwtMiddleware トークンを確認
