@@ -3,8 +3,10 @@ import styled from "styled-components";
 import axios from "axios";
 
 import Logo from "../common/Logo";
+import LabelInput from "../common/Form/LabalInput";
 import NormalButton from "../common/Button/NormalButton";
 import { useDispatch } from "react-redux";
+import { signinChange } from "../../redux/Signin/action";
 
 type Props = {
   profile: any;
@@ -12,46 +14,58 @@ type Props = {
 
 type UserData = {
   name: string;
-  email: string;
   password: string;
 };
 
-const SignupFormConfirm: React.FC<Props> = props => {
-  const createUser = () => {
+const SigninForm: React.FC<Props> = props => {
+  const login = () => {
     const userData: UserData = {
       name: props.profile.userName,
-      email: props.profile.email,
       password: props.profile.password
     };
-    axios.post("http://localhost:8080/signup", userData).then(res => {
+    axios.post("http://localhost:8080/signin", userData).then(res => {
       localStorage.setItem("token", res.data);
       alert("成功");
     });
   };
+
+  const dispatch = useDispatch();
+
+  const usernameChange = (value: string) => {
+    dispatch(signinChange({ ...props.profile, userName: value }));
+  };
+  const passwordChange = (value: string) => {
+    dispatch(signinChange({ ...props.profile, password: value }));
+  };
   return (
     <Wrapper>
       <Logo logoFontSize="28px" />
-      <Title>この内容でhashアカウントを作成する</Title>
       <Layout2>
-        <Label>ユーザー名</Label>
-        <Text>{props.profile.userName}</Text>
+        <LabelInput
+          label="ユーザー名"
+          inputWidth={210}
+          inputHeight={32}
+          inputValue={props.profile.username}
+          handleChange={value => usernameChange(value)}
+        />
       </Layout2>
       <Layout2>
-        <Label>メールアドレス</Label>
-        <Text>{props.profile.email}</Text>
+        <LabelInput
+          label="パスワード"
+          inputWidth={210}
+          inputHeight={32}
+          inputValue={props.profile.password}
+          handleChange={value => passwordChange(value)}
+        />
       </Layout2>
-      <Layout1>
-        <Label>パスワード</Label>
-        <Text>{props.profile.password}</Text>
-      </Layout1>
       <Layout3>
         <NormalButton
-          content="登録する"
+          content="ログイン"
           contentSize={20}
           btnWidth={180}
           btnHeight={40}
           btnColor="#4285f4"
-          handleClick={() => createUser()}
+          handleClick={() => login()}
         />
       </Layout3>
     </Wrapper>
@@ -59,17 +73,11 @@ const SignupFormConfirm: React.FC<Props> = props => {
 };
 
 const Wrapper = styled.div`
-  width: 486px;
+  width: 276px;
   margin: 0 auto;
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 24px 30px;
-`;
-
-const Layout1 = styled.div`
-  margin: 10px 0;
-  display: inline-block;
-  margin-right: 10px;
 `;
 
 const Layout2 = styled.div`
@@ -79,19 +87,11 @@ const Layout2 = styled.div`
 const Layout3 = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 20px;
 `;
 
 const Title = styled.div`
-  font-size: 22px;
+  font-size: 26px;
 `;
 
-const Label = styled.div`
-  font-size: 18px;
-`;
-
-const Text = styled.div`
-  font-size: 18px;
-`;
-
-export default SignupFormConfirm;
+export default SigninForm;

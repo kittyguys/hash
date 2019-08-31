@@ -6,12 +6,14 @@ import { Provider } from "react-redux";
 
 // reducers
 import signupReducer from "./redux/Signup/reducer";
+import signinReducer from "./redux/Signin/reducer";
 
 import App from "./App";
 
 const rootReducer = combineReducers({
-  signup: signupReducer
-})
+  signup: signupReducer,
+  signin: signinReducer
+});
 
 const store = createStore(rootReducer);
 
