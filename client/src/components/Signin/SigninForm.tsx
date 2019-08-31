@@ -23,7 +23,7 @@ const SigninForm: React.FC<Props> = props => {
       name: props.profile.userName,
       password: props.profile.password
     };
-    axios.post("http://localhost:8080/signin", userData).then(res => {
+    axios.post("http://localhost:8080/login", userData).then(res => {
       localStorage.setItem("token", res.data);
       alert("成功");
     });
