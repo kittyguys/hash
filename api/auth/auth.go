@@ -11,53 +11,52 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/kittyguys/hash/api/model"
 	utils "github.com/kittyguys/hash/api/utils/crypto"
+	"github.com/rs/xid"
 )
 
-// var SignUp = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// SignUp ユーザー登録
+var SignUp = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	var u model.User
+	db := model.New()
+	if r.Body == nil {
+		http.Error(w, "Please send a request body", 400)
+		return
+	}
 
-// 	var u schema.User
-// 	db := database.NewDB()
-// 	if r.Body == nil {
-// 		fmt.Println("a")
+	err := json.NewDecoder(r.Body).Decode(&u)
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		return
+	}
 
-// 		http.Error(w, "Please send a request body", 400)
-// 		return
-// 	}
+	pwd := []byte(u.Password)
+	hash := utils.HashAndSalt(pwd)
+	uid := xid.New()
 
-// 	err := json.NewDecoder(r.Body).Decode(&u)
-// 	if err != nil {
-// 		fmt.Println("a")
+	u.UID = uid
+	u.Password = hash
 
-// 		http.Error(w, err.Error(), 400)
-// 		return
-// 	}
+	if !db.NewRecord(&u) {
+		panic("could not create new record")
+	}
+	if err := db.Create(&u).Error; err != nil {
+		panic(err.Error())
+	}
 
-// 	pwd := []byte(u.Password)
-// 	hash := utils.HashAndSalt(pwd)
+	token := jwt.New(jwt.SigningMethodHS256)
 
-// 	u.Password = hash
+	claims := token.Claims.(jwt.MapClaims)
+	claims["sub"] = u.UID
+	claims["name"] = u.Name
+	claims["iat"] = time.Now()
+	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 
-// 	if !db.NewRecord(&u) {
-// 		panic("could not create new record")
-// 	}
-// 	if err := db.Create(&u).Error; err != nil {
-// 		panic(err.Error())
-// 	}
+	tokenString, _ := token.SignedString([]byte(os.Getenv("SUSHI")))
 
-// 	token := jwt.New(jwt.SigningMethodHS256)
+	w.Write([]byte(tokenString))
+})
 
-// 	claims := token.Claims.(jwt.MapClaims)
-// 	claims["admin"] = true
-// 	claims["sub"] = "54546557354"
-// 	claims["name"] = "taro"
-// 	claims["iat"] = time.Now()
-// 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
-
-// 	tokenString, _ := token.SignedString([]byte(os.Getenv("SUSHI")))
-
-// 	w.Write([]byte(tokenString))
-// })
-
+// Login ログイン
 var Login = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	var u model.User
 	if r.Body == nil {
@@ -70,10 +69,8 @@ var Login = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), 400)
 		return
 	}
-	fmt.Println(u)
 	pws := []byte(u.Password)
 	hash := utils.HashAndSalt(pws)
-	fmt.Println(hash)
 
 	fmt.Println(utils.ComparePasswords(hash, []byte("a")))
 
@@ -85,14 +82,14 @@ var Login = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	claims["name"] = "taro"
 	claims["iat"] = time.Now()
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
-	tokenString, _ := token.SignedString([]byte(os.Getenv("SUSHI")))
+	tokenString, _ := token.SignedString([]byte(os.Getenv("YOUONLYLIVEONCE")))
 	w.Write([]byte(tokenString))
 })
 
-// JwtMiddleware check token
+// JwtMiddleware トークンを確認
 var JwtMiddleware = jwtmiddleware.New(jwtmiddleware.Options{
 	ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
-		return []byte(os.Getenv("SUSHI")), nil
+		return []byte(os.Getenv("YOUONLYLIVEONCE")), nil
 	},
 	SigningMethod: jwt.SigningMethodHS256,
 })

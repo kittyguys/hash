@@ -27,7 +27,5 @@ func main() {
 	fmt.Println("Server is running")
 	if err := http.Serve(l, route.HandleRoutes()); err != nil {
 		log.Fatal("ListenAndServe:", nil)
-	} else {
-		fmt.Println("Server starts on 8080")
 	}
 }
