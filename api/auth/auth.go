@@ -10,12 +10,13 @@ import (
 	jwtmiddleware "github.com/auth0/go-jwt-middleware"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/kittyguys/hash/api/model"
-	utils "github.com/kittyguys/hash/api/utils/crypto"
+	"github.com/kittyguys/hash/api/utils"
 	"github.com/rs/xid"
 )
 
 // SignUp ユーザー登録
 var SignUp = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	utils.EnableCors(&w)
 	var u model.User
 	db := model.New()
 	if r.Body == nil {
@@ -58,6 +59,7 @@ var SignUp = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 // Login ログイン
 var Login = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
 	var u model.User
 	if r.Body == nil {
 		http.Error(w, "Please send a request body", 400)
