@@ -40,8 +40,8 @@ type InputType = {
 };
 
 const Input = styled.input<InputType>`
-    width: ${props => props.inputWidth}px
-    height: ${props => props.inputHeight}px
+    width: ${props => props.inputWidth}px;
+    height: ${props => props.inputHeight}px;
     color: #555;
     font-size: 16px;
     padding: 10px;

@@ -20,10 +20,7 @@ const Header: React.FC<Props> = props => {
   }
 
   if (page === "home" && isLogin === true) {
-    linkContents = [
-      <StyledLink to="/signup">Sign up</StyledLink>,
-      <StyledLink to="/home">Sign out</StyledLink>
-    ];
+    linkContents = [<StyledLink to="/home">ログインちゅう</StyledLink>];
   }
 
   return (

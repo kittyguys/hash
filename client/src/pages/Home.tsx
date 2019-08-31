@@ -13,7 +13,11 @@ const Home: React.FC = () => {
   });
   return (
     <Fragment>
-      <Header page={"home"} isLogin={false} />
+      {localStorage.getItem("token") ? (
+        <Header page={"home"} isLogin={true} />
+      ) : (
+        <Header page={"home"} isLogin={false} />
+      )}
       <Logo
         logoWidth="640px"
         logoMargin="0 auto"

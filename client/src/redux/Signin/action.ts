@@ -1,4 +1,4 @@
-export const SIGNIN_CHANGE = "PROFILE_CHANGE";
+export const SIGNIN_CHANGE = "SIGNIN_CHANGE";
 
 export const signinChange = (userData: any) => ({
   type: SIGNIN_CHANGE,
