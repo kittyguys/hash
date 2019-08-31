@@ -70,7 +70,7 @@ var Login = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	}
 	pwd := []byte(u.Password)
 
-	db.Find(&u, model.User{Name: "Harry"})
+	db.Find(&u, model.User{Name: u.Name})
 
 	if utils.ComparePasswords(u.Password, pwd) {
 		token := jwt.New(jwt.SigningMethodHS256)
