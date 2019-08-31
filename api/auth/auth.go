@@ -58,6 +58,7 @@ var SignUp = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 // Login ログイン
 var Login = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	var u model.User
+	var userRecord model.User
 	db := model.DB
 	if r.Body == nil {
 		http.Error(w, "Please send a request body", 400)
@@ -70,9 +71,9 @@ var Login = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	}
 	pwd := []byte(u.Password)
 
-	db.Find(&u, model.User{Name: u.Name})
+	db.Find(&userRecord, model.User{Name: u.Name})
 
-	if utils.ComparePasswords(u.Password, pwd) {
+	if utils.ComparePasswords(userRecord.Password, pwd) {
 		token := jwt.New(jwt.SigningMethodHS256)
 		claims := token.Claims.(jwt.MapClaims)
 		claims["admin"] = true
