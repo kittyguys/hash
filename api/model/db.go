@@ -44,6 +44,7 @@ func Init() {
 // 	return db
 // }
 
+// Create 保存
 func Create(value interface{}) *gorm.DB {
 	return DB.Create(value)
 }
@@ -52,14 +53,16 @@ func Create(value interface{}) *gorm.DB {
 // 	return db.Connect.Exec(sql, values...)
 // }
 
-// func (db *DB) Find(out interface{}, where ...interface{}) *gorm.DB {
-// 	return db.Connect.Find(out, where...)
-// }
+// Find 検索
+func Find(out interface{}, where ...interface{}) *gorm.DB {
+	return DB.Find(out, where...)
+}
 
 // func (db *DB) First(out interface{}, where ...interface{}) *gorm.DB {
 // 	return db.Connect.First(out, where...)
 // }
 
+// NewRecord 新しいレコード
 func NewRecord(value interface{}) bool {
 	return DB.NewRecord(value)
 }
