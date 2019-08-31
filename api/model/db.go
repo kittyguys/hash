@@ -44,9 +44,9 @@ func Init() {
 // 	return db
 // }
 
-// func (db *DB) Create(value interface{}) *gorm.DB {
-// 	return db.Connect.Create(value)
-// }
+func Create(value interface{}) *gorm.DB {
+	return DB.Create(value)
+}
 
 // func (db *DB) Exec(sql string, values ...interface{}) *gorm.DB {
 // 	return db.Connect.Exec(sql, values...)
@@ -60,10 +60,9 @@ func Init() {
 // 	return db.Connect.First(out, where...)
 // }
 
-// func (db *DB) NewRecord(value interface{}) bool {
-// 	fmt.Println(value)
-// 	return db.Connect.NewRecord(value)
-// }
+func NewRecord(value interface{}) bool {
+	return DB.NewRecord(value)
+}
 
 // func (db *DB) Raw(sql string, values ...interface{}) *gorm.DB {
 // 	return db.Connect.Raw(sql, values...)

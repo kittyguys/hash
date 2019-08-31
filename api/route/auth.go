@@ -9,6 +9,7 @@ var router *mux.Router
 
 func HandleRoutes() *mux.Router {
 	router = mux.NewRouter()
-	router.HandleFunc("/signup", auth.Login).Methods("POST")
+	router.HandleFunc("/signup", auth.SignUp).Methods("POST")
+	router.HandleFunc("/login", auth.Login).Methods("POST")
 	return router
 }
