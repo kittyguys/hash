@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup/Signup";
 import SignupConfirm from "./pages/Signup/SignupConfirm";
 import Signin from "./pages/Signin/Signin";
+import UserList from "./pages/UserList";
 
 const App: React.FC = () => (
   <Router>
@@ -12,6 +13,8 @@ const App: React.FC = () => (
     <Route exact path="/signup" component={Signup} />
     <Route exact path="/signup/confirm" component={SignupConfirm} />
     <Route exact path="/signin" component={Signin} />
+    {/* <Route exact path="/signin" component={Signin} /> */}
+    <Route exact path="/userlist" component={UserList} />
   </Router>
 );
 
