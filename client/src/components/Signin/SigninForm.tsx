@@ -20,7 +20,6 @@ type UserData = {
 
 const SigninForm: React.FC<Props> = ({ history, ...props }) => {
   const login = () => {
-    console.log(props.profile);
     const userData: UserData = {
       name: props.profile.userName,
       password: props.profile.password

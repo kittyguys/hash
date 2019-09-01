@@ -6,7 +6,6 @@ import SignupForm from "../../components/Signup/SignupForm";
 
 const Signup: React.FC = () => {
   const profile = useSelector((state: any) => state.signup.profile);
-  console.log(profile);
   return (
     <Layout>
       <SignupForm profile={profile} />
