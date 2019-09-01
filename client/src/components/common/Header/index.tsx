@@ -1,13 +1,19 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Avatar from "../Avatar";
+import { withRouter, RouteComponentProps } from "react-router";
 
 type Props = {
   page: string;
   isLogin: boolean;
-};
+} & RouteComponentProps;
 
-const Header: React.FC<Props> = ({ isLogin, page }) => {
+const Header: React.FC<Props> = ({ isLogin, page, history }) => {
+  const toMypage = () => {
+    history.push("/mypage");
+  };
+
   let linkContents: JSX.Element[] = [];
 
   if (page === "home" && isLogin === false) {
@@ -18,7 +24,13 @@ const Header: React.FC<Props> = ({ isLogin, page }) => {
   }
 
   if (page === "home" && isLogin === true) {
-    linkContents = [<StyledLink to="/home">ログインちゅう</StyledLink>];
+    linkContents = [
+      <Avatar
+        imageWidth="60px"
+        imageHeight="60px"
+        handleClick={() => toMypage()}
+      />
+    ];
   }
 
   return (
@@ -45,4 +57,4 @@ const StyledA = styled.a`
 
 const StyledLink = StyledA.withComponent(Link);
 
-export default Header;
+export default withRouter(Header);

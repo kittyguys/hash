@@ -31,8 +31,8 @@ const SignupForm: React.FC<Props> = ({ history, ...props }) => {
       <Layout2>
         <LabelInput
           label="ユーザー名"
-          inputWidth={410}
-          inputHeight={32}
+          inputWidth="410px"
+          inputHeight="32px"
           inputValue={props.profile.username}
           handleChange={value => usernameChange(value)}
         />
@@ -40,8 +40,8 @@ const SignupForm: React.FC<Props> = ({ history, ...props }) => {
       <Layout2>
         <LabelInput
           label="メールアドレス"
-          inputWidth={410}
-          inputHeight={32}
+          inputWidth="410px"
+          inputHeight="32px"
           inputValue={props.profile.username}
           handleChange={value => emailChange(value)}
         />
@@ -49,21 +49,21 @@ const SignupForm: React.FC<Props> = ({ history, ...props }) => {
       <Layout1>
         <LabelInput
           label="パスワード"
-          inputWidth={200}
-          inputHeight={32}
+          inputWidth="200px"
+          inputHeight="32px"
           inputValue={props.profile.password}
           handleChange={value => passwordChange(value)}
         />
       </Layout1>
       <Layout1>
-        <LabelInput label="パスワード確認" inputWidth={200} inputHeight={32} />
+        <LabelInput label="パスワード確認" inputWidth="200px" inputHeight="32px" />
       </Layout1>
       <Layout3>
         <NormalButton
           content="次へ"
-          contentSize={20}
-          btnWidth={180}
-          btnHeight={40}
+          contentSize="20px"
+          btnWidth="180px"
+          btnHeight="40px"
           btnColor="#4285f4"
           handleClick={() => history.push("/signup/confirm")}
         />

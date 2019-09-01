@@ -28,7 +28,7 @@ const Text = styled.span`
   cursor: pointer;
   position: absolute;
   top: -16px;
-  left: 8px
+  left: 8px;
   background-color: #fff;
 `;
 
