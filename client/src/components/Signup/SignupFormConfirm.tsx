@@ -4,11 +4,11 @@ import axios from "axios";
 
 import Logo from "../common/Logo";
 import NormalButton from "../common/Button/NormalButton";
-import { useDispatch } from "react-redux";
+import { withRouter, RouteComponentProps } from "react-router";
 
 type Props = {
   profile: any;
-};
+} & RouteComponentProps;
 
 type UserData = {
   name: string;
@@ -16,7 +16,7 @@ type UserData = {
   password: string;
 };
 
-const SignupFormConfirm: React.FC<Props> = props => {
+const SignupFormConfirm: React.FC<Props> = ({ history, ...props }) => {
   const createUser = () => {
     const userData: UserData = {
       name: props.profile.userName,
@@ -25,7 +25,8 @@ const SignupFormConfirm: React.FC<Props> = props => {
     };
     axios.post("http://localhost:8080/signup", userData).then(res => {
       localStorage.setItem("token", res.data);
-      alert("成功");
+      alert("アカウントの作成が成功しました。");
+      history.push("/");
     });
   };
   return (
@@ -87,11 +88,12 @@ const Title = styled.div`
 `;
 
 const Label = styled.div`
-  font-size: 18px;
+  font-size: 16px;
+  color: #999;
 `;
 
 const Text = styled.div`
-  font-size: 18px;
+  font-size: 20px;
 `;
 
-export default SignupFormConfirm;
+export default withRouter(SignupFormConfirm);

@@ -7,17 +7,18 @@ import LabelInput from "../common/Form/LabalInput";
 import NormalButton from "../common/Button/NormalButton";
 import { useDispatch } from "react-redux";
 import { signinChange } from "../../redux/Signin/action";
+import { withRouter, RouteComponentProps } from "react-router";
 
 type Props = {
   profile: any;
-};
+} & RouteComponentProps;
 
 type UserData = {
   name: string;
   password: string;
 };
 
-const SigninForm: React.FC<Props> = props => {
+const SigninForm: React.FC<Props> = ({ history, ...props }) => {
   const login = () => {
     console.log(props.profile);
     const userData: UserData = {
@@ -26,7 +27,8 @@ const SigninForm: React.FC<Props> = props => {
     };
     axios.post("http://localhost:8080/login", userData).then(res => {
       localStorage.setItem("token", res.data);
-      alert("成功");
+      alert("ログインに成功しました。");
+      history.push("/");
     });
   };
 
@@ -91,8 +93,4 @@ const Layout3 = styled.div`
   margin-top: 20px;
 `;
 
-const Title = styled.div`
-  font-size: 26px;
-`;
-
-export default SigninForm;
+export default withRouter(SigninForm);

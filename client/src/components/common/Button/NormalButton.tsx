@@ -4,7 +4,7 @@ import styled from "styled-components";
 type Props = {
   content: string;
   contentSize?: number;
-  btnWidth: number;
+  btnWidth?: number;
   btnHeight: number;
   btnColor: string;
   handleClick?: () => void;
