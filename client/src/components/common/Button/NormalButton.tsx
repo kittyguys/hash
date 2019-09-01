@@ -3,34 +3,47 @@ import styled from "styled-components";
 
 type Props = {
   content: string;
-  contentSize?: number;
-  btnWidth: number;
-  btnHeight: number;
+  contentSize?: string;
+  btnWidth?: string;
+  btnHeight: string;
   btnColor: string;
+  handleClick?: () => void;
 };
 
-const NormalButton: React.FC<Props> = props => {
-  const { content, btnWidth, btnHeight, btnColor, contentSize } = props;
+const NormalButton: React.FC<Props> = ({
+  content,
+  btnWidth,
+  btnHeight,
+  btnColor,
+  contentSize,
+  handleClick
+}) => {
   return (
-    <Button btnWidth={btnWidth} btnHeight={btnHeight} btnColor={btnColor} contentSize={contentSize}>
+    <Button
+      btnWidth={btnWidth}
+      btnHeight={btnHeight}
+      btnColor={btnColor}
+      contentSize={contentSize}
+      onClick={handleClick}
+    >
       {content}
     </Button>
   );
 };
 
 type ButtonType = {
-  btnWidth: number;
-  btnHeight: number;
+  btnWidth: string;
+  btnHeight: string;
   btnColor: string;
-  contentSize?: number;
+  contentSize?: string;
 };
 
 const Button = styled.div<ButtonType>`
-  width: ${props => props.btnWidth}px;
-  height: ${props => props.btnHeight}px;
-  line-height: ${props => props.btnHeight}px;
-  background-color: ${props => props.btnColor};
-  font-size: ${props => props.contentSize}px;
+  width: ${({ btnWidth }) => btnWidth};
+  height: ${({ btnHeight }) => btnHeight};
+  line-height: ${({ btnHeight }) => btnHeight};
+  background-color: ${({ btnColor }) => btnColor};
+  font-size: ${({ contentSize }) => contentSize}px;
   display: inline-block;
   text-align: center;
   border-radius: 4px;

@@ -1,7 +1,6 @@
 type State = {
   profile: {
     userName: string;
-    email: string;
     password: string;
   };
 };
@@ -9,14 +8,13 @@ type State = {
 const initialState: State = {
   profile: {
     userName: "",
-    email: "",
     password: ""
   }
 };
 
-const signupReducer = (state = initialState, action: any) => {
+const signinReducer = (state = initialState, action: any) => {
   switch (action.type) {
-    case "PROFILE_CHANGE":
+    case "SIGNIN_CHANGE":
       return {
         ...state,
         profile: action.payload
@@ -26,4 +24,4 @@ const signupReducer = (state = initialState, action: any) => {
   }
 };
 
-export default signupReducer;
+export default signinReducer;

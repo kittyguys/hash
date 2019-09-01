@@ -7,23 +7,18 @@ type Props = {
   isLogin: boolean;
 };
 
-const Header: React.FC<Props> = props => {
-  const { isLogin, page } = props;
-
+const Header: React.FC<Props> = ({ isLogin, page }) => {
   let linkContents: JSX.Element[] = [];
 
   if (page === "home" && isLogin === false) {
     linkContents = [
       <StyledLink to="/signup">Sign up</StyledLink>,
-      <StyledLink to="/login">Sign in</StyledLink>
+      <StyledLink to="/signin">Sign in</StyledLink>
     ];
   }
 
   if (page === "home" && isLogin === true) {
-    linkContents = [
-      <StyledLink to="/signup">Sign up</StyledLink>,
-      <StyledLink to="/home">Sign out</StyledLink>
-    ];
+    linkContents = [<StyledLink to="/home">ログインちゅう</StyledLink>];
   }
 
   return (

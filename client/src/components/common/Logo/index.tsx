@@ -9,15 +9,21 @@ type Props = {
   centering?: boolean;
 };
 
-const Logo: React.FC<Props> = props => {
+const Logo: React.FC<Props> = ({
+  logoWidth,
+  logoMargin,
+  logoPadding,
+  logoFontSize,
+  centering
+}) => {
   return (
     <LogoWrapper
-      logoWidth={props.logoWidth}
-      logoMargin={props.logoMargin}
-      logoPadding={props.logoPadding}
-      centering={props.centering}
+      logoWidth={logoWidth}
+      logoMargin={logoMargin}
+      logoPadding={logoPadding}
+      centering={centering}
     >
-      <Text logoFontSize={props.logoFontSize}>#hash</Text>
+      <Text logoFontSize={logoFontSize}>#hash</Text>
     </LogoWrapper>
   );
 };
@@ -26,7 +32,7 @@ type LogoWrappertype = {
   logoWidth?: string;
   logoMargin?: string;
   logoPadding?: string;
-  centering?: boolean,
+  centering?: boolean;
 };
 
 type TextType = {
@@ -34,15 +40,15 @@ type TextType = {
 };
 
 const LogoWrapper = styled.div<LogoWrappertype>`
-  width: ${props => props.logoWidth};
-  margin: ${props => props.logoMargin};
-  padding: ${props => props.logoPadding};
-  text-align: ${props => props.centering && "center"};
+  width: ${({ logoWidth }) => logoWidth};
+  margin: ${({ logoMargin }) => logoMargin};
+  padding: ${({ logoPadding }) => logoPadding};
+  text-align: ${({ centering }) => centering && "center"};
 `;
 
 const Text = styled.span<TextType>`
   font-family: "Lobster", cursive;
-  font-size: ${props => props.logoFontSize};
+  font-size: ${({ logoFontSize }) => logoFontSize};
 `;
 
 export default Logo;

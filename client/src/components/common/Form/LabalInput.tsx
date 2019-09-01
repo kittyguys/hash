@@ -3,54 +3,61 @@ import styled from "styled-components";
 
 type Props = {
   label: string;
-  inputWidth: number;
-  inputHeight: number;
-  inputValue?: string,
-  handleChange?: (value: string)=> void,
+  inputWidth?: string;
+  inputHeight: string;
+  inputValue?: string;
+  handleChange?: (value: string) => void;
 };
 
-const LabelInput: React.FC<Props> = props => {
+const LabelInput: React.FC<Props> = ({
+  label,
+  inputWidth,
+  inputHeight,
+  inputValue,
+  handleChange
+}) => {
   return (
     <Wrapper>
-      <Label htmlFor="">{props.label && props.label}</Label>
+      <Label htmlFor="">{label && label}</Label>
       <Input
         type="text"
-        inputWidth={props.inputWidth}
-        inputHeight={props.inputHeight}
-        onChange={e => props.handleChange(e.target.value)}
+        value={inputValue}
+        inputWidth={inputWidth}
+        inputHeight={inputHeight}
+        onChange={e => handleChange(e.target.value)}
       />
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-    display: inline-block;
-    position: relative;
-    margin-top: 18px;
-`
+  display: inline-block;
+  position: relative;
+  margin-top: 18px;
+`;
 
 const Label = styled.label`
-    position: absolute;
-    top: -21px;
+  position: absolute;
+  top: -21px;
 `;
 
 type InputType = {
-  inputWidth: number;
-  inputHeight: number;
+  inputWidth?: string;
+  inputHeight: string;
 };
 
 const Input = styled.input<InputType>`
-    width: ${props => props.inputWidth}px
-    height: ${props => props.inputHeight}px
-    color: #555;
-    font-size: 16px;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #dfe1e5;
-    outline: none;
-    :focus {
-      border: 2px solid #38a1f3;
-    }
+  width: ${({ inputWidth }) => inputWidth};
+  height: ${({ inputHeight }) => inputHeight};
+  color: #555;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #dfe1e5;
+  outline: none;
+  :focus {
+    border: 2px solid #38a1f3;
+  }
 `;
 
 export default LabelInput;
