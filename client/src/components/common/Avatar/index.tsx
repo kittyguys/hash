@@ -2,17 +2,24 @@ import * as React from "react";
 import styled from "styled-components";
 
 type Props = {
-  imageSrc: string;
+  imageSrc?: string;
   imageWidth?: string;
   imageHeight?: string;
+  handleClick?: () => void;
 };
 
-const Avatar: React.FC<Props> = ({ imageSrc, imageWidth, imageHeight }) => {
+const Avatar: React.FC<Props> = ({
+  imageSrc,
+  imageWidth,
+  imageHeight,
+  handleClick
+}) => {
   return (
     <Image
       imageSrc={imageSrc}
       imageWidth={imageWidth}
       imageHeight={imageHeight}
+      onClick={() => handleClick()}
     />
   );
 };
@@ -32,6 +39,9 @@ const Image = styled.div<ImageStyle>`
   height: ${({ imageHeight }) => imageHeight};
   border-radius: 50%;
   overflow: hidden;
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 export default Avatar;
