@@ -48,6 +48,7 @@ const Button = styled.div<ButtonType>`
   text-align: center;
   border-radius: 4px;
   color: #fff;
+  max-width: 300px;
   :hover {
     opacity: 0.8;
     cursor: pointer;

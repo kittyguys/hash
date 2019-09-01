@@ -2,8 +2,8 @@ import * as React from "react";
 import styled from "styled-components";
 
 type Props = {
-  inputWidth: string;
-  inputHeight: string;
+  inputWidth?: string;
+  inputHeight?: string;
   inputValue?: string;
 };
 
