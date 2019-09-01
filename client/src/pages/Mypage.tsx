@@ -29,7 +29,7 @@ const Mypage: React.FC = () => {
           </SubLayout>
         </MainLayout>
         <MainInputLayout>
-          <MainInput inputWidth="100%" inputHeight="36px" />
+          <MainInput inputWidth="100%" inputHeight="36px" inputValue="test" />
         </MainInputLayout>
       </MypageWrapper>
     </Fragment>

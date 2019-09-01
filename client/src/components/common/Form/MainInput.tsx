@@ -4,13 +4,18 @@ import styled from "styled-components";
 type Props = {
   inputWidth: string;
   inputHeight: string;
+  inputValue?: string;
 };
 
-const MainInput: React.FC<Props> = ({ inputWidth, inputHeight }) => {
+const MainInput: React.FC<Props> = ({
+  inputWidth,
+  inputHeight,
+  inputValue
+}) => {
   return (
     <InputWrapper>
       <InputText
-        value={name}
+        value={inputValue}
         inputWidth={inputWidth}
         inputHeight={inputHeight}
       />
