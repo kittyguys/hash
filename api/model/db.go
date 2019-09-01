@@ -32,7 +32,7 @@ func New() *gorm.DB {
 
 // Init マイグレーション
 func Init() {
-	DB.AutoMigrate(&User{})
+	DB.AutoMigrate(&User{}, &Tag{})
 	return
 }
 
@@ -71,9 +71,9 @@ func NewRecord(value interface{}) bool {
 // 	return db.Connect.Raw(sql, values...)
 // }
 
-// func (db *DB) Save(value interface{}) *gorm.DB {
-// 	return db.Connect.Save(value)
-// }
+func Save(value interface{}) *gorm.DB {
+	return DB.Save(value)
+}
 
 // func (db *DB) Where(query interface{}, args ...interface{}) *gorm.DB {
 // 	return db.Connect.Where(query, args...)
