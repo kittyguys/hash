@@ -4,21 +4,29 @@ import { Fragment } from "react";
 import styled from "styled-components";
 import Tag from "./index";
 
-const Box = ({ tags }: { tags: string[] }) => {
+type Props = {
+  tags: string[];
+  tagWrapperWidth?: string;
+};
+
+const Box: React.FC<Props> = ({ tags, tagWrapperWidth }) => {
   if (tags.length === 0) {
     return <Fragment />;
   }
   return (
-    <TagWrapper>
+    <TagWrapper tagWrapperWidth={tagWrapperWidth}>
       <Text>{tags[0]}</Text>
       <Tag tags={tags.filter((tag, i) => (i !== 0 ? tag : null))} />
     </TagWrapper>
   );
 };
 
-const TagWrapper = styled.div`
-  width: 640px;
-  margin: 60px auto;
+type TagWrapperStyle = {
+  tagWrapperWidth?: string;
+};
+
+const TagWrapper = styled.div<TagWrapperStyle>`
+  width: ${({ tagWrapperWidth }) => tagWrapperWidth};
   padding: 16px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -33,7 +41,7 @@ const Text = styled.span`
   cursor: pointer;
   position: absolute;
   top: -16px;
-  left: 8px
+  left: 8px;
   background-color: #fff;
 `;
 
