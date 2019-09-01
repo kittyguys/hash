@@ -3,15 +3,9 @@ import { Fragment, useState, useEffect } from "react";
 import styled from "styled-components";
 import MainInput from "../components/common/Form/MainInput";
 import Logo from "../components/common/Logo";
-import Box from "../components/common/Tag/box";
 import Header from "../components/common/Header";
 
 const Home: React.FC = () => {
-  const [tags, setTags] = useState([]);
-  const [box, setBox] = useState([]);
-  const displayBox = box.map((box, i) => {
-    return <Box tags={box} key={i} />;
-  });
   return (
     <Fragment>
       {localStorage.getItem("token") ? (

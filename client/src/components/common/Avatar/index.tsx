@@ -39,6 +39,9 @@ const Image = styled.div<ImageStyle>`
   height: ${({ imageHeight }) => imageHeight};
   border-radius: 50%;
   overflow: hidden;
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 export default Avatar;
