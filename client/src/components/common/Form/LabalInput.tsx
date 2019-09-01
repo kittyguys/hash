@@ -9,15 +9,22 @@ type Props = {
   handleChange?: (value: string) => void;
 };
 
-const LabelInput: React.FC<Props> = props => {
+const LabelInput: React.FC<Props> = ({
+  label,
+  inputWidth,
+  inputHeight,
+  inputValue,
+  handleChange
+}) => {
   return (
     <Wrapper>
-      <Label htmlFor="">{props.label && props.label}</Label>
+      <Label htmlFor="">{label && label}</Label>
       <Input
         type="text"
-        inputWidth={props.inputWidth}
-        inputHeight={props.inputHeight}
-        onChange={e => props.handleChange(e.target.value)}
+        value={inputValue}
+        inputWidth={inputWidth}
+        inputHeight={inputHeight}
+        onChange={e => handleChange(e.target.value)}
       />
     </Wrapper>
   );
@@ -40,8 +47,8 @@ type InputType = {
 };
 
 const Input = styled.input<InputType>`
-  width: ${props => props.inputWidth}px;
-  height: ${props => props.inputHeight}px;
+  width: ${({ inputWidth }) => inputWidth}px;
+  height: ${({ inputHeight }) => inputHeight}px;
   color: #555;
   font-size: 16px;
   padding: 10px;

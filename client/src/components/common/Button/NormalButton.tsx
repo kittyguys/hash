@@ -10,15 +10,14 @@ type Props = {
   handleClick?: () => void;
 };
 
-const NormalButton: React.FC<Props> = props => {
-  const {
-    content,
-    btnWidth,
-    btnHeight,
-    btnColor,
-    contentSize,
-    handleClick
-  } = props;
+const NormalButton: React.FC<Props> = ({
+  content,
+  btnWidth,
+  btnHeight,
+  btnColor,
+  contentSize,
+  handleClick
+}) => {
   return (
     <Button
       btnWidth={btnWidth}
@@ -40,10 +39,10 @@ type ButtonType = {
 };
 
 const Button = styled.div<ButtonType>`
-  width: ${props => props.btnWidth}px;
-  height: ${props => props.btnHeight}px;
-  line-height: ${props => props.btnHeight}px;
-  background-color: ${props => props.btnColor};
+  width: ${({ btnWidth }) => btnWidth}px;
+  height: ${({ btnHeight }) => btnHeight}px;
+  line-height: ${({ btnHeight }) => btnHeight}px;
+  background-color: ${({ btnColor }) => btnColor};
   font-size: ${props => props.contentSize}px;
   display: inline-block;
   text-align: center;

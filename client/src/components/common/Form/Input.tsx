@@ -11,15 +11,14 @@ type Props = {
   box: any;
 };
 
-const Input: React.FC<Props> = props => {
-  const {
-    inputWidth,
-    inputHeight,
-    handleSetTags,
-    handleSetBox,
-    tags,
-    box
-  } = props;
+const Input: React.FC<Props> = ({
+  inputWidth,
+  inputHeight,
+  handleSetTags,
+  handleSetBox,
+  tags,
+  box
+}) => {
   const [name, setName] = useState("");
   return (
     <InputWrapper>

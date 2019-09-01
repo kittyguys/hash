@@ -7,9 +7,7 @@ type Props = {
   isLogin: boolean;
 };
 
-const Header: React.FC<Props> = props => {
-  const { isLogin, page } = props;
-
+const Header: React.FC<Props> = ({ isLogin, page }) => {
   let linkContents: JSX.Element[] = [];
 
   if (page === "home" && isLogin === false) {
