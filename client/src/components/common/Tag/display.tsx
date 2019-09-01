@@ -32,8 +32,4 @@ const Text = styled.span`
   background-color: #fff;
 `;
 
-const pickColor = () => {
-  const defaultColor = ["ff7722", "f92772"];
-};
-
 export default Display;

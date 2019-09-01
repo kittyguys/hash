@@ -15,8 +15,7 @@ const Box: React.FC<Props> = ({ tags, tagWrapperWidth }) => {
   }
   return (
     <TagWrapper tagWrapperWidth={tagWrapperWidth}>
-      <Text>{tags[0]}</Text>
-      <Tag tags={tags.filter((tag, i) => (i !== 0 ? tag : null))} />
+      <Tag tags={tags} tagMargin="4px 8px" />
     </TagWrapper>
   );
 };
@@ -27,26 +26,6 @@ type TagWrapperStyle = {
 
 const TagWrapper = styled.div<TagWrapperStyle>`
   width: ${({ tagWrapperWidth }) => tagWrapperWidth};
-  padding: 16px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  position: relative;
-  word-wrap: break-word;
 `;
-
-const Text = styled.span`
-  color: #555;
-  font-size: 20px;
-  padding: 0 4px;
-  cursor: pointer;
-  position: absolute;
-  top: -16px;
-  left: 8px;
-  background-color: #fff;
-`;
-
-const pickColor = () => {
-  const defaultColor = ["ff7722", "f92772"];
-};
 
 export default Box;

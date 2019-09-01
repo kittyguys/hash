@@ -1,15 +1,20 @@
 import * as React from "react";
 import styled from "styled-components";
 
-const Tag = (props: { tags: string[] }) => {
-  const tags = props.tags.map((tag, i) => {
+type Props = {
+  tags: string[];
+  tagMargin?: string;
+};
+
+const Tag: React.FC<Props> = ({ tags, tagMargin }) => {
+  const tagComponents = tags.map((tag, i) => {
     return (
-      <Text key={i} onClick={() => pickColor()}>
+      <Text key={i} onClick={() => pickColor()} tagMargin={tagMargin}>
         #{tag}
       </Text>
     );
   });
-  return <TagWrapper>{tags}</TagWrapper>;
+  return <TagWrapper>{tagComponents}</TagWrapper>;
 };
 
 const TagWrapper = styled.div`
@@ -17,11 +22,17 @@ const TagWrapper = styled.div`
   margin: 0 auto;
 `;
 
-const Text = styled.span`
+type TextType = {
+  tagMargin?: string;
+};
+
+const Text = styled.span<TextType>`
+  margin: ${({ tagMargin }) => tagMargin};
   color: #777;
-  font-size: 20px;
-  padding: 8px;
-  border-radius: 24px;
+  font-size: 1.6rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background-color: #ffe5e5;
   cursor: pointer;
 `;
 

@@ -56,7 +56,11 @@ const SignupForm: React.FC<Props> = ({ history, ...props }) => {
         />
       </Layout1>
       <Layout1>
-        <LabelInput label="パスワード確認" inputWidth="200px" inputHeight="32px" />
+        <LabelInput
+          label="パスワード確認"
+          inputWidth="200px"
+          inputHeight="32px"
+        />
       </Layout1>
       <Layout3>
         <NormalButton
