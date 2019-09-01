@@ -34,6 +34,7 @@ const Text = styled.span<TextType>`
   border-radius: 6px;
   background-color: #ffe5e5;
   cursor: pointer;
+  display: inline-block;
 `;
 
 const pickColor = () => {

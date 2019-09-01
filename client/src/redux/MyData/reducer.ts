@@ -12,7 +12,16 @@ const initialState: State = {
     userID: "hogehoge",
     userName: "keisuke",
     avatar: "foobar",
-    tags: ["fish", "shark", "jojo"]
+    tags: [
+      "fish",
+      "shark",
+      "jojo",
+      "toku",
+      "kalbee",
+      "デブ",
+      "日光",
+      "カマンベールチーズのチータラ"
+    ]
   }
 };
 
