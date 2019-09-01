@@ -46,8 +46,8 @@ const SigninForm: React.FC<Props> = ({ history, ...props }) => {
       <Layout2>
         <LabelInput
           label="ユーザー名"
-          inputWidth={210}
-          inputHeight={32}
+          inputWidth="210px"
+          inputHeight="32px"
           inputValue={props.profile.username}
           handleChange={value => usernameChange(value)}
         />
@@ -55,8 +55,8 @@ const SigninForm: React.FC<Props> = ({ history, ...props }) => {
       <Layout2>
         <LabelInput
           label="パスワード"
-          inputWidth={210}
-          inputHeight={32}
+          inputWidth="210px"
+          inputHeight="32px"
           inputValue={props.profile.password}
           handleChange={value => passwordChange(value)}
         />
@@ -64,9 +64,9 @@ const SigninForm: React.FC<Props> = ({ history, ...props }) => {
       <Layout3>
         <NormalButton
           content="ログイン"
-          contentSize={20}
-          btnWidth={180}
-          btnHeight={40}
+          contentSize="20px"
+          btnWidth="180px"
+          btnHeight="40px"
           btnColor="#4285f4"
           handleClick={() => login()}
         />

@@ -48,9 +48,9 @@ const SignupFormConfirm: React.FC<Props> = ({ history, ...props }) => {
       <Layout3>
         <NormalButton
           content="登録する"
-          contentSize={20}
-          btnWidth={180}
-          btnHeight={40}
+          contentSize="20px"
+          btnWidth="180px"
+          btnHeight="40px"
           btnColor="#4285f4"
           handleClick={() => createUser()}
         />

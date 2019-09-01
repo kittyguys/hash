@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 type Props = {
   label: string;
-  inputWidth?: number;
-  inputHeight: number;
+  inputWidth?: string;
+  inputHeight: string;
   inputValue?: string;
   handleChange?: (value: string) => void;
 };
@@ -42,13 +42,13 @@ const Label = styled.label`
 `;
 
 type InputType = {
-  inputWidth?: number;
-  inputHeight: number;
+  inputWidth?: string;
+  inputHeight: string;
 };
 
 const Input = styled.input<InputType>`
-  width: ${({ inputWidth }) => inputWidth}px;
-  height: ${({ inputHeight }) => inputHeight}px;
+  width: ${({ inputWidth }) => inputWidth};
+  height: ${({ inputHeight }) => inputHeight};
   color: #555;
   font-size: 16px;
   padding: 10px;

@@ -3,9 +3,9 @@ import styled from "styled-components";
 
 type Props = {
   content: string;
-  contentSize?: number;
-  btnWidth?: number;
-  btnHeight: number;
+  contentSize?: string;
+  btnWidth?: string;
+  btnHeight: string;
   btnColor: string;
   handleClick?: () => void;
 };
@@ -32,18 +32,18 @@ const NormalButton: React.FC<Props> = ({
 };
 
 type ButtonType = {
-  btnWidth: number;
-  btnHeight: number;
+  btnWidth: string;
+  btnHeight: string;
   btnColor: string;
-  contentSize?: number;
+  contentSize?: string;
 };
 
 const Button = styled.div<ButtonType>`
-  width: ${({ btnWidth }) => btnWidth}px;
-  height: ${({ btnHeight }) => btnHeight}px;
-  line-height: ${({ btnHeight }) => btnHeight}px;
+  width: ${({ btnWidth }) => btnWidth};
+  height: ${({ btnHeight }) => btnHeight};
+  line-height: ${({ btnHeight }) => btnHeight};
   background-color: ${({ btnColor }) => btnColor};
-  font-size: ${props => props.contentSize}px;
+  font-size: ${({ contentSize }) => contentSize}px;
   display: inline-block;
   text-align: center;
   border-radius: 4px;
