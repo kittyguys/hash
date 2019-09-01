@@ -37,7 +37,6 @@ type TextType = {
 };
 
 const Text = styled.span<TextType>`
-  font-family: "Lobster", cursive;
   font-size: ${({ textFontSize }) => textFontSize};
   font-weight: ${({ textFontWeight }) => textFontWeight};
 `;
