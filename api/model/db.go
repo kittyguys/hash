@@ -71,6 +71,7 @@ func NewRecord(value interface{}) bool {
 // 	return db.Connect.Raw(sql, values...)
 // }
 
+// Save SAVE
 func Save(value interface{}) *gorm.DB {
 	return DB.Save(value)
 }
