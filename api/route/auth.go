@@ -21,7 +21,8 @@ func HandleRoutes() *mux.Router {
 	router = mux.NewRouter()
 	router.HandleFunc("/signup", signUp).Methods("POST")
 	router.HandleFunc("/login", login).Methods("POST")
-	router.HandleFunc("/tag/create", AddTag).Methods("POST")
+	router.HandleFunc("/tags/create", AddTag).Methods("POST")
+	router.HandleFunc("/users/create", AddTag).Methods("GET")
 	return router
 }
 
@@ -88,8 +89,8 @@ var login = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		token := jwt.New(jwt.SigningMethodHS256)
 		claims := token.Claims.(jwt.MapClaims)
 		claims["admin"] = true
-		claims["sub"] = "54546557354"
-		claims["name"] = "taro"
+		claims["sub"] = u.UID
+		claims["name"] = u.Name
 		claims["iat"] = time.Now()
 		claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 		tokenString, _ := token.SignedString([]byte(os.Getenv("YOUONLYLIVEONCE")))
