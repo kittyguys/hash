@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Fragment } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Avatar from "../components/common/Avatar";
 import UserName from "../components/common/UserName";
 import NormalButton from "../components/common/Button/NormalButton";
