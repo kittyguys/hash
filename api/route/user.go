@@ -4,17 +4,21 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/rs/xid"
+
+	"github.com/gorilla/mux"
 	"github.com/kittyguys/hash/api/model"
 )
 
 // GetUserByID UIDでユーザー情報を取得
 var GetUserByID = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	var u model.User
-	var t model.Tag
 	var body model.AddTagBody
+	var tags []model.Tag
 	db := model.DB
-	var tt []model.Tag
-	uu := model.User{}
+	params := mux.Vars(r)
+	id := params["id"]
+	uid, _ := xid.FromString(id)
 
 	if r.Body == nil {
 		http.Error(w, "Please send a request body", 400)
@@ -26,23 +30,12 @@ var GetUserByID = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	db.First(&u, model.User{UID: body.UID})
-	db.Model(&uu).Related(&tt, "Tags")
+	db.First(&u, model.User{UID: uid})
+	db.Model(&u).Association("Tags").Find(&tags)
 
-	t.Name = body.Name
+	data := map[string]interface{}{"uid": u.UID, "name": u.Name, "tags": tags}
 
-	var res []model.Tag
-	db.Model(&u).Association("Tags").Append(&t)
-	db.Model(&u).Association("Tags").Find(&res)
-
-	type response struct {
-		user model.User
-		resp []model.Tag
-	}
-
-	rr := response{user: u, resp: res}
-
-	json, err := json.Marshal(rr)
+	json, err := json.Marshal(data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
