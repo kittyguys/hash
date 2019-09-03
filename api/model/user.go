@@ -1,11 +1,16 @@
 package model
 
-import "github.com/rs/xid"
+import (
+	"github.com/jinzhu/gorm"
+	"github.com/rs/xid"
+)
 
 // User UserSchema
 type User struct {
+	gorm.Model
 	UID      xid.ID `json:"uid"`
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
+	Tags     []Tag  `gorm:"many2many:user_tags;"`
 }
