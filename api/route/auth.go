@@ -23,6 +23,7 @@ func HandleRoutes() *mux.Router {
 	router.HandleFunc("/login", login).Methods("POST")
 	router.HandleFunc("/tags/create", AddTag).Methods("POST")
 	router.HandleFunc("/users/{id}", GetUserByID).Methods("GET")
+	router.HandleFunc("/tags", GetUserByTag).Methods("GET")
 	return router
 }
 
