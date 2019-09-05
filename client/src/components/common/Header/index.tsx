@@ -26,8 +26,10 @@ const Header: React.FC<Props> = ({ isLogin, page, history }) => {
   if (page === "home" && isLogin === true) {
     linkContents = [
       <Avatar key="avatar"
-        imageWidth="60px"
-        imageHeight="60px"
+        imageWidth="100px"
+        imageHeight="100px"
+        sp_imageWidth="60px"
+        sp_imageHeight="60px"
         handleClick={() => toMypage()}
       />
     ];

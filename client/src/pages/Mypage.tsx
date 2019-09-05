@@ -40,14 +40,13 @@ const Mypage: React.FC = () => {
 
   const addTag = (e: any) => {
     e.preventDefault();
-    console.log(mypageInput);
+    dispatch(mypageInputChange(""));
     axios
       .post("http://localhost:8080/tags/create", {
         uid: myData.userID,
         name: mypageInput
       })
       .then(res => {
-        console.log(res.data)
         dispatch(myDataChange({ ...myData, tags: res.data }));
       });
   };
@@ -60,19 +59,28 @@ const Mypage: React.FC = () => {
     <Fragment>
       <MypageWrapper>
         <MainLayout>
-          <Avatar imageWidth="90px" imageHeight="90px" />
+          <Avatar
+            imageWidth="90px"
+            imageHeight="90px"
+            sp_imageWidth="60px"
+            sp_imageHeight="60px"
+          />
           <SubLayout>
             <UserName
               userName={myData.userName}
               textFontSize="30px"
+              sp_textFontSize="24px"
               textFontWeight="bold"
             />
             <NormalButton
               content="プロフィールを編集する"
               btnWidth="50vw"
+              sp_btnWidth=""
               btnHeight="36px"
+              sp_btnHeight="28px"
               btnColor="#4285f4"
-              contentSize="14px"
+              contentSize="18px"
+              sp_contentSize="14px"
             />
           </SubLayout>
         </MainLayout>
@@ -86,7 +94,13 @@ const Mypage: React.FC = () => {
           />
         </MainInputLayout>
         <TagBoxLayout>
-          <TagBox tags={myData.tags} tagMargin="4px 6px" />
+          <TagBox
+            tags={myData.tags}
+            tagMargin="8px 10px"
+            tagFontSize="1.6rem"
+            sp_tagMargin="4px 6px"
+            sp_tagFontSize="1rem"
+          />
         </TagBoxLayout>
       </MypageWrapper>
     </Fragment>
@@ -94,7 +108,13 @@ const Mypage: React.FC = () => {
 };
 
 const MypageWrapper = styled.div`
-  padding: 20px;
+  width: 640px;
+  margin: 20px auto 0;
+  @media (max-width: 768px) {
+    padding: 20px;
+    width: auto;
+    margin: 0;
+  }
 `;
 
 const MainLayout = styled.div`
@@ -108,6 +128,9 @@ const SubLayout = styled.div`
 
 const MainInputLayout = styled.div`
   margin-top: 28px;
+  @media (max-width: 768px) {
+    margin-top: 18px;
+  }
 `;
 
 const TagBoxLayout = styled.div`
