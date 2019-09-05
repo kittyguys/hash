@@ -18,14 +18,14 @@ const Header: React.FC<Props> = ({ isLogin, page, history }) => {
 
   if (page === "home" && isLogin === false) {
     linkContents = [
-      <StyledLink to="/signup">Sign up</StyledLink>,
-      <StyledLink to="/signin">Sign in</StyledLink>
+      <StyledLink key="signup" to="/signup">Sign up</StyledLink>,
+      <StyledLink key="signin" to="/signin">Sign in</StyledLink>
     ];
   }
 
   if (page === "home" && isLogin === true) {
     linkContents = [
-      <Avatar
+      <Avatar key="avatar"
         imageWidth="60px"
         imageHeight="60px"
         handleClick={() => toMypage()}

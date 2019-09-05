@@ -7,27 +7,30 @@ import styled from "styled-components";
 import MainInput from "../components/common/Form/MainInput";
 import Logo from "../components/common/Logo";
 import Header from "../components/common/Header";
-
-const decodeJwt = (token: string) => {
-  const base64Url = token.split(".")[1];
-  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-  return JSON.parse(decodeURIComponent(escape(window.atob(base64))));
-};
+import { decodeJwt } from "../Utils/decodeJwt";
 
 const Home: React.FC = () => {
   const dispatch = useDispatch();
 
-  if (localStorage.getItem("token")) {
-    const token = localStorage.getItem("token");
-    const decodedToken = decodeJwt(token);
-    console.log(decodedToken);
-  }
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://localhost/8080?id=${userID}`)
-  //     .then(res => dispatch(myDataChange(res.data)));
-  // }, []);
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      const token = localStorage.getItem("token");
+      const decodedToken = decodeJwt(token);
+      // dispatch(
+      //   myDataChange({
+      //     userID: decodedToken.sub,
+      //     userName: decodedToken.name,
+      //     avatar: "none",
+      //     tags: []
+      //   })
+      // );
+      const userID = decodedToken.sub;
+      axios.get(`http://localhost:8080/users/${userID}`).then(res => {
+        console.log(res.data);
+        dispatch(myDataChange(res.data));
+      });
+    }
+  }, []);
 
   return (
     <Fragment>

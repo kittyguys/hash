@@ -5,25 +5,30 @@ type Props = {
   inputWidth?: string;
   inputHeight?: string;
   inputValue?: string;
+  handleSubmit?: (e: any) => void;
+  handleChange?: (inputValue: string) => void;
 };
 
 const MainInput: React.FC<Props> = ({
   inputWidth,
   inputHeight,
-  inputValue
+  inputValue,
+  handleSubmit,
+  handleChange
 }) => {
   return (
-    <InputWrapper>
+    <InputForm onSubmit={handleSubmit}>
       <InputText
         value={inputValue}
         inputWidth={inputWidth}
         inputHeight={inputHeight}
+        onChange={e => handleChange(e.target.value)}
       />
-    </InputWrapper>
+    </InputForm>
   );
 };
 
-const InputWrapper = styled.div`
+const InputForm = styled.form`
   display: block;
 `;
 

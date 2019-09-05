@@ -2,15 +2,15 @@ import * as React from "react";
 import styled from "styled-components";
 
 type Props = {
-  tags: string[];
+  tags: any;
   tagMargin?: string;
 };
 
 const Tag: React.FC<Props> = ({ tags, tagMargin }) => {
-  const tagComponents = tags.map((tag, i) => {
+  const tagComponents = tags.map((tag: any, i: number) => {
     return (
       <Text key={i} onClick={() => pickColor()} tagMargin={tagMargin}>
-        #{tag}
+        #{tag.name}
       </Text>
     );
   });

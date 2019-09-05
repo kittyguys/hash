@@ -8,6 +8,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/kittyguys/hash/api/model"
+	"fmt"
 )
 
 // GetUserByID UIDでユーザー情報を取得
@@ -19,6 +20,7 @@ var GetUserByID = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) 
 	params := mux.Vars(r)
 	id := params["id"]
 	uid, _ := xid.FromString(id)
+	fmt.Println(uid)
 
 	if r.Body == nil {
 		http.Error(w, "Please send a request body", 400)
