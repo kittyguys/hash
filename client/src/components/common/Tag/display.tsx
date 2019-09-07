@@ -28,12 +28,8 @@ const Text = styled.span`
   cursor: pointer;
   position: absolute;
   top: -16px;
-  left: 8px
+  left: 8px;
   background-color: #fff;
 `;
-
-const pickColor = () => {
-  const defaultColor = ["ff7722", "f92772"];
-};
 
 export default Display;

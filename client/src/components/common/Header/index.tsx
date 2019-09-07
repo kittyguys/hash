@@ -1,28 +1,35 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Avatar from "../Avatar";
+import { withRouter, RouteComponentProps } from "react-router";
 
 type Props = {
   page: string;
   isLogin: boolean;
-};
+} & RouteComponentProps;
 
-const Header: React.FC<Props> = props => {
-  const { isLogin, page } = props;
+const Header: React.FC<Props> = ({ isLogin, page, history }) => {
+  const toMypage = () => {
+    history.push("/mypage");
+  };
 
   let linkContents: JSX.Element[] = [];
 
   if (page === "home" && isLogin === false) {
     linkContents = [
       <StyledLink to="/signup">Sign up</StyledLink>,
-      <StyledLink to="/login">Sign in</StyledLink>
+      <StyledLink to="/signin">Sign in</StyledLink>
     ];
   }
 
   if (page === "home" && isLogin === true) {
     linkContents = [
-      <StyledLink to="/signup">Sign up</StyledLink>,
-      <StyledLink to="/home">Sign out</StyledLink>
+      <Avatar
+        imageWidth="60px"
+        imageHeight="60px"
+        handleClick={() => toMypage()}
+      />
     ];
   }
 
@@ -50,4 +57,4 @@ const StyledA = styled.a`
 
 const StyledLink = StyledA.withComponent(Link);
 
-export default Header;
+export default withRouter(Header);
