@@ -11,6 +11,7 @@ import { mypageInputChange } from "../redux/MypageInput/action";
 import axios from "axios";
 import { decodeJwt } from "../Utils/decodeJwt";
 import { myDataChange } from "../redux/MyData/action";
+import Header from "../components/common/Header";
 
 const Mypage: React.FC = () => {
   useEffect(() => {
@@ -57,6 +58,7 @@ const Mypage: React.FC = () => {
 
   return (
     <Fragment>
+      <Header page="common" />
       <MypageWrapper>
         <MainLayout>
           <Avatar
@@ -110,10 +112,13 @@ const Mypage: React.FC = () => {
 const MypageWrapper = styled.div`
   width: 640px;
   margin: 20px auto 0;
+  border: 1px solid #dbdbdb;
+  padding: 30px;
   @media (max-width: 768px) {
-    padding: 20px;
+    padding: 0 20px;
     width: auto;
     margin: 0;
+    border: none;
   }
 `;
 
