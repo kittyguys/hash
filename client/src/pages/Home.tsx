@@ -22,7 +22,7 @@ const Home: React.FC = () => {
         myDataChange({
           userID: decodedToken.sub,
           userName: decodedToken.name,
-          avatar: "none",
+          avatar: "",
           tags: []
         })
       );
@@ -37,6 +37,7 @@ const Home: React.FC = () => {
   const homeSearch = (e: any) => {
     e.preventDefault();
     console.log(homeInput);
+    dispatch(homeInputChange(""));
   };
 
   const inputChange = (inputValue: string) => {

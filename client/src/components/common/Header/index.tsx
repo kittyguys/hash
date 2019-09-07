@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Avatar from "../Avatar";
 import { withRouter, RouteComponentProps } from "react-router";
 import Logo from "../Logo";
+import { useSelector } from "react-redux";
 
 type Props = {
   page: string;
@@ -11,6 +12,9 @@ type Props = {
 } & RouteComponentProps;
 
 const Header: React.FC<Props> = ({ isLogin, page, history }) => {
+  const myData = useSelector((state: any) => state.myData);
+  console.log(myData);
+
   const toMypage = () => {
     history.push("/mypage");
   };
