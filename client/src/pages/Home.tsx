@@ -8,6 +8,7 @@ import Header from "../components/common/Header";
 import { decodeJwt } from "../Utils/decodeJwt";
 import { myDataChange } from "../redux/MyData/action";
 import { homeInputChange } from "../redux/HomeInput/action";
+import axios from "axios";
 
 const Home: React.FC = () => {
   const dispatch = useDispatch();
@@ -17,20 +18,17 @@ const Home: React.FC = () => {
     if (localStorage.getItem("token")) {
       const token = localStorage.getItem("token");
       const decodedToken = decodeJwt(token);
-      console.log(decodedToken);
-      dispatch(
-        myDataChange({
-          userID: decodedToken.sub,
-          userName: decodedToken.name,
-          avatar: "",
-          tags: []
-        })
-      );
-      // const userID = decodedToken.sub;
-      // axios.get(`http://localhost:8080/users/${userID}`).then(res => {
-      //   console.log(res.data);
-      //   dispatch(myDataChange(res.data));
-      // });
+      const userID = decodedToken.sub;
+      axios.get(`http://localhost:8080/users/${userID}`).then(res => {
+        dispatch(
+          myDataChange({
+            userID: res.data.uid,
+            userName: res.data.name,
+            avatar: "",
+            tags: res.data.tags
+          })
+        );
+      });
     }
   }, []);
 
