@@ -82,7 +82,7 @@ const LinkWrapper = styled.div`
   max-width: 900px;
   margin: 0 auto;
   @media (max-width: 768px) {
-    padding: 10px 4px;
+    padding: 10px 8px;
   }
 `;
 
