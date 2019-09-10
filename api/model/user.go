@@ -5,7 +5,7 @@ import (
 	"github.com/rs/xid"
 )
 
-// User UserSchema
+// User UserModel
 type User struct {
 	gorm.Model
 	UID      xid.ID `json:"uid"`
@@ -14,3 +14,6 @@ type User struct {
 	Password string `json:"password"`
 	Tags     []Tag  `gorm:"many2many:user_tags;"`
 }
+
+// Users Slice of User
+var Users []User
