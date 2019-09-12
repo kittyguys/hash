@@ -31,14 +31,7 @@ func main() {
 	}))
 
 	// Initialize handler
-	h := &handler.Handler{DB: db}
-
-	// Routes
-	e.POST("/signup", h.Signup)
-	// e.POST("/login", h.Login)
-	// e.POST("/follow/:id", h.Follow)
-	// e.POST("/posts", h.CreatePost)
-	// e.GET("/feed", h.FetchPost)
+	handler.InitializeRouter(db, e)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))

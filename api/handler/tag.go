@@ -1,42 +1,40 @@
 package handler
 
-// // AddTag ユーザーにタグを追加する
-// var AddTag = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-// 	var u model.User
-// 	var t model.Tag
-// 	var body model.AddTagBody
-// 	db := model.DB
-// 	var tt []model.Tag
-// 	uu := model.User{}
-// 	var users []model.User
+import (
+	"net/http"
 
-// 	if r.Body == nil {
-// 		http.Error(w, "Please send a request body", 400)
-// 		return
-// 	}
-// 	err := json.NewDecoder(r.Body).Decode(&body)
-// 	if err != nil {
-// 		http.Error(w, err.Error(), 400)
-// 		return
-// 	}
+	"github.com/kittyguys/hash/api/db"
 
-// 	db.Find(&u, model.User{UID: body.UID})
-// 	db.Model(&uu).Related(&tt, "Tags")
-// 	db.Model(&model.Tag{}).Related(&users, "Users")
+	"github.com/kittyguys/hash/api/model"
+	"github.com/labstack/echo"
+)
 
-// 	t.Name = body.Name
+// AddTag ユーザーにタグを追加する
+func (h *Handler) AddTag(c echo.Context) (err error) {
+	var u model.User
+	var t model.Tag
+	body := &model.AddTagBody{}
+	var tt []model.Tag
+	uu := model.User{}
+	var users []model.User
+	db := db.GetDB()
+	if err = c.Bind(body); err != nil {
+		return
+	}
 
-// 	var res []model.Tag
-// 	db.Model(&u).Association("Tags").Append(&t)
-// 	db.Model(&t).Association("Users").Append(&u)
-// 	db.Model(&u).Association("Tags").Find(&res)
+	db.Find(&u, model.User{UID: body.UID})
+	db.Model(&uu).Related(&tt, "Tags")
+	db.Model(&model.Tag{}).Related(&users, "Users")
 
-// 	json, err := json.Marshal(res)
-// 	if err != nil {
-// 		http.Error(w, err.Error(), http.StatusInternalServerError)
-// 		return
-// 	}
+	t.Name = body.Name
 
-// 	w.Header().Set("Content-Type", "application/json")
-// 	w.Write(json)
-// })
+	var res []model.Tag
+	db.Model(&u).Association("Tags").Append(&t)
+	db.Model(&t).Association("Users").Append(&u)
+	db.Model(&u).Association("Tags").Find(&res)
+
+	if err != nil {
+		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
+	}
+	return c.JSON(http.StatusCreated, res)
+}

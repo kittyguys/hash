@@ -2,14 +2,18 @@ package handler
 
 import (
 	"net/http"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/kittyguys/hash/api/db"
 	"github.com/kittyguys/hash/api/model"
+	"github.com/kittyguys/hash/api/utils"
 	"github.com/labstack/echo"
+	"github.com/rs/xid"
 )
 
+// Signup sign up
 func (h *Handler) Signup(c echo.Context) (err error) {
-	// Bind
 	u := &model.User{}
 	if err = c.Bind(u); err != nil {
 		return
@@ -20,6 +24,13 @@ func (h *Handler) Signup(c echo.Context) (err error) {
 		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
 	}
 
+	pwd := []byte(u.Password)
+	hash := utils.HashAndSalt(pwd)
+	uid := xid.New()
+
+	u.UID = uid
+	u.Password = hash
+
 	if !db.NewRecord(&u) {
 		panic("could not create new record")
 	}
@@ -28,6 +39,31 @@ func (h *Handler) Signup(c echo.Context) (err error) {
 	}
 
 	return c.JSON(http.StatusCreated, u)
+}
+
+// Login log in
+func (h *Handler) Login(c echo.Context) (err error) {
+	u := &model.User{}
+	if err = c.Bind(u); err != nil {
+		return
+	}
+	pwd := []byte(u.Password)
+
+	db.Find(&u, model.User{Name: u.Name})
+
+	if utils.ComparePasswords(u.Password, pwd) {
+		token := jwt.New(jwt.SigningMethodHS256)
+		claims := token.Claims.(jwt.MapClaims)
+		claims["admin"] = true
+		claims["sub"] = u.UID
+		claims["name"] = u.Name
+		claims["iat"] = time.Now()
+		claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+		tokenString, _ := token.SignedString([]byte(Key))
+		return c.JSON(http.StatusCreated, tokenString)
+	}
+
+	return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
 }
 
 // func (h *Handler) Signup(c echo.Context) (err error) {

@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
+	"github.com/labstack/echo"
 )
 
 var router *mux.Router
@@ -17,14 +18,15 @@ const (
 	Key = "secret"
 )
 
-// // InitializeRouter Init Router
-// func InitializeRouter() *mux.Router {
-// 	router = mux.NewRouter()
+// InitializeRouter Init Router
+func InitializeRouter(db *gorm.DB, e *echo.Echo) *echo.Echo {
+	h := &Handler{DB: db}
 
-// 	router.HandleFunc("/signup", signUp).Methods("POST")
-// 	// router.HandleFunc("/login", login).Methods("POST")
-// 	// router.HandleFunc("/tags/create", AddTag).Methods("POST")
-// 	// router.HandleFunc("/users/{id}", GetUserByID).Methods("GET")
-// 	// router.HandleFunc("/tags", GetUserByTag).Methods("GET")
-// 	return router
-// }
+	e.POST("/signup", h.Signup)
+	e.POST("/login", h.Login)
+	e.POST("/tags/create", h.AddTag)
+	// e.POST("/posts", h.CreatePost)
+	// e.GET("/feed", h.FetchPost)
+
+	return e
+}
