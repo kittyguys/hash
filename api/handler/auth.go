@@ -1,4 +1,4 @@
-package route
+package handler
 
 import (
 	"encoding/json"
@@ -6,31 +6,23 @@ import (
 	"os"
 	"time"
 
-	jwtmiddleware "github.com/auth0/go-jwt-middleware"
+	"github.com/kittyguys/hash/api/db"
+	repo "github.com/kittyguys/hash/api/repository"
+
 	"github.com/dgrijalva/jwt-go"
-	"github.com/gorilla/mux"
 	"github.com/kittyguys/hash/api/model"
 	"github.com/kittyguys/hash/api/utils"
 	"github.com/rs/xid"
 )
 
-var router *mux.Router
-
-// HandleRoutes 認証用のルートを定義
-func HandleRoutes() *mux.Router {
-	router = mux.NewRouter()
-	router.HandleFunc("/signup", signUp).Methods("POST")
-	router.HandleFunc("/login", login).Methods("POST")
-	router.HandleFunc("/tags/create", AddTag).Methods("POST")
-	router.HandleFunc("/users/{id}", GetUserByID).Methods("GET")
-	router.HandleFunc("/tags", GetUserByTag).Methods("GET")
-	return router
+// UserHandler as a handler for user
+type UserHandler struct {
+	users repo.UserRepo
 }
 
-// SignUp ユーザー登録
-var signUp = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+func (handler *UserHandler) signUp(w http.ResponseWriter, r *http.Request) {
 	var u model.User
-	db := model.DB
+	db := db.GetDB()
 	if r.Body == nil {
 		http.Error(w, "Please send a request body", 400)
 		return
@@ -67,12 +59,11 @@ var signUp = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	tokenString, _ := token.SignedString([]byte(os.Getenv("SUSHI")))
 
 	w.Write([]byte(tokenString))
-})
+}
 
-// Login ログイン
-var login = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+func (handler *UserHandler) login(w http.ResponseWriter, r *http.Request) {
 	var u model.User
-	db := model.DB
+	db := db.GetDB()
 	if r.Body == nil {
 		http.Error(w, "Please send a request body", 400)
 		return
@@ -100,12 +91,12 @@ var login = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusUnauthorized)
 		w.Write([]byte("401 - Unauthorized"))
 	}
-})
+}
 
 // JwtMiddleware トークンを確認
-var JwtMiddleware = jwtmiddleware.New(jwtmiddleware.Options{
-	ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
-		return []byte(os.Getenv("YOUONLYLIVEONCE")), nil
-	},
-	SigningMethod: jwt.SigningMethodHS256,
-})
+// var JwtMiddleware = jwtmiddleware.New(jwtmiddleware.Options{
+// 	ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
+// 		return []byte(os.Getenv("YOUONLYLIVEONCE")), nil
+// 	},
+// 	SigningMethod: jwt.SigningMethodHS256,
+// })

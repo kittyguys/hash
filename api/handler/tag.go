@@ -1,29 +1,24 @@
-package route
+package handler
 
 import (
-	"encoding/json"
 	"net/http"
 
+	"github.com/kittyguys/hash/api/db"
+
 	"github.com/kittyguys/hash/api/model"
+	"github.com/labstack/echo"
 )
 
 // AddTag ユーザーにタグを追加する
-var AddTag = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) AddTag(c echo.Context) (err error) {
 	var u model.User
 	var t model.Tag
-	var body model.AddTagBody
-	db := model.DB
+	body := &model.AddTagBody{}
 	var tt []model.Tag
 	uu := model.User{}
 	var users []model.User
-
-	if r.Body == nil {
-		http.Error(w, "Please send a request body", 400)
-		return
-	}
-	err := json.NewDecoder(r.Body).Decode(&body)
-	if err != nil {
-		http.Error(w, err.Error(), 400)
+	db := db.GetDB()
+	if err = c.Bind(body); err != nil {
 		return
 	}
 
@@ -38,12 +33,8 @@ var AddTag = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	db.Model(&t).Association("Users").Append(&u)
 	db.Model(&u).Association("Tags").Find(&res)
 
-	json, err := json.Marshal(res)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
 	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(json)
-})
+	return c.JSON(http.StatusCreated, res)
+}

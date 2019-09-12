@@ -1,33 +1,38 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"net"
-	"net/http"
-
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/kittyguys/hash/api/model"
-	"github.com/kittyguys/hash/api/route"
-	"github.com/rs/cors"
+	"github.com/kittyguys/hash/api/db"
+	"github.com/kittyguys/hash/api/handler"
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 func init() {
-	model.New()
-	model.Init()
+	db.New()
+	db.Init()
 }
 
 func main() {
-	defer model.DB.Close()
+	db := db.GetDB()
+	defer db.Close()
 
-	// サーバー起動
-	l, err := net.Listen("tcp", ":8080")
-	if err != nil {
-		log.Fatal(err)
-	}
-	handler := cors.Default().Handler(route.HandleRoutes())
-	fmt.Println("Server is running")
-	if err := http.Serve(l, handler); err != nil {
-		log.Fatal("ListenAndServe:", nil)
-	}
+	e := echo.New()
+	e.Use(middleware.Logger())
+	e.Use(middleware.JWTWithConfig(middleware.JWTConfig{
+		SigningKey: []byte(handler.Key),
+		Skipper: func(c echo.Context) bool {
+			// Skip authentication for and signup login requests
+			if c.Path() == "/login" || c.Path() == "/signup" {
+				return true
+			}
+			return false
+		},
+	}))
+
+	// Initialize handler
+	handler.InitializeRouter(db, e)
+
+	// Start server
+	e.Logger.Fatal(e.Start(":8080"))
 }
