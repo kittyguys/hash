@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 type Props = {
@@ -7,17 +8,20 @@ type Props = {
   inputValue?: string;
 };
 
-const MainInput: React.FC<Props> = ({
-  inputWidth,
-  inputHeight,
-  inputValue
-}) => {
+const MainInput: React.FC<Props> = ({ inputWidth, inputHeight }) => {
+  const [value, setValue] = useState("");
+
+  const handleOnChange = (e: any) => {
+    setValue(e.target.value);
+  };
+
   return (
     <InputWrapper>
       <InputText
-        value={inputValue}
+        value={value}
         inputWidth={inputWidth}
         inputHeight={inputHeight}
+        onChange={e => handleOnChange(e)}
       />
     </InputWrapper>
   );

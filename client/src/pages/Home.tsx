@@ -16,7 +16,7 @@ const Home: React.FC = () => {
       <HomeLayout>
         <MainLayout>
           <Logo logoFontSize="48px" centering />
-          <MainInput inputWidth="100%" inputHeight="36px" inputValue="sss" />
+          <MainInput inputWidth="100%" inputHeight="36px" />
         </MainLayout>
       </HomeLayout>
     </Fragment>
