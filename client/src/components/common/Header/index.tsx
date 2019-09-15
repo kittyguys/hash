@@ -1,9 +1,12 @@
 import * as React from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Avatar from "../Avatar";
 import { withRouter, RouteComponentProps } from "react-router";
 import Logo from "../Logo";
+import NormalButton from "../Button/NormalButton";
+import UserName from "../UserName";
 import { useSelector } from "react-redux";
 
 type Props = {
@@ -13,7 +16,7 @@ type Props = {
 
 const Header: React.FC<Props> = ({ isLogin, page, history }) => {
   const myData = useSelector((state: any) => state.myData);
-  console.log(myData);
+  const [modal, modalChange] = useState(false);
 
   const toMypage = () => {
     history.push("/mypage");
@@ -21,8 +24,57 @@ const Header: React.FC<Props> = ({ isLogin, page, history }) => {
   const toHome = () => {
     history.push("/");
   };
+  const signOut = () => {
+    localStorage.removeItem("token");
+    history.push("/");
+  };
 
   let linkContents: JSX.Element[] = [];
+
+  const headerModal = (
+    <ModalWrapper>
+      <ModalLayout1>
+        <Avatar
+          imageWidth="50px"
+          imageHeight="50px"
+          sp_imageWidth="40px"
+          sp_imageHeight="40px"
+        />
+        <NameLayout>
+          <UserName
+            userName={myData.userName}
+            textFontSize="26px"
+            sp_textFontSize="20px"
+          />
+        </NameLayout>
+      </ModalLayout1>
+      <ModalLayout2>
+        <NormalButton
+          content="マイページ"
+          contentSize="16px"
+          btnWidth="100px"
+          btnHeight="30px"
+          btnColor="#4285f4"
+          sp_contentSize="14px"
+          sp_btnWidth="84px"
+          sp_btnHeight="24px"
+          handleClick={() => toMypage()}
+        />
+        <NormalButton
+          content="Sign out"
+          contentSize="16px"
+          btnWidth="100px"
+          btnHeight="30px"
+          btnColor="#4285f4"
+          sp_contentSize="14px"
+          sp_btnWidth="84px"
+          sp_btnHeight="24px"
+          handleClick={() => signOut()}
+        />
+      </ModalLayout2>
+      <CloseButton onClick={() => modalChange(false)}>×</CloseButton>
+    </ModalWrapper>
+  );
 
   if (page === "home" && isLogin === false) {
     linkContents = [
@@ -43,7 +95,7 @@ const Header: React.FC<Props> = ({ isLogin, page, history }) => {
         imageHeight="100px"
         sp_imageWidth="60px"
         sp_imageHeight="60px"
-        handleClick={() => toMypage()}
+        handleClick={() => modalChange(true)}
       />
     ];
   }
@@ -63,14 +115,17 @@ const Header: React.FC<Props> = ({ isLogin, page, history }) => {
         imageHeight="100px"
         sp_imageWidth="60px"
         sp_imageHeight="60px"
-        handleClick={() => toMypage()}
+        handleClick={() => modalChange(true)}
       />
     ];
   }
 
   return (
     <HeaderWrapper>
-      <LinkWrapper>{linkContents}</LinkWrapper>
+      <LinkWrapper>
+        {linkContents}
+        {modal && headerModal}
+      </LinkWrapper>
     </HeaderWrapper>
   );
 };
@@ -85,6 +140,7 @@ const LinkWrapper = styled.div`
   padding: 10px 20px;
   max-width: 900px;
   margin: 0 auto;
+  position: relative;
   @media (max-width: 768px) {
     padding: 10px 8px;
   }
@@ -101,5 +157,46 @@ const StyledA = styled.a`
 `;
 
 const StyledLink = StyledA.withComponent(Link);
+
+const ModalWrapper = styled.div`
+  width: 250px;
+  background-color: #fff;
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+  position: absolute;
+  top: 0;
+  margin: 20px -14px;
+  padding: 14px 10px;
+  @media (max-width: 768px) {
+    width: 200px;
+    margin: 8px 0px;
+    padding: 8px 8px;
+  }
+`;
+
+const ModalLayout1 = styled.div`
+  display: flex;
+  align-items: center;
+`;
+const ModalLayout2 = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 12px;
+  @media (max-width: 768px) {
+    margin-top: 8px;
+  }
+`;
+
+const NameLayout = styled.div`
+  margin-left: 10px;
+`;
+
+const CloseButton = styled.div`
+  position: absolute;
+  top: -8px;
+  right: 8px;
+  font-size: 28px;
+  cursor: pointer;
+`;
 
 export default withRouter(Header);
