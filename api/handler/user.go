@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -49,7 +48,6 @@ func (h *Handler) Login(c echo.Context) (err error) {
 		return
 	}
 	pwd := []byte(u.Password)
-	fmt.Println(c.Request().Body)
 
 	db.Find(&u, model.User{Name: u.Name})
 
