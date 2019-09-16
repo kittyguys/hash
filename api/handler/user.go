@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/kittyguys/hash/api/db"
 	"github.com/kittyguys/hash/api/model"
 	"github.com/kittyguys/hash/api/utils"
 	"github.com/labstack/echo"
@@ -31,10 +30,10 @@ func (h *Handler) Signup(c echo.Context) (err error) {
 	u.UID = uid
 	u.Password = hash
 
-	if !db.NewRecord(&u) {
+	if !h.DB.NewRecord(&u) {
 		panic("could not create new record")
 	}
-	if err := db.Create(&u).Error; err != nil {
+	if err := h.DB.Create(&u).Error; err != nil {
 		panic(err.Error())
 	}
 
@@ -49,7 +48,7 @@ func (h *Handler) Login(c echo.Context) (err error) {
 	}
 	pwd := []byte(u.Password)
 
-	db.Find(&u, model.User{Name: u.Name})
+	h.DB.Find(&u, model.User{Name: u.Name})
 
 	if utils.ComparePasswords(u.Password, pwd) {
 		token := jwt.New(jwt.SigningMethodHS256)
@@ -72,10 +71,9 @@ func (h *Handler) GetUserByID(c echo.Context) (err error) {
 	var tags []model.Tag
 	var id string
 	uid, _ := xid.FromString(id)
-	db := db.GetDB()
 
-	db.First(&u, model.User{UID: uid})
-	db.Model(&u).Association("Tags").Find(&tags)
+	h.DB.First(&u, model.User{UID: uid})
+	h.DB.Model(&u).Association("Tags").Find(&tags)
 
 	data := map[string]interface{}{"uid": u.UID, "name": u.Name, "tags": tags}
 
@@ -94,8 +92,8 @@ func (h *Handler) GetUserByTag(c echo.Context) (err error) {
 	if err = c.Bind(t); err != nil {
 		return
 	}
-	db := db.GetDB()
-	db.Where("tags.name=?", t.Name).Select("DISTINCT(uid)").Joins("JOIN user_tags ON user_tags.user_id = users.id").
+
+	h.DB.Where("tags.name=?", t.Name).Select("DISTINCT(uid)").Joins("JOIN user_tags ON user_tags.user_id = users.id").
 		Joins("JOIN tags ON user_tags.tag_id=tags.id").Find(&users)
 	for _, v := range users {
 		uid = append(uid, v.UID)
