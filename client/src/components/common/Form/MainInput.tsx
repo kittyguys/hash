@@ -7,49 +7,30 @@ type Props = {
   inputWidth?: string;
   inputHeight?: string;
   inputValue?: string;
-  inputMargin?: string;
+  handleSubmit?: (e: any) => void;
+  handleChange?: (inputValue: string) => void;
 };
 
 const MainInput: React.FC<Props> = ({
   inputWidth,
   inputHeight,
-  inputMargin
+  inputValue,
+  handleSubmit,
+  handleChange
 }) => {
-  const [value, setValue] = useState("");
-
-  const handleOnChange = (e: any) => {
-    setValue(e.target.value);
-    fetchUsers(value);
-  };
-
-  const fetchUsers = (tag: string) => {
-    const token = localStorage.getItem("token");
-    const data = axios.get("http://localhost:8080/tags", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      },
-      params: { name: tag }
-    });
-    data.then(res => {
-      console.log(res);
-    });
-  };
-
   return (
-    <InputWrapper>
+    <InputForm onSubmit={handleSubmit}>
       <InputText
         value={value}
         inputWidth={inputWidth}
         inputHeight={inputHeight}
-        inputMargin={inputMargin}
-        onChange={e => handleOnChange(e)}
+        onChange={e => handleChange(e.target.value)}
       />
-    </InputWrapper>
+    </InputForm>
   );
 };
 
-const InputWrapper = styled.div`
+const InputForm = styled.form`
   display: block;
 `;
 

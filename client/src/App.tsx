@@ -14,7 +14,6 @@ const App: React.FC = () => (
     <Route exact path="/signup" component={Signup} />
     <Route exact path="/signup/confirm" component={SignupConfirm} />
     <Route exact path="/signin" component={Signin} />
-    {/* <Route exact path="/signin" component={Signin} /> */}
     <Route exact path="/userlist" component={UserList} />
     <Route exact path="/mypage" component={Mypage} />
   </Router>

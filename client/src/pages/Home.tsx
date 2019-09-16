@@ -1,11 +1,47 @@
 import * as React from "react";
 import { Fragment, useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import MainInput from "../components/common/Form/MainInput";
 import Logo from "../components/common/Logo";
 import Header from "../components/common/Header";
+import { decodeJwt } from "../Utils/decodeJwt";
+import { myDataChange } from "../redux/MyData/action";
+import { homeInputChange } from "../redux/HomeInput/action";
+import axios from "axios";
 
 const Home: React.FC = () => {
+  const dispatch = useDispatch();
+  const myData = useSelector((state: any) => state.myData);
+  const homeInput = useSelector((state: any) => state.homeInput.search);
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      const token = localStorage.getItem("token");
+      const decodedToken = decodeJwt(token);
+      const userID = decodedToken.sub;
+      axios.get(`http://localhost:8080/users/${userID}`).then(res => {
+        dispatch(
+          myDataChange({
+            userID: res.data.uid,
+            userName: res.data.name,
+            avatar: "",
+            tags: res.data.tags
+          })
+        );
+      });
+    }
+  }, []);
+
+  const homeSearch = (e: any) => {
+    e.preventDefault();
+    console.log(homeInput);
+    dispatch(homeInputChange(""));
+  };
+
+  const inputChange = (inputValue: string) => {
+    dispatch(homeInputChange(inputValue));
+  };
+
   return (
     <Fragment>
       {localStorage.getItem("token") ? (
@@ -16,7 +52,13 @@ const Home: React.FC = () => {
       <HomeLayout>
         <MainLayout>
           <Logo logoFontSize="48px" centering />
-          <MainInput inputWidth="100%" inputHeight="36px" inputMargin="36px" />
+          <MainInput
+            inputWidth="100%"
+            inputHeight="36px"
+            inputValue={homeInput}
+            handleSubmit={e => homeSearch(e)}
+            handleChange={inputValue => inputChange(inputValue)}
+          />
         </MainLayout>
       </HomeLayout>
     </Fragment>
@@ -35,7 +77,7 @@ const MainLayout = styled.div`
   display: block;
   width: 80%;
   max-width: 640px;
-  transform: translateY(-90px);
+  transform: translateY(-200px);
 `;
 
 export default Home;
