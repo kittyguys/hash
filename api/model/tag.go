@@ -12,6 +12,10 @@ type Tag struct {
 	Users []User `gorm:"many2many:user_tags;"`
 }
 
+type Tags struct {
+	T []Tag
+}
+
 // AddTagBody リクエストBODY
 type AddTagBody struct {
 	Name string `json:"name"`

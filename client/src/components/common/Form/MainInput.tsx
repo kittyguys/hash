@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 type Props = {
@@ -19,7 +20,7 @@ const MainInput: React.FC<Props> = ({
   return (
     <InputForm onSubmit={handleSubmit}>
       <InputText
-        value={inputValue}
+        value={value}
         inputWidth={inputWidth}
         inputHeight={inputHeight}
         onChange={e => handleChange(e.target.value)}
