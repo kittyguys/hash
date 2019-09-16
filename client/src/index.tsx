@@ -8,13 +8,17 @@ import { Provider } from "react-redux";
 import signupReducer from "./redux/Signup/reducer";
 import signinReducer from "./redux/Signin/reducer";
 import myDataReducer from "./redux/MyData/reducer";
+import mypageInputReducer from "./redux/MypageInput/reducer";
+import homeInputReducer from "./redux/HomeInput/reducer";
 
 import App from "./App";
 
 const rootReducer = combineReducers({
   signup: signupReducer,
   signin: signinReducer,
-  myData: myDataReducer
+  myData: myDataReducer,
+  mypageInput: mypageInputReducer,
+  homeInput: homeInputReducer
 });
 
 const store = createStore(rootReducer);

@@ -5,8 +5,11 @@ type Props = {
   content: string;
   contentSize?: string;
   btnWidth?: string;
-  btnHeight: string;
-  btnColor: string;
+  btnHeight?: string;
+  sp_contentSize?: string;
+  sp_btnWidth?: string;
+  sp_btnHeight?: string;
+  btnColor?: string;
   handleClick?: () => void;
 };
 
@@ -15,6 +18,9 @@ const NormalButton: React.FC<Props> = ({
   btnWidth,
   btnHeight,
   btnColor,
+  sp_contentSize,
+  sp_btnWidth,
+  sp_btnHeight,
   contentSize,
   handleClick
 }) => {
@@ -24,6 +30,9 @@ const NormalButton: React.FC<Props> = ({
       btnHeight={btnHeight}
       btnColor={btnColor}
       contentSize={contentSize}
+      sp_btnWidth={sp_btnWidth}
+      sp_btnHeight={sp_btnHeight}
+      sp_contentSize={sp_contentSize}
       onClick={handleClick}
     >
       {content}
@@ -32,10 +41,13 @@ const NormalButton: React.FC<Props> = ({
 };
 
 type ButtonType = {
-  btnWidth: string;
-  btnHeight: string;
-  btnColor: string;
+  btnWidth?: string;
+  btnHeight?: string;
+  btnColor?: string;
   contentSize?: string;
+  sp_btnWidth?: string;
+  sp_btnHeight?: string;
+  sp_contentSize?: string;
 };
 
 const Button = styled.div<ButtonType>`
@@ -52,6 +64,12 @@ const Button = styled.div<ButtonType>`
   :hover {
     opacity: 0.8;
     cursor: pointer;
+  }
+  @media (max-width: 768px) {
+    width: ${({ sp_btnWidth }) => sp_btnWidth};
+    height: ${({ sp_btnHeight }) => sp_btnHeight};
+    font-size: ${({ sp_contentSize }) => sp_contentSize};
+    line-height: ${({ sp_btnHeight }) => sp_btnHeight};
   }
 `;
 

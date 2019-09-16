@@ -1,44 +1,49 @@
 import * as React from "react";
 import { useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 type Props = {
   inputWidth?: string;
   inputHeight?: string;
   inputValue?: string;
+  handleSubmit?: (e: any) => void;
+  handleChange?: (inputValue: string) => void;
 };
 
-const MainInput: React.FC<Props> = ({ inputWidth, inputHeight }) => {
-  const [value, setValue] = useState("");
-
-  const handleOnChange = (e: any) => {
-    setValue(e.target.value);
-  };
-
+const MainInput: React.FC<Props> = ({
+  inputWidth,
+  inputHeight,
+  inputValue,
+  handleSubmit,
+  handleChange
+}) => {
   return (
-    <InputWrapper>
+    <InputForm onSubmit={handleSubmit}>
       <InputText
-        value={value}
+        value={inputValue}
         inputWidth={inputWidth}
         inputHeight={inputHeight}
-        onChange={e => handleOnChange(e)}
+        onChange={e => handleChange(e.target.value)}
       />
-    </InputWrapper>
+    </InputForm>
   );
 };
 
-const InputWrapper = styled.div`
+const InputForm = styled.form`
   display: block;
 `;
 
 type InputTextType = {
   inputWidth?: string;
   inputHeight?: string;
+  inputMargin?: string;
 };
 
 const InputText = styled.input<InputTextType>`
   width: ${({ inputWidth }) => inputWidth};
   height: ${({ inputHeight }) => inputHeight};
+  margin: ${({ inputMargin }) => inputMargin};
   color: #555;
   font-size: 16px;
   padding: 16px;
