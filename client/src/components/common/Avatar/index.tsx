@@ -40,7 +40,7 @@ type ImageStyle = {
 
 const Image = styled.div<ImageStyle>`
   background: ${({ imageSrc }) => {
-      return imageSrc ? `url(${imageSrc})` : "#81f7f3";
+      return imageSrc ? `url(${imageSrc})` : "#ffffff";
     }}
     center/cover no-repeat;
   width: ${({ imageWidth }) => imageWidth};
@@ -51,8 +51,8 @@ const Image = styled.div<ImageStyle>`
     cursor: pointer;
   }
   @media (max-width: 768px) {
-    width: ${({sp_imageWidth}) => sp_imageWidth};
-    height: ${({sp_imageHeight}) => sp_imageHeight};
+    width: ${({ sp_imageWidth }) => sp_imageWidth};
+    height: ${({ sp_imageHeight }) => sp_imageHeight};
   }
 `;
 

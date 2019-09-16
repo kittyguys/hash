@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 type Props = {
   inputWidth?: string;
@@ -36,11 +37,13 @@ const InputForm = styled.form`
 type InputTextType = {
   inputWidth?: string;
   inputHeight?: string;
+  inputMargin?: string;
 };
 
 const InputText = styled.input<InputTextType>`
   width: ${({ inputWidth }) => inputWidth};
   height: ${({ inputHeight }) => inputHeight};
+  margin: ${({ inputMargin }) => inputMargin};
   color: #555;
   font-size: 16px;
   padding: 16px;

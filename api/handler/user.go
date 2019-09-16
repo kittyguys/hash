@@ -49,6 +49,7 @@ func (h *Handler) Login(c echo.Context) (err error) {
 		return
 	}
 	pwd := []byte(u.Password)
+	fmt.Println(c.Request().Body)
 
 	db.Find(&u, model.User{Name: u.Name})
 
@@ -71,7 +72,7 @@ func (h *Handler) Login(c echo.Context) (err error) {
 func (h *Handler) GetUserByID(c echo.Context) (err error) {
 	var u model.User
 	var tags []model.Tag
-	id := c.QueryParam("uid")
+	var id string
 	uid, _ := xid.FromString(id)
 	db := db.GetDB()
 
@@ -96,12 +97,9 @@ func (h *Handler) GetUserByTag(c echo.Context) (err error) {
 		return
 	}
 	db := db.GetDB()
-
 	db.Where("tags.name=?", t.Name).Select("DISTINCT(uid)").Joins("JOIN user_tags ON user_tags.user_id = users.id").
 		Joins("JOIN tags ON user_tags.tag_id=tags.id").Find(&users)
-
 	for _, v := range users {
-		fmt.Println(v.UID)
 		uid = append(uid, v.UID)
 	}
 
