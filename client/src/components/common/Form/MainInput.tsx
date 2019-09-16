@@ -21,7 +21,7 @@ const MainInput: React.FC<Props> = ({
   return (
     <InputForm onSubmit={handleSubmit}>
       <InputText
-        value={value}
+        value={inputValue}
         inputWidth={inputWidth}
         inputHeight={inputHeight}
         onChange={e => handleChange(e.target.value)}
