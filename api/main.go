@@ -18,7 +18,9 @@ func main() {
 	defer db.Close()
 
 	e := echo.New()
+
 	e.Use(middleware.Logger())
+	e.Use(middleware.CORS())
 	e.Use(middleware.JWTWithConfig(middleware.JWTConfig{
 		SigningKey: []byte(handler.Key),
 		Skipper: func(c echo.Context) bool {

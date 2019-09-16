@@ -32,7 +32,7 @@ type ImageStyle = {
 
 const Image = styled.div<ImageStyle>`
   background: ${({ imageSrc }) => {
-      return imageSrc ? `url(${imageSrc})` : "#81f7f3";
+      return imageSrc ? `url(${imageSrc})` : "#ffffff";
     }}
     center/cover no-repeat;
   width: ${({ imageWidth }) => imageWidth};
@@ -42,6 +42,7 @@ const Image = styled.div<ImageStyle>`
   :hover {
     cursor: pointer;
   }
+  border: 1px solid #ccc;
 `;
 
 export default Avatar;
