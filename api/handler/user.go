@@ -5,50 +5,48 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/kittyguys/hash/api/interfaces"
 	"github.com/kittyguys/hash/api/model"
+	repo "github.com/kittyguys/hash/api/repository"
 	"github.com/kittyguys/hash/api/utils"
+
+	"github.com/jinzhu/gorm"
+
 	"github.com/labstack/echo"
-	"github.com/rs/xid"
 )
 
-// Signup sign up
-func (h *Handler) Signup(c echo.Context) (err error) {
-	u := &model.User{}
-	if err = c.Bind(u); err != nil {
-		return
+// NewUserRepo Initialize user repository
+func NewUserHandler(conn *gorm.DB) *UserHandler {
+	return &UserHandler{
+		repo: interfaces.NewUserRepo(conn),
 	}
+}
 
-	// Validate
-	if u.Email == "" || u.Password == "" {
+// UserHandler Handler with DB
+type UserHandler struct {
+	repo repo.UserRepo
+}
+
+// Signup sign up
+func (h *UserHandler) SignUp(c echo.Context) (err error) {
+
+	e := h.repo.SignUp(c)
+	if e != nil {
 		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
 	}
 
-	pwd := []byte(u.Password)
-	hash := utils.HashAndSalt(pwd)
-	uid := xid.New()
-
-	u.UID = uid
-	u.Password = hash
-
-	if !h.DB.NewRecord(&u) {
-		panic("could not create new record")
-	}
-	if err := h.DB.Create(&u).Error; err != nil {
-		panic(err.Error())
-	}
-
-	return c.JSON(http.StatusCreated, u)
+	return c.JSON(http.StatusCreated, e)
 }
 
 // Login log in
-func (h *Handler) Login(c echo.Context) (err error) {
+func (h *UserHandler) Login(c echo.Context) (err error) {
 	u := &model.User{}
 	if err = c.Bind(u); err != nil {
 		return
 	}
 	pwd := []byte(u.Password)
 
-	h.DB.Find(&u, model.User{Name: u.Name})
+	h.Conn.Find(&u, model.User{Name: u.Name})
 
 	if utils.ComparePasswords(u.Password, pwd) {
 		token := jwt.New(jwt.SigningMethodHS256)
@@ -65,45 +63,45 @@ func (h *Handler) Login(c echo.Context) (err error) {
 	return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
 }
 
-// GetUserByID for getting user info by ID
-func (h *Handler) GetUserByID(c echo.Context) (err error) {
-	var u model.User
-	var tags []model.Tag
-	var id string
-	uid, _ := xid.FromString(id)
+// // GetUserByID for getting user info by ID
+// func (h *UserHandler) GetUserByID(c echo.Context) (err error) {
+// 	var u model.User
+// 	var tags []model.Tag
+// 	var id string
+// 	uid, _ := xid.FromString(id)
 
-	h.DB.First(&u, model.User{UID: uid})
-	h.DB.Model(&u).Association("Tags").Find(&tags)
+// 	h.Conn.First(&u, model.User{UID: uid})
+// 	h.Conn.Model(&u).Association("Tags").Find(&tags)
 
-	data := map[string]interface{}{"uid": u.UID, "name": u.Name, "tags": tags}
+// 	data := map[string]interface{}{"uid": u.UID, "name": u.Name, "tags": tags}
 
-	if err != nil {
-		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
-	}
+// 	if err != nil {
+// 		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
+// 	}
 
-	return c.JSON(http.StatusCreated, data)
-}
+// 	return c.JSON(http.StatusCreated, data)
+// }
 
-// GetUserByTag UIDでユーザー情報を取得
-func (h *Handler) GetUserByTag(c echo.Context) (err error) {
-	var users []model.User
-	var uid []xid.ID
-	t := &model.Tag{}
-	if err = c.Bind(t); err != nil {
-		return
-	}
+// // GetUserByTag UIDでユーザー情報を取得
+// func (h *UserHandler) GetUserByTag(c echo.Context) (err error) {
+// 	var users []model.User
+// 	var uid []xid.ID
+// 	t := &model.Tag{}
+// 	if err = c.Bind(t); err != nil {
+// 		return
+// 	}
 
-	h.DB.Where("tags.name=?", t.Name).Select("DISTINCT(uid)").Joins("JOIN user_tags ON user_tags.user_id = users.id").
-		Joins("JOIN tags ON user_tags.tag_id=tags.id").Find(&users)
-	for _, v := range users {
-		uid = append(uid, v.UID)
-	}
+// 	h.Conn.Where("tags.name=?", t.Name).Select("DISTINCT(uid)").Joins("JOIN user_tags ON user_tags.user_id = users.id").
+// 		Joins("JOIN tags ON user_tags.tag_id=tags.id").Find(&users)
+// 	for _, v := range users {
+// 		uid = append(uid, v.UID)
+// 	}
 
-	data := map[string]interface{}{"uid": uid}
+// 	data := map[string]interface{}{"uid": uid}
 
-	if err != nil {
-		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
-	}
+// 	if err != nil {
+// 		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
+// 	}
 
-	return c.JSON(http.StatusCreated, data)
-}
+// 	return c.JSON(http.StatusCreated, data)
+// }
