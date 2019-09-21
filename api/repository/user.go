@@ -1,8 +1,8 @@
 package repo
 
-import "github.com/labstack/echo"
+import "github.com/kittyguys/hash/api/model"
 
 type UserRepo interface {
-	SignUp(c echo.Context) error
-	Login(c echo.Context) error
+	SignUp(u *model.User) error
+	Login(u *model.User) error
 }

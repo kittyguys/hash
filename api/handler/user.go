@@ -2,13 +2,10 @@ package handler
 
 import (
 	"net/http"
-	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/kittyguys/hash/api/interfaces"
 	"github.com/kittyguys/hash/api/model"
 	repo "github.com/kittyguys/hash/api/repository"
-	"github.com/kittyguys/hash/api/utils"
 
 	"github.com/jinzhu/gorm"
 
@@ -29,39 +26,42 @@ type UserHandler struct {
 
 // Signup sign up
 func (h *UserHandler) SignUp(c echo.Context) (err error) {
-
-	e := h.repo.SignUp(c)
-	if e != nil {
-		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
+	u := &model.User{}
+	if err := c.Bind(u); err != nil {
+		return err
 	}
 
-	return c.JSON(http.StatusCreated, e)
+	if err := h.repo.SignUp(u); err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusCreated, u)
 }
 
 // Login log in
-func (h *UserHandler) Login(c echo.Context) (err error) {
-	u := &model.User{}
-	if err = c.Bind(u); err != nil {
-		return
-	}
-	pwd := []byte(u.Password)
+// func (h *UserHandler) Login(c echo.Context) (err error) {
+// 	u := &model.User{}
+// 	if err = c.Bind(u); err != nil {
+// 		return
+// 	}
+// 	pwd := []byte(u.Password)
 
-	h.Conn.Find(&u, model.User{Name: u.Name})
+// 	h.Conn.Find(&u, model.User{Name: u.Name})
 
-	if utils.ComparePasswords(u.Password, pwd) {
-		token := jwt.New(jwt.SigningMethodHS256)
-		claims := token.Claims.(jwt.MapClaims)
-		claims["admin"] = true
-		claims["sub"] = u.UID
-		claims["name"] = u.Name
-		claims["iat"] = time.Now()
-		claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
-		tokenString, _ := token.SignedString([]byte(Key))
-		return c.JSON(http.StatusCreated, tokenString)
-	}
+// 	if utils.ComparePasswords(u.Password, pwd) {
+// 		token := jwt.New(jwt.SigningMethodHS256)
+// 		claims := token.Claims.(jwt.MapClaims)
+// 		claims["admin"] = true
+// 		claims["sub"] = u.UID
+// 		claims["name"] = u.Name
+// 		claims["iat"] = time.Now()
+// 		claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+// 		tokenString, _ := token.SignedString([]byte(Key))
+// 		return c.JSON(http.StatusCreated, tokenString)
+// 	}
 
-	return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
-}
+// 	return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
+// }
 
 // // GetUserByID for getting user info by ID
 // func (h *UserHandler) GetUserByID(c echo.Context) (err error) {

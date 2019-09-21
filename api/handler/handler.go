@@ -26,7 +26,7 @@ func InitializeRouter(db *gorm.DB, e *echo.Echo) *echo.Echo {
 	u := NewUserHandler(db)
 	// Auth
 	e.POST("/signup", u.SignUp)
-	e.POST("/login", u.Login)
+	// e.POST("/login", u.Login)
 	// // User
 	// e.GET("/users/:id", u.GetUserByID)
 	// // Tag

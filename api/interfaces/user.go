@@ -1,7 +1,6 @@
 package interfaces
 
 import (
-	"fmt"
 	"net/http"
 
 	repo "github.com/kittyguys/hash/api/repository"
@@ -20,21 +19,17 @@ func NewUserRepo(conn *gorm.DB) repo.UserRepo {
 	}
 }
 
-// UserHandler Handler with DB
+// UserRepo Handler with DB
 type UserRepo struct {
 	Conn *gorm.DB
 }
 
-// Signup sign up
-func (h *UserRepo) SignUp(c echo.Context) (err error) {
-	u := &model.User{}
-	if err = c.Bind(u); err != nil {
-		return
-	}
+// SignUp SignUp
+func (h *UserRepo) SignUp(u *model.User) error {
 
 	// Validate
 	if u.Email == "" || u.Password == "" {
-		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
+		return echo.NewHTTPError(http.StatusUnauthorized, "Please provide valid cred")
 	}
 
 	pwd := []byte(u.Password)
@@ -49,20 +44,16 @@ func (h *UserRepo) SignUp(c echo.Context) (err error) {
 	if err := h.Conn.Create(&u).Error; err != nil {
 		panic(err.Error())
 	}
-	fmt.Println(u)
 
-	return c.JSON(http.StatusCreated, u)
+	return nil
 }
 
-func (h *UserRepo) Login(c echo.Context) (err error) {
-	u := &model.User{}
-	if err = c.Bind(u); err != nil {
-		return
-	}
+// Login Login
+func (h *UserRepo) Login(u *model.User) error {
 
 	// Validate
 	if u.Email == "" || u.Password == "" {
-		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
+		return echo.NewHTTPError(http.StatusUnauthorized, "Please provide valid cred")
 	}
 
 	pwd := []byte(u.Password)
@@ -77,7 +68,6 @@ func (h *UserRepo) Login(c echo.Context) (err error) {
 	if err := h.Conn.Create(&u).Error; err != nil {
 		panic(err.Error())
 	}
-	fmt.Println(u)
 
-	return c.JSON(http.StatusCreated, u)
+	return nil
 }
