@@ -2,7 +2,6 @@ package model
 
 import (
 	"github.com/jinzhu/gorm"
-	"github.com/rs/xid"
 )
 
 // Tag TagSchema
@@ -19,6 +18,6 @@ type Tags struct {
 
 // Create リクエストBODY
 type Create struct {
-	Tag string `json:"tag"`
-	UID xid.ID `json:"uid"`
+	Tag    string `json:"tag"`
+	HashID string `json:"hashID"`
 }

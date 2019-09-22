@@ -20,7 +20,7 @@ func (h *Handler) Create(c echo.Context) (err error) {
 		return
 	}
 
-	h.DB.Find(&u, model.User{UID: params.UID})
+	h.DB.Find(&u, model.User{HashID: params.HashID})
 	h.DB.Model(&uu).Related(&tt, "Tags")
 	h.DB.Model(&model.Tag{}).Related(&users, "Users")
 
