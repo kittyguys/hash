@@ -7,18 +7,12 @@ import (
 	"time"
 
 	"github.com/kittyguys/hash/api/db"
-	repo "github.com/kittyguys/hash/api/repository"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/kittyguys/hash/api/model"
 	"github.com/kittyguys/hash/api/utils"
 	"github.com/rs/xid"
 )
-
-// UserHandler as a handler for user
-type UserHandler struct {
-	users repo.UserRepo
-}
 
 func (handler *UserHandler) signUp(w http.ResponseWriter, r *http.Request) {
 	var u model.User

@@ -8,16 +8,17 @@ import (
 // Tag TagSchema
 type Tag struct {
 	gorm.Model
-	Name  string `json:"name"`
-	Users []User `gorm:"many2many:user_tags;"`
+	Name    string   `json:"name"`
+	Subtags []Subtag `gorm:"many2many:tag_subtags;"`
 }
 
+// Tags List of Tag
 type Tags struct {
 	T []Tag
 }
 
-// AddTagBody リクエストBODY
-type AddTagBody struct {
-	Name string `json:"name"`
-	UID  xid.ID `json:"uid"`
+// Create リクエストBODY
+type Create struct {
+	Tag string `json:"tag"`
+	UID xid.ID `json:"uid"`
 }

@@ -9,24 +9,28 @@ import (
 var router *mux.Router
 
 type (
+	// Handler Handler
 	Handler struct {
 		DB *gorm.DB
 	}
 )
 
 const (
+	// Key This should be imported from somewhere else
 	Key = "secret"
 )
 
 // InitializeRouter Init Router
 func InitializeRouter(db *gorm.DB, e *echo.Echo) *echo.Echo {
-	h := &Handler{DB: db}
-
-	e.POST("/signup", h.Signup)
-	e.POST("/login", h.Login)
-	e.POST("/tags/create", h.AddTag)
-	e.GET("/users/:id", h.GetUserByID)
-	e.GET("/tags", h.GetUserByTag)
-
+	// h := &Handler{DB: db}
+	u := NewUserHandler(db)
+	// Auth
+	e.POST("/signup", u.SignUp)
+	e.POST("/login", u.Login)
+	// // User
+	// e.GET("/users/:id", u.GetUserByID)
+	// // Tag
+	// e.POST("/tags", h.Create)
+	//e.GET("/tags/:name/users", h.GetUserByTag)
 	return e
 }
