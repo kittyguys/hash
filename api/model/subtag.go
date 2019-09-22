@@ -8,10 +8,9 @@ import (
 type Subtag struct {
 	gorm.Model
 	Name string `json:"name"`
-	Tags []Tag  `gorm:"many2many:tag_subtags;"`
 }
 
-// Subtag List of Tag
+// Subtags List of Tag
 type Subtags struct {
 	T []Tag
 }

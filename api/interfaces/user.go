@@ -1,31 +1,33 @@
 package interfaces
 
 import (
+	"fmt"
 	"net/http"
+	"time"
 
-	repo "github.com/kittyguys/hash/api/repository"
-
+	"github.com/dgrijalva/jwt-go"
 	"github.com/jinzhu/gorm"
 	"github.com/kittyguys/hash/api/model"
+	"github.com/kittyguys/hash/api/repository"
 	"github.com/kittyguys/hash/api/utils"
 	"github.com/labstack/echo"
 	"github.com/rs/xid"
 )
 
 // NewUserRepo Initialize user repository
-func NewUserRepo(conn *gorm.DB) repo.UserRepo {
-	return &UserRepo{
+func NewUserRepo(conn *gorm.DB) repository.UserRepository {
+	return &UserRepository{
 		Conn: conn,
 	}
 }
 
-// UserRepo Handler with DB
-type UserRepo struct {
+// UserRepository Handler with DB
+type UserRepository struct {
 	Conn *gorm.DB
 }
 
 // SignUp SignUp
-func (h *UserRepo) SignUp(u *model.User) error {
+func (h *UserRepository) SignUp(u *model.User) error {
 
 	// Validate
 	if u.Email == "" || u.Password == "" {
@@ -49,24 +51,28 @@ func (h *UserRepo) SignUp(u *model.User) error {
 }
 
 // Login Login
-func (h *UserRepo) Login(u *model.User) error {
+func (h *UserRepository) Login(t *string, b echo.Map) error {
+	u := &model.User{}
 
 	// Validate
 	if u.Email == "" || u.Password == "" {
 		return echo.NewHTTPError(http.StatusUnauthorized, "Please provide valid cred")
 	}
 
-	pwd := []byte(u.Password)
-	hash := utils.HashAndSalt(pwd)
-	uid := xid.New()
+	h.Conn.Find(&u, model.User{Name: b["name"].(string)})
+	pwd := []byte(b["password"].(string))
 
-	u.UID = uid
-	u.Password = hash
-	if !h.Conn.NewRecord(&u) {
-		panic("could not create new record")
-	}
-	if err := h.Conn.Create(&u).Error; err != nil {
-		panic(err.Error())
+	if utils.ComparePasswords(u.Password, pwd) {
+		token := jwt.New(jwt.SigningMethodHS256)
+		claims := token.Claims.(jwt.MapClaims)
+		claims["admin"] = true
+		claims["sub"] = u.UID
+		claims["name"] = u.Name
+		claims["iat"] = time.Now()
+		claims["exp"] = time.Now().Add(time.Hour * 24 * 90).Unix()
+		tokenString, _ := token.SignedString([]byte("secret"))
+		fmt.Println(tokenString)
+		*t = tokenString
 	}
 
 	return nil

@@ -1,8 +1,12 @@
-package repo
+package repository
 
-import "github.com/kittyguys/hash/api/model"
+import (
+	"github.com/kittyguys/hash/api/model"
+	"github.com/labstack/echo"
+)
 
-type UserRepo interface {
+// UserRepository Define user method
+type UserRepository interface {
 	SignUp(u *model.User) error
-	Login(u *model.User) error
+	Login(t *string, n echo.Map) error
 }

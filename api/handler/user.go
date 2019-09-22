@@ -2,17 +2,19 @@ package handler
 
 import (
 	"net/http"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/kittyguys/hash/api/interfaces"
 	"github.com/kittyguys/hash/api/model"
-	repo "github.com/kittyguys/hash/api/repository"
+	"github.com/kittyguys/hash/api/repository"
 
 	"github.com/jinzhu/gorm"
 
 	"github.com/labstack/echo"
 )
 
-// NewUserRepo Initialize user repository
+// NewUserHandler Initialize user repository
 func NewUserHandler(conn *gorm.DB) *UserHandler {
 	return &UserHandler{
 		repo: interfaces.NewUserRepo(conn),
@@ -21,10 +23,10 @@ func NewUserHandler(conn *gorm.DB) *UserHandler {
 
 // UserHandler Handler with DB
 type UserHandler struct {
-	repo repo.UserRepo
+	repo repository.UserRepository
 }
 
-// Signup sign up
+// SignUp sign up
 func (h *UserHandler) SignUp(c echo.Context) (err error) {
 	u := &model.User{}
 	if err := c.Bind(u); err != nil {
@@ -35,33 +37,42 @@ func (h *UserHandler) SignUp(c echo.Context) (err error) {
 		return err
 	}
 
-	return c.JSON(http.StatusCreated, u)
+	if u.Email != "" || u.Password != "" {
+
+		token := jwt.New(jwt.SigningMethodHS256)
+		claims := token.Claims.(jwt.MapClaims)
+		claims["admin"] = true
+		claims["uid"] = u.UID
+		claims["name"] = u.Name
+		claims["iat"] = time.Now()
+		claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+		tokenString, _ := token.SignedString([]byte(Key))
+		data := map[string]interface{}{"token": tokenString}
+
+		return c.JSON(http.StatusCreated, data)
+	}
+
+	return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
 }
 
 // Login log in
-// func (h *UserHandler) Login(c echo.Context) (err error) {
-// 	u := &model.User{}
-// 	if err = c.Bind(u); err != nil {
-// 		return
-// 	}
-// 	pwd := []byte(u.Password)
+func (h *UserHandler) Login(c echo.Context) (err error) {
+	var body echo.Map
+	var token string
+	if err = c.Bind(&body); err != nil {
+		return
+	}
 
-// 	h.Conn.Find(&u, model.User{Name: u.Name})
+	h.repo.Login(&token, body)
 
-// 	if utils.ComparePasswords(u.Password, pwd) {
-// 		token := jwt.New(jwt.SigningMethodHS256)
-// 		claims := token.Claims.(jwt.MapClaims)
-// 		claims["admin"] = true
-// 		claims["sub"] = u.UID
-// 		claims["name"] = u.Name
-// 		claims["iat"] = time.Now()
-// 		claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
-// 		tokenString, _ := token.SignedString([]byte(Key))
-// 		return c.JSON(http.StatusCreated, tokenString)
-// 	}
+	if token != "" {
+		data := map[string]interface{}{"token": token}
 
-// 	return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
-// }
+		return c.JSON(http.StatusCreated, data)
+	}
+
+	return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
+}
 
 // // GetUserByID for getting user info by ID
 // func (h *UserHandler) GetUserByID(c echo.Context) (err error) {
