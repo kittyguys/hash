@@ -1,7 +1,6 @@
 package interfaces
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -71,7 +70,7 @@ func (h *UserRepository) Login(t *string, b echo.Map) error {
 		claims["iat"] = time.Now()
 		claims["exp"] = time.Now().Add(time.Hour * 24 * 90).Unix()
 		tokenString, _ := token.SignedString([]byte("secret"))
-		fmt.Println(tokenString)
+
 		*t = tokenString
 	}
 
