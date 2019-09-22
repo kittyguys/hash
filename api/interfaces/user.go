@@ -28,7 +28,7 @@ type UserRepository struct {
 func (h *UserRepository) SignUp(u *model.User) error {
 
 	// Validate
-	if u.Email == "" || u.Password == "" {
+	if u.Password == "" {
 		return echo.NewHTTPError(http.StatusUnauthorized, "Please provide valid cred")
 	}
 
@@ -72,6 +72,13 @@ func (h *UserRepository) Login(t *string, b echo.Map) error {
 
 		*t = tokenString
 	}
+
+	return nil
+}
+
+// GetUser GetUser
+func (h *UserRepository) GetUser(u *model.User, id string) error {
+	h.Conn.First(&u, model.User{HashID: id})
 
 	return nil
 }

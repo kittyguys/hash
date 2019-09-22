@@ -76,24 +76,19 @@ func (h *UserHandler) Login(c echo.Context) (err error) {
 	return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
 }
 
-// // GetUserByID for getting user info by ID
-// func (h *UserHandler) GetUserByID(c echo.Context) (err error) {
-// 	var u model.User
-// 	var tags []model.Tag
-// 	var id string
-// 	uid, _ := xid.FromString(id)
+// GetUser for getting user info by ID
+func (h *UserHandler) GetUser(c echo.Context) (err error) {
+	var u model.User
+	//var tags []model.Tag
+	id := c.Param("id")
 
-// 	h.Conn.First(&u, model.User{UID: uid})
-// 	h.Conn.Model(&u).Association("Tags").Find(&tags)
+	//h.Conn.Model(&u).Association("Tags").Find(&tags)
+	h.repo.GetUser(&u, id)
 
-// 	data := map[string]interface{}{"uid": u.UID, "name": u.Name, "tags": tags}
+	data := map[string]interface{}{"hashID": u.HashID, "displayName": u.DisplayName}
 
-// 	if err != nil {
-// 		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
-// 	}
-
-// 	return c.JSON(http.StatusCreated, data)
-// }
+	return c.JSON(http.StatusCreated, data)
+}
 
 // // GetUserByTag UIDでユーザー情報を取得
 // func (h *UserHandler) GetUserByTag(c echo.Context) (err error) {
