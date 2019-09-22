@@ -10,7 +10,6 @@ import (
 	"github.com/kittyguys/hash/api/repository"
 	"github.com/kittyguys/hash/api/utils"
 	"github.com/labstack/echo"
-	"github.com/rs/xid"
 )
 
 // NewUserRepo Initialize user repository
@@ -35,9 +34,9 @@ func (h *UserRepository) SignUp(u *model.User) error {
 
 	pwd := []byte(u.Password)
 	hash := utils.HashAndSalt(pwd)
-	uid := xid.New()
+	hashID := u.HashID
 
-	u.UID = uid
+	u.HashID = hashID
 	u.Password = hash
 	if !h.Conn.NewRecord(&u) {
 		panic("could not create new record")
@@ -54,19 +53,19 @@ func (h *UserRepository) Login(t *string, b echo.Map) error {
 	u := &model.User{}
 
 	// Validate
-	if u.Email == "" || u.Password == "" {
+	if b["email"] == "" || b["password"] == "" {
 		return echo.NewHTTPError(http.StatusUnauthorized, "Please provide valid cred")
 	}
 
-	h.Conn.Find(&u, model.User{Name: b["name"].(string)})
+	h.Conn.First(&u, model.User{HashID: b["hashID"].(string)})
 	pwd := []byte(b["password"].(string))
 
 	if utils.ComparePasswords(u.Password, pwd) {
 		token := jwt.New(jwt.SigningMethodHS256)
 		claims := token.Claims.(jwt.MapClaims)
 		claims["admin"] = true
-		claims["sub"] = u.UID
-		claims["name"] = u.Name
+		claims["hashID"] = u.HashID
+		claims["displayName"] = u.DisplayName
 		claims["iat"] = time.Now()
 		claims["exp"] = time.Now().Add(time.Hour * 24 * 90).Unix()
 		tokenString, _ := token.SignedString([]byte("secret"))
