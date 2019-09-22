@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -42,8 +43,8 @@ func (h *UserHandler) SignUp(c echo.Context) (err error) {
 		token := jwt.New(jwt.SigningMethodHS256)
 		claims := token.Claims.(jwt.MapClaims)
 		claims["admin"] = true
-		claims["uid"] = u.UID
-		claims["name"] = u.Name
+		claims["hashID"] = u.HashID
+		claims["displayName"] = u.DisplayName
 		claims["iat"] = time.Now()
 		claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 		tokenString, _ := token.SignedString([]byte(Key))
@@ -62,6 +63,7 @@ func (h *UserHandler) Login(c echo.Context) (err error) {
 	if err = c.Bind(&body); err != nil {
 		return
 	}
+	fmt.Println(body)
 
 	h.repo.Login(&token, body)
 
