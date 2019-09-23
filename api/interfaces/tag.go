@@ -5,7 +5,7 @@ import (
 	"github.com/kittyguys/hash/api/repository"
 )
 
-// NewUserRepo Initialize user repository
+// NewTagRepo Initialize user repository
 func NewTagRepo(conn *gorm.DB) repository.TagRepository {
 	return &TagRepository{
 		Conn: conn,
