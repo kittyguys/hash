@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -63,7 +62,6 @@ func (h *UserHandler) Login(c echo.Context) (err error) {
 	if err = c.Bind(&body); err != nil {
 		return
 	}
-	fmt.Println(body)
 
 	h.repo.Login(&token, body)
 
@@ -84,6 +82,24 @@ func (h *UserHandler) GetUser(c echo.Context) (err error) {
 
 	//h.Conn.Model(&u).Association("Tags").Find(&tags)
 	h.repo.GetUser(&u, id)
+
+	data := map[string]interface{}{"hashID": u.HashID, "displayName": u.DisplayName}
+
+	return c.JSON(http.StatusCreated, data)
+}
+
+// CreateTag for getting user info by ID
+func (h *UserHandler) CreateTag(c echo.Context) (err error) {
+	var u model.User
+	body := map[string]interface{}{}
+	//var tags []model.Tag
+
+	if err = c.Bind(&body); err != nil {
+		return
+	}
+
+	//h.Conn.Model(&u).Association("Tags").Find(&tags)
+	h.repo.CreateTag(&u, body)
 
 	data := map[string]interface{}{"hashID": u.HashID, "displayName": u.DisplayName}
 

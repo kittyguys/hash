@@ -3,9 +3,24 @@ package handler
 import (
 	"net/http"
 
+	"github.com/jinzhu/gorm"
+	"github.com/kittyguys/hash/api/interfaces"
 	"github.com/kittyguys/hash/api/model"
+	"github.com/kittyguys/hash/api/repository"
 	"github.com/labstack/echo"
 )
+
+// NewTagHandler Initialize user repository
+func NewTagHandler(conn *gorm.DB) *TagHandler {
+	return &TagHandler{
+		repo: interfaces.NewTagRepo(conn),
+	}
+}
+
+// TagHandler Handler with DB
+type TagHandler struct {
+	repo repository.TagRepository
+}
 
 // Create ユーザーにタグを追加する
 func (h *Handler) Create(c echo.Context) (err error) {

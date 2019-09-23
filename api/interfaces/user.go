@@ -82,3 +82,17 @@ func (h *UserRepository) GetUser(u *model.User, id string) error {
 
 	return nil
 }
+
+// CreateTag CreateTag
+func (h *UserRepository) CreateTag(u *model.User, b map[string]interface{}) error {
+	var tag model.Tag
+	var tags []model.Tag
+
+	tag.Name = b["tags"].(string)
+
+	h.Conn.First(&u, model.User{HashID: b["id"].(string)})
+	h.Conn.Model(&u).Related(&tags, "Tags")
+	h.Conn.Model(&u).Association("Tags").Append(&tag)
+
+	return nil
+}
