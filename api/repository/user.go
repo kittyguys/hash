@@ -10,5 +10,5 @@ type UserRepository interface {
 	SignUp(u *model.User) error
 	Login(t *string, n echo.Map) error
 	GetUser(u *model.User, id string) error
-	CreateTag(u *model.User, b map[string]interface{}) error
+	CreateTag(u *model.User, t *[]model.Tag, b map[string]interface{}) error
 }

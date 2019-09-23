@@ -90,18 +90,17 @@ func (h *UserHandler) GetUser(c echo.Context) (err error) {
 
 // CreateTag for getting user info by ID
 func (h *UserHandler) CreateTag(c echo.Context) (err error) {
-	var u model.User
+	var user model.User
+	var tags []model.Tag
 	body := map[string]interface{}{}
-	//var tags []model.Tag
 
 	if err = c.Bind(&body); err != nil {
 		return
 	}
 
-	//h.Conn.Model(&u).Association("Tags").Find(&tags)
-	h.repo.CreateTag(&u, body)
+	h.repo.CreateTag(&user, &tags, body)
 
-	data := map[string]interface{}{"hashID": u.HashID, "displayName": u.DisplayName}
+	data := map[string]interface{}{"tags": tags}
 
 	return c.JSON(http.StatusCreated, data)
 }
