@@ -1,8 +1,12 @@
 package interfaces
 
 import (
+	"net/http"
+
 	"github.com/jinzhu/gorm"
+	"github.com/kittyguys/hash/api/model"
 	"github.com/kittyguys/hash/api/repository"
+	"github.com/labstack/echo"
 )
 
 // NewTagRepo Initialize user repository
@@ -17,8 +21,12 @@ type TagRepository struct {
 	Conn *gorm.DB
 }
 
-// Create Create
-func (h *TagRepository) Create() error {
+// GetUsers GetUsers
+func (h *TagRepository) GetUsers(t *model.Tag, u *[]model.User, n string) error {
+	if err := h.Conn.First(&t, model.Tag{Name: n}).Error; err != nil {
+		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "Not found"}
+	}
+	h.Conn.Model(&t).Association("Users").Find(&u)
 
 	return nil
 }
