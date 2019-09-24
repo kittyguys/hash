@@ -77,13 +77,12 @@ func (h *UserHandler) Login(c echo.Context) (err error) {
 // GetUser for getting user info by ID
 func (h *UserHandler) GetUser(c echo.Context) (err error) {
 	var u model.User
-	//var tags []model.Tag
+	var tags []model.Tag
 	id := c.Param("id")
 
-	//h.Conn.Model(&u).Association("Tags").Find(&tags)
-	h.repo.GetUser(&u, id)
+	h.repo.GetUser(&u, &tags, id)
 
-	data := map[string]interface{}{"hashID": u.HashID, "displayName": u.DisplayName}
+	data := map[string]interface{}{"hashID": u.HashID, "displayName": u.DisplayName, "tags": tags}
 
 	return c.JSON(http.StatusCreated, data)
 }

@@ -77,8 +77,9 @@ func (h *UserRepository) Login(t *string, b echo.Map) error {
 }
 
 // GetUser GetUser
-func (h *UserRepository) GetUser(u *model.User, id string) error {
+func (h *UserRepository) GetUser(u *model.User, t *[]model.Tag, id string) error {
 	h.Conn.First(&u, model.User{HashID: id})
+	h.Conn.Model(&u).Association("Tags").Find(&t)
 
 	return nil
 }
