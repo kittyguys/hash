@@ -1,13 +1,17 @@
 # hash
 
-### client
+### DB
+HomebrewでMySQLをインストールした場合  
+`mysql.server start`
+
+### Client
 ```
 cd client
 npm i
 npm run dev
 ```
 
-### server 
+### Server 
 必要なパッケージをインストール  
 `go get xxx`
 ```
