@@ -1,15 +1,26 @@
 package main
 
 import (
+	"fmt"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/kittyguys/hash/api/db"
 	"github.com/kittyguys/hash/api/handler"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"github.com/spf13/viper"
 )
 
 func init() {
-	db.New()
+	viper.SetConfigName("config")
+	viper.AddConfigPath("./config")
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(fmt.Errorf("fatal error config file"))
+	}
+	mysql := viper.Get("Database")
+
+	db.New(mysql.(db.Mysql))
 	db.Init()
 }
 
