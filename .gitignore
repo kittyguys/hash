@@ -110,3 +110,6 @@ client/dist/bundle.js.map
 
 # fresh
 api/tmp/
+
+# keys
+api/config/config.json
