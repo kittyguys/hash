@@ -18,9 +18,10 @@ func init() {
 	if err != nil {
 		panic(fmt.Errorf("fatal error config file"))
 	}
-	mysql := viper.Get("Database")
+	var mysql map[string]interface{}
+	mysql = viper.Get("Database").(map[string]interface{})
 
-	db.New(mysql.(db.Mysql))
+	db.New(mysql)
 	db.Init()
 }
 

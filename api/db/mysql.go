@@ -15,8 +15,8 @@ type Mysql struct {
 }
 
 // New Connect to MySQL
-func New(d Mysql) *gorm.DB {
-	conn, err := gorm.Open("mysql", d.Username+":"+d.Password+"@tcp("+d.Host+")/"+d.DBName+"?charset=utf8&parseTime=True&loc=Local")
+func New(d map[string]interface{}) *gorm.DB {
+	conn, err := gorm.Open("mysql", d["username"].(string)+":"+d["password"].(string)+"@tcp("+d["host"].(string)+")/"+d["dbname"].(string)+"?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		panic(err.Error())
 	}
