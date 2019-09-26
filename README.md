@@ -1,4 +1,4 @@
-# hash
+# HASH
 
 ### DB
 HomebrewでMySQLをインストールした場合  
