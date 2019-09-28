@@ -57,5 +57,6 @@ func twitterLogin(c echo.Context) (err error) {
 	// return twi
 	requestToken, _, _ := config.RequestToken()
 	authorizationURL, err := config.AuthorizationURL(requestToken)
-	return c.JSON(http.StatusCreated, authorizationURL.String())
+	data := map[string]interface{}{"authorizationURL": authorizationURL.String()}
+	return c.JSON(http.StatusCreated, data)
 }
