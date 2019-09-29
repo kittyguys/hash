@@ -1,0 +1,12 @@
+{
+  "Database": {
+    "Host": "localhost",
+    "Username": "root",
+    "Password": "",
+    "DBName": "hash"
+  },
+  "Twitter": {
+    "apiKey": "xxx",
+    "apiSecretKey": "xxx"
+  }
+}

@@ -112,4 +112,4 @@ client/dist/bundle.js.map
 api/tmp/
 
 # keys
-api/config/config.json
+api/config/config.yaml

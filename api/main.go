@@ -1,27 +1,18 @@
 package main
 
 import (
-	"fmt"
-
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/kittyguys/hash/api/config"
 	"github.com/kittyguys/hash/api/db"
 	"github.com/kittyguys/hash/api/handler"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/spf13/viper"
 )
 
 func init() {
-	viper.SetConfigName("config")
-	viper.AddConfigPath("./config")
-	err := viper.ReadInConfig()
-	if err != nil {
-		panic(fmt.Errorf("fatal error config file"))
-	}
-	var mysql map[string]interface{}
-	mysql = viper.Get("Database").(map[string]interface{})
+	config := config.New()
 
-	db.New(mysql)
+	db.New(config)
 	db.Init()
 }
 
@@ -37,7 +28,7 @@ func main() {
 		SigningKey: []byte(handler.Key),
 		Skipper: func(c echo.Context) bool {
 			// Skip authentication for and signup login requests
-			if c.Path() == "/login" || c.Path() == "/signup" || c.Path() == "/auth/twitter" {
+			if c.Path() == "/login" || c.Path() == "/signup" || c.Path() == "/auth/twitter" || c.Path() == "/auth/twitter/callback" {
 				return true
 			}
 			return false

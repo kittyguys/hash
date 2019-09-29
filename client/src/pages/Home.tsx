@@ -18,17 +18,23 @@ const Home: React.FC = () => {
     if (localStorage.getItem("token")) {
       const token = localStorage.getItem("token");
       const decodedToken = decodeJwt(token);
-      const userID = decodedToken.sub;
-      axios.get(`http://localhost:8080/users/${userID}`).then(res => {
-        dispatch(
-          myDataChange({
-            userID: res.data.uid,
-            userName: res.data.name,
-            avatar: "",
-            tags: res.data.tags
-          })
-        );
-      });
+      const userID = decodedToken.hashID;
+      axios
+        .get(`http://localhost:8080/users/${userID}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(res => {
+          dispatch(
+            myDataChange({
+              userID: res.data.hashID,
+              userName: res.data.displayName,
+              avatar: "",
+              tags: res.data.tags
+            })
+          );
+        });
     }
   }, []);
 
