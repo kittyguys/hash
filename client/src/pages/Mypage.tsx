@@ -19,16 +19,22 @@ const Mypage: React.FC = () => {
       const token = localStorage.getItem("token");
       const decodedToken = decodeJwt(token);
       const userID = decodedToken.hashID;
-      axios.get(`http://localhost:8080/users/${userID}`).then(res => {
-        dispatch(
-          myDataChange({
-            userID: res.data.hashID,
-            userName: res.data.displayName,
-            avatar: "",
-            tags: res.data.tags
-          })
-        );
-      });
+      axios
+        .get(`http://localhost:8080/users/${userID}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(res => {
+          dispatch(
+            myDataChange({
+              userID: res.data.hashID,
+              userName: res.data.displayName,
+              avatar: "",
+              tags: res.data.tags
+            })
+          );
+        });
     }
   }, []);
 
@@ -39,14 +45,22 @@ const Mypage: React.FC = () => {
 
   const addTag = (e: any) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
+    const tags = mypageInput;
+    const userID = myData.userID;
     dispatch(mypageInputChange(""));
     axios
-      .post("http://localhost:8080/tags/create", {
-        uid: myData.userID,
-        name: mypageInput
-      })
+      .post(
+        `http://localhost:8080/users/${userID}/tags`,
+        { tags: tags },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
       .then(res => {
-        dispatch(myDataChange({ ...myData, tags: res.data }));
+        dispatch(myDataChange({ ...myData, tags: res.data.tags }));
       });
   };
 
