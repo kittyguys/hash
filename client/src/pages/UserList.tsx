@@ -2,11 +2,19 @@ import * as React from "react";
 import { Fragment, useState, useEffect } from "react";
 import UserCassette from "../components/UserCassette";
 import axios from "axios";
-import { decodeJwt } from "../Utils/decodeJwt";
 
-const tag = "pachislo";
+const queryString = require("query-string");
 
-const UserList: React.FC = () => {
+type Props = {
+  location: {
+    search: "";
+  };
+};
+
+const UserList: React.FC<Props> = props => {
+  const qs = queryString.parse(props.location.search);
+  const tag = qs.tag;
+
   useEffect(() => {
     if (localStorage.getItem("token")) {
       const token = localStorage.getItem("token");
