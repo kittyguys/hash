@@ -27,6 +27,7 @@ const Header: React.FC<Props> = ({ isLogin, page, history }) => {
   const signOut = () => {
     localStorage.removeItem("token");
     history.push("/");
+    modalChange(false);
   };
 
   let linkContents: JSX.Element[] = [];

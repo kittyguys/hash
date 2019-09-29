@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/kittyguys/hash/api/config"
 	"github.com/kittyguys/hash/api/db"
 	"github.com/kittyguys/hash/api/handler"
 	"github.com/labstack/echo"
@@ -9,7 +10,9 @@ import (
 )
 
 func init() {
-	db.New()
+	config := config.New()
+
+	db.New(config)
 	db.Init()
 }
 
@@ -25,7 +28,7 @@ func main() {
 		SigningKey: []byte(handler.Key),
 		Skipper: func(c echo.Context) bool {
 			// Skip authentication for and signup login requests
-			if c.Path() == "/login" || c.Path() == "/signup" {
+			if c.Path() == "/login" || c.Path() == "/signup" || c.Path() == "/auth/twitter" || c.Path() == "/auth/twitter/callback" {
 				return true
 			}
 			return false

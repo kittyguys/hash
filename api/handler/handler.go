@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
+	"github.com/kittyguys/hash/api/config"
 	"github.com/labstack/echo"
 )
 
@@ -22,15 +23,21 @@ const (
 
 // InitializeRouter Init Router
 func InitializeRouter(db *gorm.DB, e *echo.Echo) *echo.Echo {
-	// h := &Handler{DB: db}
-	u := NewUserHandler(db)
+	config := config.New()
+	user := NewUserHandler(db)
+	tag := NewTagHandler(db)
+	auth := NewOAuthHandler(config, db)
+
 	// Auth
-	e.POST("/signup", u.SignUp)
-	e.POST("/login", u.Login)
-	// // User
-	// e.GET("/users/:id", u.GetUserByID)
-	// // Tag
-	// e.POST("/tags", h.Create)
-	//e.GET("/tags/:name/users", h.GetUserByTag)
+	e.POST("/signup", user.SignUp)
+	e.POST("/login", user.Login)
+	// Social login
+	e.GET("/auth/twitter", auth.TwitterLogin())
+	e.GET("/auth/twitter/callback", auth.TwitterCallback())
+	// User
+	e.GET("/users/:id", user.GetUser)
+	e.POST("/users/:id/tags", user.CreateTag)
+	// Tag
+	e.GET("/tags/:name/users", tag.GetUsers)
 	return e
 }

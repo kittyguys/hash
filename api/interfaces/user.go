@@ -1,15 +1,14 @@
 package interfaces
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jinzhu/gorm"
+	"github.com/kittyguys/hash/api/common"
 	"github.com/kittyguys/hash/api/model"
 	"github.com/kittyguys/hash/api/repository"
-	"github.com/kittyguys/hash/api/utils"
 	"github.com/labstack/echo"
 )
 
@@ -29,12 +28,12 @@ type UserRepository struct {
 func (h *UserRepository) SignUp(u *model.User) error {
 
 	// Validate
-	if u.Email == "" || u.Password == "" {
+	if u.Password == "" {
 		return echo.NewHTTPError(http.StatusUnauthorized, "Please provide valid cred")
 	}
 
 	pwd := []byte(u.Password)
-	hash := utils.HashAndSalt(pwd)
+	hash := common.HashAndSalt(pwd)
 	hashID := u.HashID
 
 	u.HashID = hashID
@@ -61,7 +60,7 @@ func (h *UserRepository) Login(t *string, b echo.Map) error {
 	h.Conn.First(&u, model.User{HashID: b["hashID"].(string)})
 	pwd := []byte(b["password"].(string))
 
-	if utils.ComparePasswords(u.Password, pwd) {
+	if common.ComparePasswords(u.Password, pwd) {
 		token := jwt.New(jwt.SigningMethodHS256)
 		claims := token.Claims.(jwt.MapClaims)
 		claims["admin"] = true
@@ -70,9 +69,46 @@ func (h *UserRepository) Login(t *string, b echo.Map) error {
 		claims["iat"] = time.Now()
 		claims["exp"] = time.Now().Add(time.Hour * 24 * 90).Unix()
 		tokenString, _ := token.SignedString([]byte("secret"))
-		fmt.Println(tokenString)
+
 		*t = tokenString
 	}
 
 	return nil
+}
+
+// GetUser GetUser
+func (h *UserRepository) GetUser(u *model.User, t *[]model.Tag, id string) error {
+	h.Conn.First(&u, model.User{HashID: id})
+	h.Conn.Model(&u).Association("Tags").Find(&t)
+
+	return nil
+}
+
+// CreateTag CreateTag
+func (h *UserRepository) CreateTag(u *model.User, t *[]model.Tag, b map[string]interface{}) error {
+	var tag model.Tag
+
+	tag.Name = b["tags"].(string)
+
+	h.Conn.First(&u, model.User{HashID: b["id"].(string)})
+	h.Conn.Model(&u).Related(&t, "Tags")
+
+	h.Conn.Model(&u).Association("Tags").Find(&t)
+
+	if !isDuplicate(t, tag.Name) {
+		h.Conn.Model(&u).Association("Tags").Append(&tag)
+	}
+
+	return nil
+}
+
+func isDuplicate(tags *[]model.Tag, tag string) bool {
+	var result bool
+	for _, v := range *tags {
+		if v.Name == tag {
+			result = true
+			break
+		}
+	}
+	return result
 }

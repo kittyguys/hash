@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -63,7 +62,6 @@ func (h *UserHandler) Login(c echo.Context) (err error) {
 	if err = c.Bind(&body); err != nil {
 		return
 	}
-	fmt.Println(body)
 
 	h.repo.Login(&token, body)
 
@@ -76,45 +74,32 @@ func (h *UserHandler) Login(c echo.Context) (err error) {
 	return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
 }
 
-// // GetUserByID for getting user info by ID
-// func (h *UserHandler) GetUserByID(c echo.Context) (err error) {
-// 	var u model.User
-// 	var tags []model.Tag
-// 	var id string
-// 	uid, _ := xid.FromString(id)
+// GetUser for getting user info by ID
+func (h *UserHandler) GetUser(c echo.Context) (err error) {
+	var u model.User
+	var tags []model.Tag
+	id := c.Param("id")
 
-// 	h.Conn.First(&u, model.User{UID: uid})
-// 	h.Conn.Model(&u).Association("Tags").Find(&tags)
+	h.repo.GetUser(&u, &tags, id)
 
-// 	data := map[string]interface{}{"uid": u.UID, "name": u.Name, "tags": tags}
+	data := map[string]interface{}{"hashID": u.HashID, "displayName": u.DisplayName, "tags": tags}
 
-// 	if err != nil {
-// 		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
-// 	}
+	return c.JSON(http.StatusCreated, data)
+}
 
-// 	return c.JSON(http.StatusCreated, data)
-// }
+// CreateTag for getting user info by ID
+func (h *UserHandler) CreateTag(c echo.Context) (err error) {
+	var user model.User
+	var tags []model.Tag
+	body := map[string]interface{}{}
 
-// // GetUserByTag UIDでユーザー情報を取得
-// func (h *UserHandler) GetUserByTag(c echo.Context) (err error) {
-// 	var users []model.User
-// 	var uid []xid.ID
-// 	t := &model.Tag{}
-// 	if err = c.Bind(t); err != nil {
-// 		return
-// 	}
+	if err = c.Bind(&body); err != nil {
+		return
+	}
 
-// 	h.Conn.Where("tags.name=?", t.Name).Select("DISTINCT(uid)").Joins("JOIN user_tags ON user_tags.user_id = users.id").
-// 		Joins("JOIN tags ON user_tags.tag_id=tags.id").Find(&users)
-// 	for _, v := range users {
-// 		uid = append(uid, v.UID)
-// 	}
+	h.repo.CreateTag(&user, &tags, body)
 
-// 	data := map[string]interface{}{"uid": uid}
+	data := map[string]interface{}{"tags": tags}
 
-// 	if err != nil {
-// 		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
-// 	}
-
-// 	return c.JSON(http.StatusCreated, data)
-// }
+	return c.JSON(http.StatusCreated, data)
+}

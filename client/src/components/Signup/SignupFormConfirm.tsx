@@ -11,7 +11,8 @@ type Props = {
 } & RouteComponentProps;
 
 type UserData = {
-  name: string;
+  hashID: string;
+  displayName: string;
   email: string;
   password: string;
 };
@@ -19,12 +20,13 @@ type UserData = {
 const SignupFormConfirm: React.FC<Props> = ({ history, ...props }) => {
   const createUser = () => {
     const userData: UserData = {
-      name: props.profile.userName,
+      hashID: props.profile.userName,
+      displayName: props.profile.userName,
       email: props.profile.email,
       password: props.profile.password
     };
     axios.post("http://localhost:8080/signup", userData).then(res => {
-      localStorage.setItem("token", res.data);
+      localStorage.setItem("token", res.data.token);
       alert("アカウントの作成が成功しました。");
       history.push("/");
     });

@@ -2,27 +2,15 @@ package db
 
 import (
 	"github.com/jinzhu/gorm"
+	"github.com/kittyguys/hash/api/config"
 	"github.com/kittyguys/hash/api/model"
 )
 
 var db *gorm.DB
 
-type mysql struct {
-	Host     string
-	Username string
-	Password string
-	DBName   string
-}
-
 // New Connect to MySQL
-func New() *gorm.DB {
-	d := &mysql{
-		Host:     "localhost",
-		Username: "root",
-		Password: "",
-		DBName:   "hash",
-	}
-	conn, err := gorm.Open("mysql", d.Username+":"+d.Password+"@tcp("+d.Host+")/"+d.DBName+"?charset=utf8&parseTime=True&loc=Local")
+func New(d *config.Config) *gorm.DB {
+	conn, err := gorm.Open("mysql", d.MySQL.User+":"+d.MySQL.Password+"@tcp("+d.MySQL.Host+")/"+d.MySQL.Name+"?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -32,7 +20,7 @@ func New() *gorm.DB {
 
 // Init Migration
 func Init() {
-	db.AutoMigrate(&model.User{}, &model.Tag{}, &model.Subtag{})
+	db.AutoMigrate(&model.User{}, &model.Tag{}, &model.Subtag{}, &model.SocialLogin{})
 	return
 }
 
