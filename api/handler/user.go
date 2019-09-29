@@ -103,27 +103,3 @@ func (h *UserHandler) CreateTag(c echo.Context) (err error) {
 
 	return c.JSON(http.StatusCreated, data)
 }
-
-// // GetUserByTag UIDでユーザー情報を取得
-// func (h *UserHandler) GetUserByTag(c echo.Context) (err error) {
-// 	var users []model.User
-// 	var uid []xid.ID
-// 	t := &model.Tag{}
-// 	if err = c.Bind(t); err != nil {
-// 		return
-// 	}
-
-// 	h.Conn.Where("tags.name=?", t.Name).Select("DISTINCT(uid)").Joins("JOIN user_tags ON user_tags.user_id = users.id").
-// 		Joins("JOIN tags ON user_tags.tag_id=tags.id").Find(&users)
-// 	for _, v := range users {
-// 		uid = append(uid, v.UID)
-// 	}
-
-// 	data := map[string]interface{}{"uid": uid}
-
-// 	if err != nil {
-// 		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
-// 	}
-
-// 	return c.JSON(http.StatusCreated, data)
-// }

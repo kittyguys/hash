@@ -36,6 +36,12 @@ const SigninForm: React.FC<Props> = ({ history, ...props }) => {
     });
   };
 
+  const twitterLogin = () => {
+    axios.get("http://localhost:8080/auth/twitter").then(res => {
+      window.location.replace(res.data.url);
+    });
+  };
+
   const dispatch = useDispatch();
 
   const usernameChange = (value: string) => {
@@ -73,6 +79,16 @@ const SigninForm: React.FC<Props> = ({ history, ...props }) => {
           btnHeight="40px"
           btnColor="#4285f4"
           handleClick={() => login()}
+        />
+      </Layout3>
+      <Layout3>
+        <NormalButton
+          content="Twitter"
+          contentSize="20px"
+          btnWidth="180px"
+          btnHeight="40px"
+          btnColor="#38A1F3"
+          handleClick={() => twitterLogin()}
         />
       </Layout3>
     </Wrapper>

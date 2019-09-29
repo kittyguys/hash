@@ -6,9 +6,9 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jinzhu/gorm"
+	"github.com/kittyguys/hash/api/common"
 	"github.com/kittyguys/hash/api/model"
 	"github.com/kittyguys/hash/api/repository"
-	"github.com/kittyguys/hash/api/utils"
 	"github.com/labstack/echo"
 )
 
@@ -33,7 +33,7 @@ func (h *UserRepository) SignUp(u *model.User) error {
 	}
 
 	pwd := []byte(u.Password)
-	hash := utils.HashAndSalt(pwd)
+	hash := common.HashAndSalt(pwd)
 	hashID := u.HashID
 
 	u.HashID = hashID
@@ -60,7 +60,7 @@ func (h *UserRepository) Login(t *string, b echo.Map) error {
 	h.Conn.First(&u, model.User{HashID: b["hashID"].(string)})
 	pwd := []byte(b["password"].(string))
 
-	if utils.ComparePasswords(u.Password, pwd) {
+	if common.ComparePasswords(u.Password, pwd) {
 		token := jwt.New(jwt.SigningMethodHS256)
 		claims := token.Claims.(jwt.MapClaims)
 		claims["admin"] = true
