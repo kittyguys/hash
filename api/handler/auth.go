@@ -104,6 +104,7 @@ func (o *OAuth) TwitterCallback() echo.HandlerFunc {
 		claims["admin"] = true
 		claims["hashID"] = user.Name
 		claims["displayName"] = user.ScreenName
+		claims["profileImageURL"] = user.Image
 		claims["iat"] = time.Now()
 		claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 		tokenString, _ := token.SignedString([]byte(Key))
