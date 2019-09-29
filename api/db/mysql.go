@@ -7,7 +7,7 @@ import (
 
 var db *gorm.DB
 
-type mysql struct {
+type Mysql struct {
 	Host     string
 	Username string
 	Password string
@@ -15,14 +15,8 @@ type mysql struct {
 }
 
 // New Connect to MySQL
-func New() *gorm.DB {
-	d := &mysql{
-		Host:     "localhost",
-		Username: "root",
-		Password: "",
-		DBName:   "hash",
-	}
-	conn, err := gorm.Open("mysql", d.Username+":"+d.Password+"@tcp("+d.Host+")/"+d.DBName+"?charset=utf8&parseTime=True&loc=Local")
+func New(d map[string]interface{}) *gorm.DB {
+	conn, err := gorm.Open("mysql", d["username"].(string)+":"+d["password"].(string)+"@tcp("+d["host"].(string)+")/"+d["dbname"].(string)+"?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		panic(err.Error())
 	}

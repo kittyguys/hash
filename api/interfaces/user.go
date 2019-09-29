@@ -77,8 +77,38 @@ func (h *UserRepository) Login(t *string, b echo.Map) error {
 }
 
 // GetUser GetUser
-func (h *UserRepository) GetUser(u *model.User, id string) error {
+func (h *UserRepository) GetUser(u *model.User, t *[]model.Tag, id string) error {
 	h.Conn.First(&u, model.User{HashID: id})
+	h.Conn.Model(&u).Association("Tags").Find(&t)
 
 	return nil
+}
+
+// CreateTag CreateTag
+func (h *UserRepository) CreateTag(u *model.User, t *[]model.Tag, b map[string]interface{}) error {
+	var tag model.Tag
+
+	tag.Name = b["tags"].(string)
+
+	h.Conn.First(&u, model.User{HashID: b["id"].(string)})
+	h.Conn.Model(&u).Related(&t, "Tags")
+
+	h.Conn.Model(&u).Association("Tags").Find(&t)
+
+	if !isDuplicate(t, tag.Name) {
+		h.Conn.Model(&u).Association("Tags").Append(&tag)
+	}
+
+	return nil
+}
+
+func isDuplicate(tags *[]model.Tag, tag string) bool {
+	var result bool
+	for _, v := range *tags {
+		if v.Name == tag {
+			result = true
+			break
+		}
+	}
+	return result
 }

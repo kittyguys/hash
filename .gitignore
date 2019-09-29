@@ -107,3 +107,9 @@ client/dist/bundle.js.map
 
 # macOS
 .DS_Store
+
+# fresh
+api/tmp/
+
+# keys
+api/config/config.json
