@@ -1,17 +1,20 @@
 import * as React from "react";
+import { Fragment, useState, useEffect } from "react";
 import styled from "styled-components";
 
 import Avatar from "../common/Avatar";
 import UserName from "../common/UserName";
 import TagBox from "../common/Tag/box";
+import axios from "axios";
 
 type Props = {
-  userId: string;
+  userName: string;
+  tags: string[];
 };
 
-const UserCassette: React.FC<Props> = ({ userId }) => {
+const UserCassette: React.FC<Props> = ({ userName, tags }) => {
   const imageSrc = "";
-  const userName = userId;
+
   return (
     <Wrapper>
       <Avatar imageSrc={imageSrc} imageWidth="80px" imageHeight="80px" />
@@ -24,7 +27,7 @@ const UserCassette: React.FC<Props> = ({ userId }) => {
         />
       </UserInfo>
       <TagWrap>
-        <TagBox tags={["toku", "yasu", "karu"]}></TagBox>
+        <TagBox tags={tags}></TagBox>
       </TagWrap>
     </Wrapper>
   );
