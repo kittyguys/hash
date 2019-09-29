@@ -47,6 +47,7 @@ const Image = styled.div<ImageStyle>`
   height: ${({ imageHeight }) => imageHeight};
   border-radius: 50%;
   overflow: hidden;
+  border: 1px solid #dbdbdb;
   :hover {
     cursor: pointer;
   }

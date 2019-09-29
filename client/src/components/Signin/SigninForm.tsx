@@ -14,18 +14,23 @@ type Props = {
 } & RouteComponentProps;
 
 type UserData = {
-  name: string;
+  hashID: string;
+  displayName: string;
+  email: string;
   password: string;
 };
 
 const SigninForm: React.FC<Props> = ({ history, ...props }) => {
   const login = () => {
     const userData: UserData = {
-      name: props.profile.userName,
+      hashID: props.profile.userName,
+      displayName: props.profile.userName,
+      email: "",
       password: props.profile.password
     };
+    console.log(userData);
     axios.post("http://localhost:8080/login", userData).then(res => {
-      localStorage.setItem("token", res.data);
+      localStorage.setItem("token", res.data.token);
       alert("ログインに成功しました。");
       history.push("/");
     });
