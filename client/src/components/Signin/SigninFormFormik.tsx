@@ -5,7 +5,6 @@ import Logo from "../common/Logo";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { withRouter, RouteComponentProps } from "react-router";
 
 const Wrapper = styled.div`
   display: block;
@@ -16,7 +15,7 @@ const Wrapper = styled.div`
 
 const Title = styled.div`
   display: block;
-  font-size: 20px;
+  font-size: 16px;
 `;
 
 const FormBlock = styled.div`
@@ -75,18 +74,11 @@ const LabelStyle = {
   fontSize: "16px"
 };
 
-const ErrorMessage = styled.div`
-  display: block;
-  font-size: 12px;
-  color: red;
-  margin-top: 2px;
-`;
-
 const InnerForm: React.FC = ({ values, errors, touched }: any) => {
   return (
     <Wrapper>
       <Logo logoFontSize="28px" />
-      <Title>hashアカウントを作成する</Title>
+      <Title>hash IDかメールアドレスでログインできます</Title>
       <Form>
         <FormBlock>
           <label style={LabelStyle} htmlFor="hashid">
@@ -98,9 +90,6 @@ const InnerForm: React.FC = ({ values, errors, touched }: any) => {
             type="text"
             name="hashid"
           />
-          {touched.hashid && errors.hashid && (
-            <ErrorMessage>{errors.hashid}</ErrorMessage>
-          )}
         </FormBlock>
         <FormBlock>
           <label style={LabelStyle} htmlFor="email">
@@ -112,9 +101,6 @@ const InnerForm: React.FC = ({ values, errors, touched }: any) => {
             type="email"
             name="email"
           />
-          {touched.email && errors.email && (
-            <ErrorMessage>{errors.email}</ErrorMessage>
-          )}
         </FormBlock>
         <FormBlock>
           <label style={LabelStyle} htmlFor="password">
@@ -126,26 +112,9 @@ const InnerForm: React.FC = ({ values, errors, touched }: any) => {
             type="text"
             name="password"
           />
-          {touched.password && errors.password && (
-            <ErrorMessage>{errors.password}</ErrorMessage>
-          )}
         </FormBlock>
         <FormBlock>
-          <label style={LabelStyle} htmlFor="passwordconfirm">
-            パスワード確認
-          </label>
-          <Field
-            style={InputStyle}
-            value={values.passwordConfirm}
-            type="text"
-            name="passwordConfirm"
-          />
-          {touched.passwordConfirm && errors.passwordConfirm && (
-            <ErrorMessage>{errors.passwordConfirm}</ErrorMessage>
-          )}
-        </FormBlock>
-        <FormBlock>
-          <SubmitButton type="submit" value="確認" />
+          <SubmitButton type="submit" value="ログイン" />
         </FormBlock>
       </Form>
     </Wrapper>
@@ -156,22 +125,7 @@ const SignupFormFormik = withFormik({
   mapPropsToValues: () => ({
     hashid: "",
     email: "",
-    password: "",
-    passwordConfirm: ""
-  }),
-  validationSchema: Yup.object().shape({
-    hashid: Yup.string()
-      .min(8, "hashIDは8文字以上で入力してください。")
-      .required("hashIDは必須項目です。"),
-    email: Yup.string()
-      .email("形式がEメールではありません。")
-      .required("Eメールは必須項目です。"),
-    password: Yup.string()
-      .min(8, "パスワードは8文字以上で設定してください。")
-      .required("パスワードは必須項目です。"),
-    passwordConfirm: Yup.string()
-      .oneOf([Yup.ref("password")], "パスワードが一致しません。")
-      .required("パスワードの確認は必須です。")
+    password: ""
   }),
   handleSubmit: (values: any) => {
     const userData: any = {
@@ -180,9 +134,9 @@ const SignupFormFormik = withFormik({
       email: values.email,
       password: values.password
     };
-    axios.post("http://localhost:8080/signup", userData).then(res => {
+    axios.post("http://localhost:8080/login", userData).then(res => {
       localStorage.setItem("token", res.data.token);
-      alert("アカウントの作成が成功しました。");
+      alert("ログインに成功しました。");
       location.href = "/";
     });
   }
