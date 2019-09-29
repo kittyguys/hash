@@ -8,12 +8,12 @@ import TagBox from "../common/Tag/box";
 import axios from "axios";
 
 type Props = {
-  userId: string;
+  userName: string;
+  tags: string[];
 };
 
-const UserCassette: React.FC<Props> = ({ userId }) => {
+const UserCassette: React.FC<Props> = ({ userName, tags }) => {
   const imageSrc = "";
-  const userName = userId;
 
   return (
     <Wrapper>
@@ -27,7 +27,7 @@ const UserCassette: React.FC<Props> = ({ userId }) => {
         />
       </UserInfo>
       <TagWrap>
-        <TagBox tags={["toku", "yasu", "karu"]}></TagBox>
+        <TagBox tags={tags}></TagBox>
       </TagWrap>
     </Wrapper>
   );

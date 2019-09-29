@@ -4,25 +4,20 @@ import UserCassette from "../components/UserCassette";
 import axios from "axios";
 import { decodeJwt } from "../Utils/decodeJwt";
 
-const userArr = ["toku"];
 const tag = "pachislo";
 
 const UserList: React.FC = () => {
   useEffect(() => {
     if (localStorage.getItem("token")) {
       const token = localStorage.getItem("token");
-      const decodedToken = decodeJwt(token);
-      console.log(decodedToken);
-      const userID = decodedToken.hashID;
-      console.log(userID);
       axios
         .get(`http://localhost:8080/tags/${tag}/users`, {
           headers: {
-            Authorization: `Bearer ${userID}`
+            Authorization: `Bearer ${token}`
           }
         })
         .then(res => {
-          console.log(res);
+          setUsers(res.data.users);
         })
         .catch(err => {
           console.log(err);
@@ -30,10 +25,18 @@ const UserList: React.FC = () => {
     }
   }, []);
 
+  const [users, setUsers] = useState([]);
+
   return (
     <Fragment>
-      {userArr.map(user => {
-        return <UserCassette userId={user} key={user} />;
+      {users.map(user => {
+        return (
+          <UserCassette
+            userName={user.displayName}
+            tags={user.Tags}
+            key={user.hashID}
+          />
+        );
       })}
     </Fragment>
   );
