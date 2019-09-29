@@ -96,6 +96,7 @@ func (h *UserRepository) CreateTag(u *model.User, t *[]model.Tag, b map[string]i
 	if !isDuplicate(t, tag.Name) {
 		h.Conn.Model(&u).Association("Tags").Append(&tag)
 	}
+
 	h.Conn.Model(&u).Association("Tags").Find(&t)
 
 	return nil
