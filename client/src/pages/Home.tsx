@@ -9,8 +9,11 @@ import { decodeJwt } from "../Utils/decodeJwt";
 import { myDataChange } from "../redux/MyData/action";
 import { homeInputChange } from "../redux/HomeInput/action";
 import axios from "axios";
+import { withRouter, RouteComponentProps } from "react-router";
 
-const Home: React.FC = () => {
+type Props = {} & RouteComponentProps;
+
+const Home: React.FC<Props> = ({ history }) => {
   const dispatch = useDispatch();
   const myData = useSelector((state: any) => state.myData);
   const homeInput = useSelector((state: any) => state.homeInput.search);
@@ -42,6 +45,7 @@ const Home: React.FC = () => {
     e.preventDefault();
     console.log(homeInput);
     dispatch(homeInputChange(""));
+    history.push(`/users?tag=${homeInput}`);
   };
 
   const inputChange = (inputValue: string) => {
@@ -86,4 +90,4 @@ const MainLayout = styled.div`
   transform: translateY(-200px);
 `;
 
-export default Home;
+export default withRouter(Home);
