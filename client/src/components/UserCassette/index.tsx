@@ -1,9 +1,11 @@
 import * as React from "react";
+import { Fragment, useState, useEffect } from "react";
 import styled from "styled-components";
 
 import Avatar from "../common/Avatar";
 import UserName from "../common/UserName";
 import TagBox from "../common/Tag/box";
+import axios from "axios";
 
 type Props = {
   userId: string;
@@ -12,6 +14,7 @@ type Props = {
 const UserCassette: React.FC<Props> = ({ userId }) => {
   const imageSrc = "";
   const userName = userId;
+
   return (
     <Wrapper>
       <Avatar imageSrc={imageSrc} imageWidth="80px" imageHeight="80px" />
