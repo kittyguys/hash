@@ -2,6 +2,7 @@ import * as React from "react";
 import { Fragment, useState, useEffect } from "react";
 import UserCassette from "../components/UserCassette";
 import axios from "axios";
+import Header from "../components/common/Header";
 
 const queryString = require("query-string");
 
@@ -37,6 +38,7 @@ const UserList: React.FC<Props> = props => {
 
   return (
     <Fragment>
+      <Header page="common" />
       {users.map(user => {
         return (
           <UserCassette
