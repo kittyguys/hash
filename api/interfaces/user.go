@@ -57,7 +57,12 @@ func (h *UserRepository) Login(t *string, b echo.Map) error {
 		return echo.NewHTTPError(http.StatusUnauthorized, "Please provide valid cred")
 	}
 
-	h.Conn.First(&u, model.User{HashID: b["hashID"].(string)})
+	if b["hashID"] == "" {
+		h.Conn.First(&u, model.User{HashID: b["email"].(string)})
+	} else {
+		h.Conn.First(&u, model.User{HashID: b["hashID"].(string)})
+	}
+
 	pwd := []byte(b["password"].(string))
 
 	if common.ComparePasswords(u.Password, pwd) {
