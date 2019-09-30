@@ -12,6 +12,7 @@ import axios from "axios";
 import { decodeJwt } from "../Utils/decodeJwt";
 import { myDataChange } from "../redux/MyData/action";
 import Header from "../components/common/Header";
+const hashImage = require('../assets/images/hash.jpg');
 
 const Mypage: React.FC = () => {
   useEffect(() => {
@@ -30,7 +31,7 @@ const Mypage: React.FC = () => {
             myDataChange({
               userID: res.data.hashID,
               userName: res.data.displayName,
-              avatar: "",
+              avatar: hashImage,
               tags: res.data.tags
             })
           );
@@ -74,6 +75,7 @@ const Mypage: React.FC = () => {
       <MypageWrapper>
         <MainLayout>
           <Avatar
+            imageSrc={myData.avatar}
             imageWidth="90px"
             imageHeight="90px"
             sp_imageWidth="60px"

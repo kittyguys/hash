@@ -23,6 +23,10 @@ module.exports = {
         use: {
           loader: "ts-loader"
         }
+      },
+      {
+        test: /\.(gif|png|jpg|eot|wof|woff|woff2|ttf|svg)$/,
+        loader: "url-loader"
       }
     ]
   },

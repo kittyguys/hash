@@ -36,6 +36,7 @@ const Header: React.FC<Props> = ({ isLogin, page, history }) => {
     <ModalWrapper>
       <ModalLayout1>
         <Avatar
+          imageSrc={myData.avatar}
           imageWidth="50px"
           imageHeight="50px"
           sp_imageWidth="40px"
@@ -92,6 +93,7 @@ const Header: React.FC<Props> = ({ isLogin, page, history }) => {
     linkContents = [
       <Avatar
         key="avatar"
+        imageSrc={myData.avatar}
         imageWidth="100px"
         imageHeight="100px"
         sp_imageWidth="60px"
@@ -112,6 +114,7 @@ const Header: React.FC<Props> = ({ isLogin, page, history }) => {
       />,
       <Avatar
         key="avatar"
+        imageSrc={myData.avatar}
         imageWidth="100px"
         imageHeight="100px"
         sp_imageWidth="60px"
@@ -143,7 +146,7 @@ const LinkWrapper = styled.div`
   margin: 0 auto;
   position: relative;
   @media (max-width: 768px) {
-    padding: 10px 8px;
+    padding: 10px 14px;
   }
 `;
 
@@ -169,7 +172,6 @@ const ModalWrapper = styled.div`
   margin: 20px -14px;
   padding: 14px 10px;
   @media (max-width: 768px) {
-    width: 200px;
     margin: 8px 0px;
     padding: 8px 8px;
   }

@@ -10,6 +10,7 @@ import { myDataChange } from "../redux/MyData/action";
 import { homeInputChange } from "../redux/HomeInput/action";
 import axios from "axios";
 import { withRouter, RouteComponentProps } from "react-router";
+const hashImage = require('../assets/images/hash.jpg');
 
 type Props = {} & RouteComponentProps;
 
@@ -33,7 +34,7 @@ const Home: React.FC<Props> = ({ history }) => {
             myDataChange({
               userID: res.data.hashID,
               userName: res.data.displayName,
-              avatar: "",
+              avatar: hashImage,
               tags: res.data.tags
             })
           );
