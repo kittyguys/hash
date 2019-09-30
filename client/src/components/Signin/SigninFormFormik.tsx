@@ -8,9 +8,9 @@ import axios from "axios";
 
 const Wrapper = styled.div`
   display: block;
-  width: 400px;
+  width: 375px;
   border: 1px solid #dbdbdb;
-  padding: 10px 20px;
+  padding: 10px 10px;
 `;
 
 const Title = styled.div`
