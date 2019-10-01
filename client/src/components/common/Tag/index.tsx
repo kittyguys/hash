@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 type Props = {
   tags: any;
@@ -7,6 +8,7 @@ type Props = {
   tagFontSize?: string;
   sp_tagMargin?: string;
   sp_tagFontSize?: string;
+  matching?: boolean;
 };
 
 const Tag: React.FC<Props> = ({
@@ -14,9 +16,29 @@ const Tag: React.FC<Props> = ({
   tagMargin,
   tagFontSize,
   sp_tagMargin,
-  sp_tagFontSize
+  sp_tagFontSize,
+  matching
 }) => {
+  const myData = useSelector((state: any) => state.myData);
+  const myTags = myData.tags.map((tag: any) => tag.name);
   const tagComponents = tags.map((tag: any, i: number) => {
+    if (matching) {
+      if(myTags.includes(tag.name)){
+        return (
+          <Text
+            key={i}
+            onClick={() => pickColor()}
+            tagMargin={tagMargin}
+            tagFontSize={tagFontSize}
+            sp_tagMargin={sp_tagMargin}
+            sp_tagFontSize={sp_tagFontSize}
+            match
+          >
+            #{tag.name}
+          </Text>
+        );
+      }
+    }
     return (
       <Text
         key={i}
@@ -43,15 +65,16 @@ type TextType = {
   tagFontSize?: string;
   sp_tagMargin?: string;
   sp_tagFontSize?: string;
+  match?: boolean;
 };
 
 const Text = styled.span<TextType>`
   margin: ${({ tagMargin }) => tagMargin};
-  color: #777;
+  color: ${({ match }) => match ? "#fff" : "#777"};
   font-size: ${({ tagFontSize }) => tagFontSize};
   padding: 6px 12px;
   border-radius: 6px;
-  background-color: #ffe5e5;
+  background-color: ${({ match }) => match ? "blue" : "#ffe5e5"};
   cursor: pointer;
   display: inline-block;
   @media (max-width: 768px) {

@@ -81,25 +81,14 @@ const InnerForm: React.FC = ({ values, errors, touched }: any) => {
       <Title>hash IDかメールアドレスでログインできます</Title>
       <Form>
         <FormBlock>
-          <label style={LabelStyle} htmlFor="hashid">
-            hash ID
+          <label style={LabelStyle} htmlFor="loginid">
+            ログインID
           </label>
           <Field
             style={IDInput}
-            value={values.hashid}
+            value={values.loginid}
             type="text"
-            name="hashid"
-          />
-        </FormBlock>
-        <FormBlock>
-          <label style={LabelStyle} htmlFor="email">
-            Eメールアドレス
-          </label>
-          <Field
-            style={EmailInput}
-            value={values.email}
-            type="email"
-            name="email"
+            name="loginid"
           />
         </FormBlock>
         <FormBlock>
@@ -123,17 +112,15 @@ const InnerForm: React.FC = ({ values, errors, touched }: any) => {
 
 const SignupFormFormik = withFormik({
   mapPropsToValues: () => ({
-    hashid: "",
-    email: "",
+    loginid: "",
     password: ""
   }),
   handleSubmit: (values: any) => {
     const userData: any = {
-      hashID: values.hashid,
-      displayName: values.hashid,
-      email: values.email,
+      loginID: values.loginid,
       password: values.password
     };
+    console.log(userData)
     axios.post("http://localhost:8080/login", userData).then(res => {
       localStorage.setItem("token", res.data.token);
       alert("ログインに成功しました。");

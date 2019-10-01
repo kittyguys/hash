@@ -1,10 +1,13 @@
 import * as React from "react";
+import { useDispatch } from "react-redux";
+import { myDataChange } from "../redux/MyData/action";
 import { Fragment, useState, useEffect } from "react";
 import UserCassette from "../components/UserCassette";
 import axios from "axios";
 import Header from "../components/common/Header";
-
+import { decodeJwt } from "../Utils/decodeJwt";
 const queryString = require("query-string");
+const hashImage = require('../assets/images/hash.jpg');
 
 type Props = {
   location: {
@@ -13,12 +16,32 @@ type Props = {
 };
 
 const UserList: React.FC<Props> = props => {
+  const [users, setUsers] = useState([]);
+  const dispatch = useDispatch()
   const qs = queryString.parse(props.location.search);
   const tag = qs.tag;
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
       const token = localStorage.getItem("token");
+      const decodedToken = decodeJwt(token);
+      const userID = decodedToken.hashID;
+      axios
+        .get(`http://localhost:8080/users/${userID}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(res => {
+          dispatch(
+            myDataChange({
+              userID: res.data.hashID,
+              userName: res.data.displayName,
+              avatar: hashImage,
+              tags: res.data.tags
+            })
+          );
+        });
       axios
         .get(`http://localhost:8080/tags/${tag}/users`, {
           headers: {
@@ -26,6 +49,7 @@ const UserList: React.FC<Props> = props => {
           }
         })
         .then(res => {
+          const fetchedUsers = res.data.users;
           setUsers(res.data.users);
         })
         .catch(err => {
@@ -33,8 +57,6 @@ const UserList: React.FC<Props> = props => {
         });
     }
   }, []);
-
-  const [users, setUsers] = useState([]);
 
   return (
     <Fragment>
@@ -45,6 +67,7 @@ const UserList: React.FC<Props> = props => {
             userName={user.displayName}
             tags={user.Tags}
             key={user.hashID}
+            matching
           />
         );
       })}

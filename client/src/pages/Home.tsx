@@ -10,7 +10,9 @@ import { myDataChange } from "../redux/MyData/action";
 import { homeInputChange } from "../redux/HomeInput/action";
 import axios from "axios";
 import { withRouter, RouteComponentProps } from "react-router";
+import { fetchMyData } from "../Utils/fetchMyData";
 const hashImage = require('../assets/images/hash.jpg');
+
 
 type Props = {} & RouteComponentProps;
 
@@ -44,7 +46,6 @@ const Home: React.FC<Props> = ({ history }) => {
 
   const homeSearch = (e: any) => {
     e.preventDefault();
-    console.log(homeInput);
     dispatch(homeInputChange(""));
     history.push(`/users?tag=${homeInput}`);
   };

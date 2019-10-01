@@ -7,15 +7,16 @@ import Tag from "./index";
 type Props = {
   tags: string[];
   tagWrapperWidth?: string;
+  matching?: boolean;
 };
 
-const Box: React.FC<Props> = ({ tags, tagWrapperWidth }) => {
+const Box: React.FC<Props> = ({ tags, tagWrapperWidth, matching }) => {
   if (tags.length === 0) {
     return <Fragment />;
   }
   return (
     <TagWrapper tagWrapperWidth={tagWrapperWidth}>
-      <Tag tags={tags} tagMargin="4px 8px" />
+      <Tag tags={tags} tagMargin="4px 8px" matching={matching} />
     </TagWrapper>
   );
 };

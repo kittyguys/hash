@@ -10,9 +10,10 @@ import axios from "axios";
 type Props = {
   userName: string;
   tags: string[];
+  matching?: boolean;
 };
 
-const UserCassette: React.FC<Props> = ({ userName, tags }) => {
+const UserCassette: React.FC<Props> = ({ userName, tags, matching }) => {
   const imageSrc = "";
 
   return (
@@ -27,7 +28,7 @@ const UserCassette: React.FC<Props> = ({ userName, tags }) => {
         />
       </UserInfo>
       <TagWrap>
-        <TagBox tags={tags}></TagBox>
+        <TagBox tags={tags} matching={matching}></TagBox>
       </TagWrap>
     </Wrapper>
   );
