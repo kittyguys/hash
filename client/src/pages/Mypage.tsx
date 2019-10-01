@@ -9,10 +9,8 @@ import MainInput from "../components/common/Form/MainInput";
 import TagBox from "../components/common/Tag";
 import { mypageInputChange } from "../redux/MypageInput/action";
 import axios from "axios";
-import { decodeJwt } from "../Utils/decodeJwt";
 import { myDataChange } from "../redux/MyData/action";
 import Header from "../components/common/Header";
-const hashImage = require('../assets/images/hash.jpg');
 
 const Mypage: React.FC = () => {
   const dispatch = useDispatch();

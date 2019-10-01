@@ -5,13 +5,8 @@ import styled from "styled-components";
 import MainInput from "../components/common/Form/MainInput";
 import Logo from "../components/common/Logo";
 import Header from "../components/common/Header";
-import { decodeJwt } from "../Utils/decodeJwt";
-import { myDataChange } from "../redux/MyData/action";
 import { homeInputChange } from "../redux/HomeInput/action";
-import axios from "axios";
 import { withRouter, RouteComponentProps } from "react-router";
-const hashImage = require('../assets/images/hash.jpg');
-
 
 type Props = {} & RouteComponentProps;
 
