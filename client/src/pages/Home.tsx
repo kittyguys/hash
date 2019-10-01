@@ -10,7 +10,6 @@ import { myDataChange } from "../redux/MyData/action";
 import { homeInputChange } from "../redux/HomeInput/action";
 import axios from "axios";
 import { withRouter, RouteComponentProps } from "react-router";
-import { fetchMyData } from "../Utils/fetchMyData";
 const hashImage = require('../assets/images/hash.jpg');
 
 
@@ -18,31 +17,7 @@ type Props = {} & RouteComponentProps;
 
 const Home: React.FC<Props> = ({ history }) => {
   const dispatch = useDispatch();
-  const myData = useSelector((state: any) => state.myData);
   const homeInput = useSelector((state: any) => state.homeInput.search);
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      const token = localStorage.getItem("token");
-      const decodedToken = decodeJwt(token);
-      const userID = decodedToken.hashID;
-      axios
-        .get(`http://localhost:8080/users/${userID}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        .then(res => {
-          dispatch(
-            myDataChange({
-              userID: res.data.hashID,
-              userName: res.data.displayName,
-              avatar: hashImage,
-              tags: res.data.tags
-            })
-          );
-        });
-    }
-  }, []);
 
   const homeSearch = (e: any) => {
     e.preventDefault();

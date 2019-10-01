@@ -24,24 +24,6 @@ const UserList: React.FC<Props> = props => {
   useEffect(() => {
     if (localStorage.getItem("token")) {
       const token = localStorage.getItem("token");
-      const decodedToken = decodeJwt(token);
-      const userID = decodedToken.hashID;
-      axios
-        .get(`http://localhost:8080/users/${userID}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        .then(res => {
-          dispatch(
-            myDataChange({
-              userID: res.data.hashID,
-              userName: res.data.displayName,
-              avatar: hashImage,
-              tags: res.data.tags
-            })
-          );
-        });
       axios
         .get(`http://localhost:8080/tags/${tag}/users`, {
           headers: {
@@ -49,7 +31,6 @@ const UserList: React.FC<Props> = props => {
           }
         })
         .then(res => {
-          const fetchedUsers = res.data.users;
           setUsers(res.data.users);
         })
         .catch(err => {

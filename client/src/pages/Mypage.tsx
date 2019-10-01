@@ -15,30 +15,6 @@ import Header from "../components/common/Header";
 const hashImage = require('../assets/images/hash.jpg');
 
 const Mypage: React.FC = () => {
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      const token = localStorage.getItem("token");
-      const decodedToken = decodeJwt(token);
-      const userID = decodedToken.hashID;
-      axios
-        .get(`http://localhost:8080/users/${userID}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        .then(res => {
-          dispatch(
-            myDataChange({
-              userID: res.data.hashID,
-              userName: res.data.displayName,
-              avatar: hashImage,
-              tags: res.data.tags
-            })
-          );
-        });
-    }
-  }, []);
-
   const dispatch = useDispatch();
 
   const myData = useSelector((state: any) => state.myData);
