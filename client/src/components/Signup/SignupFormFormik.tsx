@@ -9,7 +9,7 @@ import { withRouter, RouteComponentProps } from "react-router";
 
 const Wrapper = styled.div`
   display: block;
-  width: 375px;
+  width: 350px;
   border: 1px solid #dbdbdb;
   padding: 10px 10px;
 `;
@@ -57,7 +57,7 @@ const IDInput = {
   borderRadius: "4px",
   border: "1px solid #dfe1e5",
   outline: "none",
-  width: "350px"
+  width: "328px"
 };
 
 const EmailInput = {
@@ -67,7 +67,7 @@ const EmailInput = {
   borderRadius: "4px",
   border: "1px solid #dfe1e5",
   outline: "none",
-  width: "350px"
+  width: "328px"
 };
 
 const LabelStyle = {
