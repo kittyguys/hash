@@ -14,6 +14,7 @@ type Props = {} & RouteComponentProps;
 const Home: React.FC<Props> = ({ history }) => {
   const dispatch = useDispatch();
   const homeInput = useSelector((state: any) => state.homeInput.search);
+  const myData = useSelector((state: any) => state.myData);
 
   const homeSearch = (e: any) => {
     e.preventDefault();
@@ -31,23 +32,29 @@ const Home: React.FC<Props> = ({ history }) => {
     <Loading />
   ) : (
     <Fragment>
-      {localStorage.getItem("token") ? (
-        <Header page={"home"} isLogin={true} />
+      {myData.isLoading ? (
+        <div>ロードちゅう</div>
       ) : (
-        <Header page={"home"} isLogin={false} />
+        <div>
+          {localStorage.getItem("token") ? (
+            <Header page={"home"} isLogin={true} />
+          ) : (
+            <Header page={"home"} isLogin={false} />
+          )}
+          <HomeLayout>
+            <MainLayout>
+              <Logo logoFontSize="48px" centering />
+              <MainInput
+                inputWidth="100%"
+                inputHeight="36px"
+                inputValue={homeInput}
+                handleSubmit={e => homeSearch(e)}
+                handleChange={inputValue => inputChange(inputValue)}
+              />
+            </MainLayout>
+          </HomeLayout>
+        </div>
       )}
-      <HomeLayout>
-        <MainLayout>
-          <Logo logoFontSize="48px" centering />
-          <MainInput
-            inputWidth="100%"
-            inputHeight="36px"
-            inputValue={homeInput}
-            handleSubmit={e => homeSearch(e)}
-            handleChange={inputValue => inputChange(inputValue)}
-          />
-        </MainLayout>
-      </HomeLayout>
     </Fragment>
   );
 };
