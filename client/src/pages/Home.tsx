@@ -7,6 +7,7 @@ import Logo from "../components/common/Logo";
 import Header from "../components/common/Header";
 import { homeInputChange } from "../redux/HomeInput/action";
 import { withRouter, RouteComponentProps } from "react-router";
+import Loading from "../components/common/Loading";
 
 type Props = {} & RouteComponentProps;
 
@@ -24,7 +25,11 @@ const Home: React.FC<Props> = ({ history }) => {
     dispatch(homeInputChange(inputValue));
   };
 
-  return (
+  const isLoading = setTimeout(() => true, 10);
+
+  return isLoading ? (
+    <Loading />
+  ) : (
     <Fragment>
       {localStorage.getItem("token") ? (
         <Header page={"home"} isLogin={true} />
