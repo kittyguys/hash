@@ -44,6 +44,7 @@ const UserList: React.FC<Props> = props => {
             tags={user.Tags}
             key={user.hashID}
             matching
+            userId={user.hashID}
           />
         );
       })}

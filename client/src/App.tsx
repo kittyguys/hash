@@ -13,6 +13,7 @@ import SignupConfirm from "./pages/Signup/SignupConfirm";
 import Signin from "./pages/Signin/Signin";
 import Users from "./pages/Users";
 import Mypage from "./pages/Mypage";
+import User from "./pages/User";
 
 const App: React.FC = () => {
   // ユーザ情報の取得処理
@@ -48,6 +49,7 @@ const App: React.FC = () => {
       <Route exact path="/signin" component={Signin} />
       <Route exact path="/users" component={Users} />
       <Route exact path="/mypage" component={Mypage} />
+      <Route exact path="/user" component={User} />
     </Router>
   );
 };

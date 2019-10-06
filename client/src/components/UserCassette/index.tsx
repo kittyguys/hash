@@ -1,23 +1,28 @@
 import * as React from "react";
-import { Fragment, useState, useEffect } from "react";
 import styled from "styled-components";
 
 import Avatar from "../common/Avatar";
 import UserName from "../common/UserName";
 import TagBox from "../common/Tag/box";
-import axios from "axios";
+import { Link as BaseLink } from "react-router-dom";
 
 type Props = {
   userName: string;
   tags: string[];
   matching?: boolean;
+  userId: string;
 };
 
-const UserCassette: React.FC<Props> = ({ userName, tags, matching }) => {
+const UserCassette: React.FC<Props> = ({
+  userName,
+  tags,
+  matching,
+  userId
+}) => {
   const imageSrc = "";
 
   return (
-    <Wrapper>
+    <Link to={`/user?id=${userId}`}>
       <Avatar imageSrc={imageSrc} imageWidth="80px" imageHeight="80px" />
       <UserInfo>
         <UserName
@@ -30,11 +35,11 @@ const UserCassette: React.FC<Props> = ({ userName, tags, matching }) => {
       <TagWrap>
         <TagBox tags={tags} matching={matching}></TagBox>
       </TagWrap>
-    </Wrapper>
+    </Link>
   );
 };
 
-const Wrapper = styled.div`
+const StyledA = styled.div`
   width: 600px;
   padding: 20px;
   display: flex;
@@ -42,7 +47,11 @@ const Wrapper = styled.div`
   align-items: center;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
   margin: 20px auto 0;
+  color: inherit;
+  text-decoration: none;
 `;
+
+const Link = StyledA.withComponent(BaseLink);
 
 const UserInfo = styled.div`
   margin-left: 20px;
