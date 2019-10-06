@@ -127,7 +127,7 @@ const Header: React.FC<Props> = ({ isLogin, page, history }) => {
   return (
     <HeaderWrapper>
       <LinkWrapper>
-        {linkContents}
+        {myData.avatar != "" && linkContents}
         {modal && headerModal}
       </LinkWrapper>
     </HeaderWrapper>

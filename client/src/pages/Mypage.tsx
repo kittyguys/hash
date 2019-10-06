@@ -9,8 +9,8 @@ import MainInput from "../components/common/Form/MainInput";
 import TagBox from "../components/common/Tag";
 import { mypageInputChange } from "../redux/MypageInput/action";
 import axios from "axios";
-import { myDataChange } from "../redux/MyData/action";
 import Header from "../components/common/Header";
+import { myDataChangeSuccess } from "../redux/MyData/action";
 
 const Mypage: React.FC = () => {
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ const Mypage: React.FC = () => {
         }
       )
       .then(res => {
-        dispatch(myDataChange({ ...myData, tags: res.data.tags }));
+        dispatch(myDataChangeSuccess({ ...myData, tags: res.data.tags }));
       });
   };
 
