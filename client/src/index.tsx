@@ -1,7 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { createGlobalStyle } from "styled-components";
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import { rootSaga } from "./redux/sagas/rootSaga";
+import createSagaMiddleware from "redux-saga";
 import { Provider } from "react-redux";
 
 // reducers
@@ -21,7 +23,8 @@ const rootReducer = combineReducers({
   homeInput: homeInputReducer
 });
 
-const store = createStore(rootReducer);
+const sagaMiddleWare = createSagaMiddleware();
+const store = createStore(rootReducer, applyMiddleware(sagaMiddleWare));
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -40,3 +43,5 @@ ReactDOM.render(
   </>,
   document.getElementById("root")
 );
+
+sagaMiddleWare.run(rootSaga);

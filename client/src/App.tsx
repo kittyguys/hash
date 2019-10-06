@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { decodeJwt } from "./Utils/decodeJwt";
-import { myDataChange } from "./redux/MyData/action";
+import { myDataChangeStart } from "./redux/MyData/action";
 const hashImage = require("./assets/images/hash.jpg");
 
 import Home from "./pages/Home";
@@ -20,25 +20,7 @@ const App: React.FC = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      const token = localStorage.getItem("token");
-      const decodedToken = decodeJwt(token);
-      const userID = decodedToken.hashID;
-      axios
-        .get(`http://localhost:8080/users/${userID}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        .then(res => {
-          dispatch(
-            myDataChange({
-              userID: res.data.hashID,
-              userName: res.data.displayName,
-              avatar: hashImage,
-              tags: res.data.tags
-            })
-          );
-        });
+      dispatch(myDataChangeStart());
     }
   }, []);
   return (
