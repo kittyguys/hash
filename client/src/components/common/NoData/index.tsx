@@ -1,54 +1,38 @@
 import * as React from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
-type Props = {
+type TextProps = {
+  className: string;
   searchWord: string;
   targetField: string;
-  noDataMargin?: string;
-  noDataFontSize?: string;
-  sp_noDataFontSize?: string;
 };
 
-const NoData: React.FC<Props> = ({
+export const NoDataText: React.FC<TextProps> = ({
+  className,
   searchWord,
-  targetField,
-  noDataMargin,
-  noDataFontSize,
-  sp_noDataFontSize
+  targetField
 }) => {
   return (
-    <Wrapper noDataMargin={noDataMargin}>
-      <Text
-        noDataFontSize={noDataFontSize}
-        sp_noDataFontSize={sp_noDataFontSize}
-      >
-        {searchWord} に一致する {targetField} は今はまだないようです。
-      </Text>
-    </Wrapper>
+    <Text className={className}>
+      {searchWord} に一致する {targetField} は今はまだないようです。
+    </Text>
   );
 };
 
-type Wrappertype = {
-  noDataMargin?: string;
+type WrapperProps = {
+  className: string;
 };
 
-type TextType = {
-  noDataFontSize?: string;
-  sp_noDataFontSize?: string;
+export const NoData: React.FC<WrapperProps> = ({ children, className }) => {
+  return <Wrapper className={className}>{children}</Wrapper>;
 };
 
-const Wrapper = styled.div<Wrappertype>`
-  margin: ${({ noDataMargin }) => noDataMargin};
+const Wrapper = styled.div`
+  margin: 30px 0;
 `;
 
-const Text = styled.p<TextType>`
+const Text = styled.p`
   max-width: 900px;
   padding: 10px 20px;
   margin: 0 auto;
-  font-size: ${({ noDataFontSize }) => noDataFontSize};
-  @media (max-width: 768px) {
-    font-size: ${({ sp_noDataFontSize }) => sp_noDataFontSize};
-  }
 `;
-
-export default NoData;

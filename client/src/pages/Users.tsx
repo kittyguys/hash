@@ -1,10 +1,13 @@
 import * as React from "react";
 import { Fragment, useState, useEffect } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import UserCassette from "../components/UserCassette";
 import axios from "axios";
 import Header from "../components/common/Header";
-import NoData from "../components/common/NoData";
+import {
+  NoData as BaseNoData,
+  NoDataText as BaseNoDataText
+} from "../components/common/NoData";
 const queryString = require("query-string");
 
 type Props = {
@@ -52,10 +55,24 @@ const UserList: React.FC<Props> = props => {
           );
         })}
       {!users && (
-        <NoData searchWord={tag} targetField="ユーザー" noDataMargin="30px 0" />
+        <NoData className="">
+          <NoDataText
+            className=""
+            searchWord={tag}
+            targetField="ユーザー"
+          ></NoDataText>
+        </NoData>
       )}
     </Fragment>
   );
 };
+
+const NoData = styled(BaseNoData)`
+  margin: 80px 0;
+`;
+
+const NoDataText = styled(BaseNoDataText)`
+  font-size: 20px;
+`;
 
 export default UserList;

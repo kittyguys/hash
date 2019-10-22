@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@emotion/core": "^10.0.21",
+    "@emotion/styled": "^10.0.17",
     "@types/axios": "^0.14.0",
     "@types/react-redux": "^7.1.2",
     "@types/recompose": "^0.30.7",
