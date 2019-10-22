@@ -1,8 +1,10 @@
 import * as React from "react";
 import { Fragment, useState, useEffect } from "react";
+import styled from "styled-components";
 import UserCassette from "../components/UserCassette";
 import axios from "axios";
 import Header from "../components/common/Header";
+import NoData from "../components/common/NoData";
 const queryString = require("query-string");
 
 type Props = {
@@ -37,17 +39,21 @@ const UserList: React.FC<Props> = props => {
   return (
     <Fragment>
       <Header page="common" />
-      {users.map(user => {
-        return (
-          <UserCassette
-            userName={user.displayName}
-            tags={user.Tags}
-            key={user.hashID}
-            matching
-            userId={user.hashID}
-          />
-        );
-      })}
+      {users &&
+        users.map(user => {
+          return (
+            <UserCassette
+              userName={user.displayName}
+              tags={user.Tags}
+              key={user.hashID}
+              matching
+              userId={user.hashID}
+            />
+          );
+        })}
+      {!users && (
+        <NoData searchWord={tag} targetField="ユーザー" noDataMargin="30px 0" />
+      )}
     </Fragment>
   );
 };
