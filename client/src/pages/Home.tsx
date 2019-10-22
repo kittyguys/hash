@@ -27,7 +27,7 @@ const Home: React.FC<Props> = ({ history }) => {
 
   return (
     <Fragment>
-      {myData.isLoading ? (
+      {myData.status === "busy" || myData.status === "loading" ? (
         <div>ロードちゅう</div>
       ) : (
         <div>
