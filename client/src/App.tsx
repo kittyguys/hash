@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { decodeJwt } from "./Utils/decodeJwt";
-import { myDataChangeStart } from "./redux/MyData/action";
+import { myDataChangeStart, myDataChangeFailed } from "./redux/MyData/action";
 const hashImage = require("./assets/images/hash.jpg");
 
 import Home from "./pages/Home";
@@ -21,6 +21,8 @@ const App: React.FC = () => {
   useEffect(() => {
     if (localStorage.getItem("token")) {
       dispatch(myDataChangeStart());
+    } else {
+      dispatch(myDataChangeFailed());
     }
   }, []);
   return (

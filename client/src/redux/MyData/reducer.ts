@@ -33,6 +33,8 @@ const myDataReducer = (state = initialState, action: any) => {
       };
     case "MYDATA_CHANGE_FAILED":
       return { ...state, status: "failed" };
+    case "MYDATA_CHANGE_TAGS":
+      return { ...state, tags: action.payload.tags };
     default:
       return state;
   }
