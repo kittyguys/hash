@@ -10,7 +10,7 @@ import TagBox from "../components/common/Tag";
 import { mypageInputChange } from "../redux/MypageInput/action";
 import axios from "axios";
 import Header from "../components/common/Header";
-import { myDataChangeSuccess } from "../redux/MyData/action";
+import { myDataChangeSuccess, myDataChangeTags } from "../redux/MyData/action";
 
 const Mypage: React.FC = () => {
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ const Mypage: React.FC = () => {
         }
       )
       .then(res => {
-        dispatch(myDataChangeSuccess({ ...myData, tags: res.data.tags }));
+        dispatch(myDataChangeTags({ tags: res.data.tags }));
       });
   };
 
