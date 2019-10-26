@@ -1,10 +1,12 @@
 import * as React from "react";
 import styled from "styled-components";
 import axios from "axios";
-
-import Logo from "../common/Logo";
-import LabelInput from "../common/Form/LabalInput";
-import NormalButton from "../common/Button/NormalButton";
+import BaseLogo from "../common/Logo";
+import LabelInputWrapper, {
+  Label,
+  Input as BaseInput
+} from "../common/Form/LabelInput";
+import BaseNormalButton from "../common/Button/NormalButton";
 import { useDispatch } from "react-redux";
 import { signinChange } from "../../redux/Signin/action";
 import { withRouter, RouteComponentProps } from "react-router";
@@ -52,44 +54,30 @@ const SigninForm: React.FC<Props> = ({ history, ...props }) => {
   };
   return (
     <Wrapper>
-      <Logo logoFontSize="28px" />
+      <Logo />
       <Layout2>
-        <LabelInput
-          label="ユーザー名"
-          inputWidth="210px"
-          inputHeight="32px"
-          inputValue={props.profile.username}
-          handleChange={value => usernameChange(value)}
-        />
+        <LabelInputWrapper>
+          <Label label="ユーザー名" />
+          <Input
+            inputValue={props.profile.username}
+            handleChange={value => usernameChange(value)}
+          />
+        </LabelInputWrapper>
       </Layout2>
       <Layout2>
-        <LabelInput
-          label="パスワード"
-          inputWidth="210px"
-          inputHeight="32px"
-          inputValue={props.profile.password}
-          handleChange={value => passwordChange(value)}
-        />
+        <LabelInputWrapper>
+          <Label label="パスワード" />
+          <Input
+            inputValue={props.profile.password}
+            handleChange={value => passwordChange(value)}
+          />
+        </LabelInputWrapper>
       </Layout2>
       <Layout3>
-        <NormalButton
-          content="ログイン"
-          contentSize="20px"
-          btnWidth="180px"
-          btnHeight="40px"
-          btnColor="#4285f4"
-          handleClick={() => login()}
-        />
+        <NormalButton1 content="ログイン" handleClick={() => login()} />
       </Layout3>
       <Layout3>
-        <NormalButton
-          content="Twitter"
-          contentSize="20px"
-          btnWidth="180px"
-          btnHeight="40px"
-          btnColor="#38A1F3"
-          handleClick={() => twitterLogin()}
-        />
+        <NormalButton2 content="Twitter" handleClick={() => twitterLogin()} />
       </Layout3>
     </Wrapper>
   );
@@ -103,14 +91,37 @@ const Wrapper = styled.div`
   padding: 24px 30px;
 `;
 
+const Logo = styled(BaseLogo)`
+  font-size: 28px;
+`;
+
 const Layout2 = styled.div`
   margin: 10px 0;
+`;
+
+const Input = styled(BaseInput)`
+  width: 210px;
+  height: 32px;
 `;
 
 const Layout3 = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 20px;
+`;
+
+const NormalButton1 = styled(BaseNormalButton)`
+  font-size: 20px;
+  width: 180px;
+  height: 40px;
+  background-color: #4285f4;
+`;
+
+const NormalButton2 = styled(BaseNormalButton)`
+  font-size: 20px;
+  width: 180px;
+  height: 40px;
+  background-color: #38a1f3;
 `;
 
 export default withRouter(SigninForm);

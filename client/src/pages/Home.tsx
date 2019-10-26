@@ -2,8 +2,10 @@ import * as React from "react";
 import { Fragment, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import MainInput from "../components/common/Form/MainInput";
-import Logo from "../components/common/Logo";
+import MainInputForm, {
+  MainInput as BaseMainInput
+} from "../components/common/Form/MainInput";
+import BaseLogo from "../components/common/Logo";
 import Header from "../components/common/Header";
 import { homeInputChange } from "../redux/HomeInput/action";
 import { withRouter, RouteComponentProps } from "react-router";
@@ -38,14 +40,13 @@ const Home: React.FC<Props> = ({ history }) => {
           )}
           <HomeLayout>
             <MainLayout>
-              <Logo logoFontSize="48px" centering />
-              <MainInput
-                inputWidth="100%"
-                inputHeight="36px"
-                inputValue={homeInput}
-                handleSubmit={e => homeSearch(e)}
-                handleChange={inputValue => inputChange(inputValue)}
-              />
+              <Logo centering={true} />
+              <MainInputForm handleSubmit={e => homeSearch(e)}>
+                <MainInput
+                  inputValue={homeInput}
+                  handleChange={inputValue => inputChange(inputValue)}
+                />
+              </MainInputForm>
             </MainLayout>
           </HomeLayout>
         </div>
@@ -67,6 +68,15 @@ const MainLayout = styled.div`
   width: 80%;
   max-width: 640px;
   transform: translateY(-200px);
+`;
+
+const Logo = styled(BaseLogo)`
+  font-size: 48px;
+`;
+
+const MainInput = styled(BaseMainInput)`
+  width: 100%;
+  height: 36px;
 `;
 
 export default withRouter(Home);

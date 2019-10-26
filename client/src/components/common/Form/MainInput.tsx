@@ -4,28 +4,18 @@ import styled from "styled-components";
 import axios from "axios";
 
 type Props = {
-  inputWidth?: string;
-  inputHeight?: string;
-  inputValue?: string;
+  className?: string;
   handleSubmit?: (e: any) => void;
-  handleChange?: (inputValue: string) => void;
 };
 
-const MainInput: React.FC<Props> = ({
-  inputWidth,
-  inputHeight,
-  inputValue,
+const MainInputForm: React.FC<Props> = ({
+  className,
   handleSubmit,
-  handleChange
+  children
 }) => {
   return (
-    <InputForm onSubmit={handleSubmit}>
-      <InputText
-        value={inputValue}
-        inputWidth={inputWidth}
-        inputHeight={inputHeight}
-        onChange={e => handleChange(e.target.value)}
-      />
+    <InputForm className={className} onSubmit={handleSubmit}>
+      {children}
     </InputForm>
   );
 };
@@ -34,16 +24,29 @@ const InputForm = styled.form`
   display: block;
 `;
 
-type InputTextType = {
-  inputWidth?: string;
-  inputHeight?: string;
-  inputMargin?: string;
+export default MainInputForm;
+
+type InputProps = {
+  className?: string;
+  inputValue?: string;
+  handleChange?: (inputValue: string) => void;
 };
 
-const InputText = styled.input<InputTextType>`
-  width: ${({ inputWidth }) => inputWidth};
-  height: ${({ inputHeight }) => inputHeight};
-  margin: ${({ inputMargin }) => inputMargin};
+export const MainInput: React.FC<InputProps> = ({
+  className,
+  inputValue,
+  handleChange
+}) => {
+  return (
+    <Input
+      className={className}
+      value={inputValue}
+      onChange={e => handleChange(e.target.value)}
+    />
+  );
+};
+
+const Input = styled.input`
   color: #555;
   font-size: 16px;
   padding: 16px;
@@ -54,5 +57,3 @@ const InputText = styled.input<InputTextType>`
     border: 1px solid #38a1f3;
   }
 `;
-
-export default MainInput;

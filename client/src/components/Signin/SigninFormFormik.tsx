@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import Logo from "../common/Logo";
+import BaseLogo from "../common/Logo";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -11,6 +11,10 @@ const Wrapper = styled.div`
   width: 350px;
   border: 1px solid #dbdbdb;
   padding: 10px 10px;
+`;
+
+const Logo = styled(BaseLogo)`
+  font-size: 28px;
 `;
 
 const Title = styled.div`
@@ -77,7 +81,7 @@ const LabelStyle = {
 const InnerForm: React.FC = ({ values, errors, touched }: any) => {
   return (
     <Wrapper>
-      <Logo logoFontSize="28px" />
+      <Logo />
       <Title>hash IDかメールアドレスでログインできます</Title>
       <Form>
         <FormBlock>
@@ -120,7 +124,7 @@ const SignupFormFormik = withFormik({
       loginID: values.loginid,
       password: values.password
     };
-    console.log(userData)
+    console.log(userData);
     axios.post("http://localhost:8080/login", userData).then(res => {
       localStorage.setItem("token", res.data.token);
       alert("ログインに成功しました。");

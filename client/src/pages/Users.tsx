@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Fragment, useState, useEffect } from "react";
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import UserCassette from "../components/UserCassette";
 import axios from "axios";
 import Header from "../components/common/Header";

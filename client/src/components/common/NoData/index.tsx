@@ -1,5 +1,5 @@
 import * as React from "react";
-import styled from "@emotion/styled";
+import styled from "styled-components";
 
 type TextProps = {
   className: string;
@@ -14,7 +14,10 @@ export const NoDataText: React.FC<TextProps> = ({
 }) => {
   return (
     <Text className={className}>
-      {searchWord} に一致する {targetField} は今はまだないようです。
+      {searchWord}
+      に一致する
+      {targetField}
+      は今はまだないようです。
     </Text>
   );
 };

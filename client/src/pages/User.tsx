@@ -1,9 +1,9 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Fragment, useState, useEffect } from "react";
-import Avatar from "../components/common/Avatar";
-import UserName from "../components/common/UserName";
-import TagBox from "../components/common/Tag";
+import BaseAvatar from "../components/common/Avatar";
+import BaseUserName from "../components/common/UserName";
+import Tags from "../components/common/Tag";
 import axios from "axios";
 import Header from "../components/common/Header";
 const queryString = require("query-string");
@@ -48,30 +48,13 @@ const User: React.FC<Props> = props => {
       <Header page="common" />
       <MypageWrapper>
         <MainLayout>
-          <Avatar
-            imageSrc={userData.avatar}
-            imageWidth="90px"
-            imageHeight="90px"
-            sp_imageWidth="60px"
-            sp_imageHeight="60px"
-          />
+          <Avatar imageSrc={userData.avatar} />
           <SubLayout>
-            <UserName
-              userName={userData.displayName}
-              textFontSize="30px"
-              sp_textFontSize="24px"
-              textFontWeight="bold"
-            />
+            <UserName userName={userData.displayName} />
           </SubLayout>
         </MainLayout>
         <TagBoxLayout>
-          <TagBox
-            tags={userData.tags}
-            tagMargin="8px 10px"
-            tagFontSize="1.6rem"
-            sp_tagMargin="4px 6px"
-            sp_tagFontSize="1rem"
-          />
+          <Tags tags={userData.tags} />
         </TagBoxLayout>
       </MypageWrapper>
     </Fragment>
@@ -95,10 +78,27 @@ const MainLayout = styled.div`
   display: flex;
 `;
 
+const Avatar = styled(BaseAvatar)`
+  width: 90px;
+  height: 90px;
+  @media (max-width: 768px) {
+    width: 60px;
+    height: 60px;
+  }
+`;
+
 const SubLayout = styled.div`
   display: block;
   margin-left: 20px;
   margin-top: 20px;
+`;
+
+const UserName = styled(BaseUserName)`
+  font-size: 30px;
+  font-weight: bold;
+  @media (max-width: 768px) {
+    font-size: 24px;
+  }
 `;
 
 const TagBoxLayout = styled.div`

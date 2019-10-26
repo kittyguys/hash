@@ -2,8 +2,8 @@ import * as React from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-import Logo from "../common/Logo";
-import NormalButton from "../common/Button/NormalButton";
+import BaseLogo from "../common/Logo";
+import BaseNormalButton from "../common/Button/NormalButton";
 import { withRouter, RouteComponentProps } from "react-router";
 
 type Props = {
@@ -33,7 +33,7 @@ const SignupFormConfirm: React.FC<Props> = ({ history, ...props }) => {
   };
   return (
     <Wrapper>
-      <Logo logoFontSize="28px" />
+      <Logo />
       <Title>この内容でhashアカウントを作成する</Title>
       <Layout2>
         <Label>ユーザー名</Label>
@@ -48,14 +48,7 @@ const SignupFormConfirm: React.FC<Props> = ({ history, ...props }) => {
         <Text>{props.profile.password}</Text>
       </Layout1>
       <Layout3>
-        <NormalButton
-          content="登録する"
-          contentSize="20px"
-          btnWidth="180px"
-          btnHeight="40px"
-          btnColor="#4285f4"
-          handleClick={() => createUser()}
-        />
+        <NormalButton content="登録する" handleClick={() => createUser()} />
       </Layout3>
     </Wrapper>
   );
@@ -67,6 +60,10 @@ const Wrapper = styled.div`
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 24px 30px;
+`;
+
+const Logo = styled(BaseLogo)`
+  font-size: 28px;
 `;
 
 const Layout1 = styled.div`
@@ -83,6 +80,13 @@ const Layout3 = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 10px;
+`;
+
+const NormalButton = styled(BaseNormalButton)`
+  font-size: 20px;
+  width: 180px;
+  height: 40px;
+  background-color: #4285f4;
 `;
 
 const Title = styled.div`
