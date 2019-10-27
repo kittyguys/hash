@@ -26,14 +26,10 @@ const Home: React.FC<Props> = ({ history }) => {
     dispatch(homeInputChange(inputValue));
   };
 
-  const isLoading = setTimeout(() => true, 10);
-
-  return isLoading ? (
-    <Loading />
-  ) : (
+  return (
     <Fragment>
       {myData.isLoading ? (
-        <div>ロードちゅう</div>
+        <Loading />
       ) : (
         <div>
           {localStorage.getItem("token") ? (
