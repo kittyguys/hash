@@ -3,12 +3,13 @@ import { Fragment, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import MainInputForm, {
-  MainInput as BaseMainInput
+  MainInput as BaseMainInput,
 } from "../components/common/Form/MainInput";
 import BaseLogo from "../components/common/Logo";
 import Header from "../components/common/Header";
 import { homeInputChange } from "../redux/HomeInput/action";
 import { withRouter, RouteComponentProps } from "react-router";
+import Loading from "../components/common/Loading";
 
 type Props = {} & RouteComponentProps;
 
@@ -30,7 +31,7 @@ const Home: React.FC<Props> = ({ history }) => {
   return (
     <Fragment>
       {myData.status === "busy" || myData.status === "loading" ? (
-        <div>ロードちゅう</div>
+        <Loading />
       ) : (
         <div>
           {localStorage.getItem("token") ? (
