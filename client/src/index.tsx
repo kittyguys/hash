@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { createGlobalStyle } from "styled-components";
+import GlobalStyle from "./GlobalStyle";
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import { rootSaga } from "./redux/sagas/rootSaga";
 import createSagaMiddleware from "redux-saga";
@@ -25,14 +25,6 @@ const rootReducer = combineReducers({
 
 const sagaMiddleWare = createSagaMiddleware();
 const store = createStore(rootReducer, applyMiddleware(sagaMiddleWare));
-
-const GlobalStyle = createGlobalStyle`
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-`;
 
 ReactDOM.render(
   <>
