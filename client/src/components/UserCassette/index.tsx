@@ -1,9 +1,12 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import Avatar from "../common/Avatar";
-import UserName from "../common/UserName";
-import TagBox from "../common/Tag/box";
+import BaseAvatar from "../common/Avatar";
+import BaseUserName from "../common/UserName";
+import {
+  Wrapper as BaseTagWrapper,
+  Box as BaseTagBox
+} from "../common/Tag/box";
 import { Link as BaseLink } from "react-router-dom";
 
 type Props = {
@@ -23,23 +26,18 @@ const UserCassette: React.FC<Props> = ({
 
   return (
     <Link to={`/user?id=${userId}`}>
-      <Avatar imageSrc={imageSrc} imageWidth="80px" imageHeight="80px" />
+      <Avatar imageSrc={imageSrc} />
       <UserInfo>
-        <UserName
-          userName={userName}
-          wrapperWidth=""
-          textFontSize="2rem"
-          textFontWeight="700"
-        />
+        <UserName userName={userName} />
       </UserInfo>
-      <TagWrap>
-        <TagBox tags={tags} matching={matching}></TagBox>
-      </TagWrap>
+      <TagWrapper>
+        <TagBox tags={tags} matching={matching} />
+      </TagWrapper>
     </Link>
   );
 };
 
-const StyledA = styled.div`
+const Link = styled(BaseLink)`
   width: 600px;
   padding: 20px;
   display: flex;
@@ -51,15 +49,25 @@ const StyledA = styled.div`
   text-decoration: none;
 `;
 
-const Link = StyledA.withComponent(BaseLink);
+const Avatar = styled(BaseAvatar)`
+  width: 80px;
+  height: 80px;
+`;
 
 const UserInfo = styled.div`
   margin-left: 20px;
 `;
 
-const TagWrap = styled.div`
+const UserName = styled(BaseUserName)`
+  font-size: 2rem;
+  font-weight: 700;
+`;
+
+const TagWrapper = styled(BaseTagWrapper)`
   margin: 20px auto 0;
   width: 100%;
 `;
+
+const TagBox = styled(BaseTagBox)``;
 
 export default UserCassette;

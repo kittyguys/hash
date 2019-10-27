@@ -2,15 +2,17 @@ import * as React from "react";
 import styled from "styled-components";
 import { Fragment, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Avatar from "../components/common/Avatar";
-import UserName from "../components/common/UserName";
-import NormalButton from "../components/common/Button/NormalButton";
-import MainInput from "../components/common/Form/MainInput";
-import TagBox from "../components/common/Tag";
+import BaseAvatar from "../components/common/Avatar";
+import BaseUserName from "../components/common/UserName";
+import BaseNormalButton from "../components/common/Button/NormalButton";
+import MainInputForm, {
+  MainInput as BaseMainInput
+} from "../components/common/Form/MainInput";
+import Tags, { Tag as BaseTag } from "../components/common/Tag";
 import { mypageInputChange } from "../redux/MypageInput/action";
 import axios from "axios";
 import Header from "../components/common/Header";
-import { myDataChangeSuccess } from "../redux/MyData/action";
+import { myDataChangeSuccess, myDataChangeTags } from "../redux/MyData/action";
 
 const Mypage: React.FC = () => {
   const dispatch = useDispatch();
@@ -35,7 +37,7 @@ const Mypage: React.FC = () => {
         }
       )
       .then(res => {
-        dispatch(myDataChangeSuccess({ ...myData, tags: res.data.tags }));
+        dispatch(myDataChangeTags({ tags: res.data.tags }));
       });
   };
 
@@ -48,49 +50,22 @@ const Mypage: React.FC = () => {
       <Header page="common" />
       <MypageWrapper>
         <MainLayout>
-          <Avatar
-            imageSrc={myData.avatar}
-            imageWidth="90px"
-            imageHeight="90px"
-            sp_imageWidth="60px"
-            sp_imageHeight="60px"
-          />
+          <Avatar imageSrc={myData.avatar} />
           <SubLayout>
-            <UserName
-              userName={myData.userName}
-              textFontSize="30px"
-              sp_textFontSize="24px"
-              textFontWeight="bold"
-            />
-            <NormalButton
-              content="プロフィールを編集する"
-              btnWidth="50vw"
-              sp_btnWidth=""
-              btnHeight="36px"
-              sp_btnHeight="28px"
-              btnColor="#4285f4"
-              contentSize="18px"
-              sp_contentSize="14px"
-            />
+            <UserName userName={myData.userName} />
+            <NormalButton content="プロフィールを編集する" />
           </SubLayout>
         </MainLayout>
         <MainInputLayout>
-          <MainInput
-            inputWidth="100%"
-            inputHeight="36px"
-            inputValue={mypageInput}
-            handleSubmit={e => addTag(e)}
-            handleChange={inputValue => inputChange(inputValue)}
-          />
+          <MainInputForm handleSubmit={e => addTag(e)}>
+            <MainInput
+              inputValue={mypageInput}
+              handleChange={inputValue => inputChange(inputValue)}
+            />
+          </MainInputForm>
         </MainInputLayout>
         <TagBoxLayout>
-          <TagBox
-            tags={myData.tags}
-            tagMargin="8px 10px"
-            tagFontSize="1.6rem"
-            sp_tagMargin="4px 6px"
-            sp_tagFontSize="1rem"
-          />
+          <Tags tags={myData.tags} styledTag={<Tag tagName="" />} />
         </TagBoxLayout>
       </MypageWrapper>
     </Fragment>
@@ -114,9 +89,38 @@ const MainLayout = styled.div`
   display: flex;
 `;
 
+const Avatar = styled(BaseAvatar)`
+  width: 90px;
+  height: 90px;
+  @media (max-width: 768px) {
+    width: 60px;
+    height: 60px;
+  }
+`;
+
 const SubLayout = styled.div`
   display: block;
   margin-left: 20px;
+`;
+
+const UserName = styled(BaseUserName)`
+  font-size: 30px;
+  font-weight: bold;
+  @media (max-width: 768px) {
+    font-size: 24px;
+  }
+`;
+
+const NormalButton = styled(BaseNormalButton)`
+  width: 50vw;
+  height: 36px;
+  background-color: #4285f4;
+  font-size: 18px;
+
+  @media (max-width: 768px) {
+    height: 28px;
+    font-size: 14px;
+  }
 `;
 
 const MainInputLayout = styled.div`
@@ -126,8 +130,22 @@ const MainInputLayout = styled.div`
   }
 `;
 
+const MainInput = styled(BaseMainInput)`
+  width: 100%;
+  height: 36px;
+`;
+
 const TagBoxLayout = styled.div`
   margin-top: 20px;
+`;
+
+const Tag = styled(BaseTag)`
+  margin: 8px 10px;
+  font-size: 1.6rem;
+  @media (max-width: 768px) {
+    margin: 4px 6px;
+    font-size: 1rem;
+  }
 `;
 
 export default Mypage;

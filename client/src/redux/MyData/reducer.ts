@@ -5,7 +5,7 @@ type State = {
   userName: string;
   avatar: string;
   tags: string[];
-  isLoading: boolean;
+  status: string;
 };
 
 const initialState: State = {
@@ -13,7 +13,7 @@ const initialState: State = {
   userName: "",
   avatar: "",
   tags: [],
-  isLoading: false,
+  status: "busy",
 };
 
 const myDataReducer = (state = initialState, action: any) => {
@@ -21,7 +21,7 @@ const myDataReducer = (state = initialState, action: any) => {
     case "MYDATA_CHANGE_START":
       return {
         ...state,
-        isLoading: true,
+        status: "loading",
       };
     case "MYDATA_CHANGE_SUCCESS":
       return {
@@ -29,10 +29,12 @@ const myDataReducer = (state = initialState, action: any) => {
         userName: action.payload.displayName,
         avatar: hashImage,
         tags: action.payload.tags,
-        isLoading: false,
+        status: "success",
       };
     case "MYDATA_CHANGE_FAILED":
-      return { ...state, isLoading: false };
+      return { ...state, status: "failed" };
+    case "MYDATA_CHANGE_TAGS":
+      return { ...state, tags: action.payload.tags };
     default:
       return state;
   }

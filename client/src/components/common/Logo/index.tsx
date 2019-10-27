@@ -2,65 +2,34 @@ import * as React from "react";
 import styled from "styled-components";
 
 type Props = {
-  logoWidth?: string;
-  logoMargin?: string;
-  logoPadding?: string;
-  logoFontSize?: string;
-  sp_logoFontSize?: string;
-  centering?: boolean;
+  className?: string;
   handleClick?: () => void;
+  centering?: boolean;
 };
 
-const Logo: React.FC<Props> = ({
-  logoWidth,
-  logoMargin,
-  logoPadding,
-  logoFontSize,
-  sp_logoFontSize,
-  centering,
-  handleClick
-}) => {
+const Logo: React.FC<Props> = ({ className, centering, handleClick }) => {
   return (
     <LogoWrapper
-      logoWidth={logoWidth}
-      logoMargin={logoMargin}
-      logoPadding={logoPadding}
+      className={className}
       centering={centering}
       onClick={() => handleClick()}
     >
-      <Text logoFontSize={logoFontSize} sp_logoFontSize={sp_logoFontSize}>
-        #hash
-      </Text>
+      <Text>#hash</Text>
     </LogoWrapper>
   );
 };
 
-type LogoWrappertype = {
-  logoWidth?: string;
-  logoMargin?: string;
-  logoPadding?: string;
+type LogoWrapperType = {
   centering?: boolean;
 };
 
-type TextType = {
-  logoFontSize?: string;
-  sp_logoFontSize?: string;
-};
-
-const LogoWrapper = styled.div<LogoWrappertype>`
-  width: ${({ logoWidth }) => logoWidth};
-  margin: ${({ logoMargin }) => logoMargin};
-  padding: ${({ logoPadding }) => logoPadding};
-  text-align: ${({ centering }) => centering && "center"};
+const LogoWrapper = styled.div<LogoWrapperType>`
   cursor: pointer;
+  text-align: ${({ centering }) => (centering ? "center" : "")};
 `;
 
-const Text = styled.span<TextType>`
+const Text = styled.span`
   font-family: "Lobster", cursive;
-  font-size: ${({ logoFontSize }) => logoFontSize};
-  @media (max-width: 768px) {
-    font-size: ${({ sp_logoFontSize }) => sp_logoFontSize};
-  }
 `;
 
 export default Logo;
