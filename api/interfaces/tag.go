@@ -27,14 +27,7 @@ func (h *TagRepository) GetUsers(t *model.Tag, u *[]model.User, n string) error 
 	if err := h.Conn.First(&t, model.Tag{Name: n}).Error; err != nil {
 		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "Not found"}
 	}
-	h.Conn.Model(&t).Association("Users").Find(&users)
-
-	for _, v := range users {
-		var tags []model.Tag
-		h.Conn.Model(&v).Association("Tags").Find(&tags)
-		v.Tags = tags
-		*u = append(*u, v)
-	}
-
+	h.Conn.Preload("Tags").Find(&users)
+	*u = users
 	return nil
 }

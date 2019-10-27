@@ -3,12 +3,14 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 import SigninForm from "../../components/Signin/SigninForm";
+import SigninFormFormik from "../../components/Signin/SigninFormFormik";
 
 const Signin: React.FC = () => {
   const profile = useSelector((state: any) => state.signin.profile);
   return (
     <Layout>
-      <SigninForm profile={profile} />
+      {/* <SigninForm profile={profile} /> */}
+      <SigninFormFormik />
     </Layout>
   );
 };

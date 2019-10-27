@@ -3,28 +3,15 @@ import styled from "styled-components";
 
 type Props = {
   imageSrc?: string;
-  imageWidth?: string;
-  imageHeight?: string;
-  sp_imageWidth?: string;
-  sp_imageHeight?: string;
+  className?: string;
   handleClick?: () => void;
 };
 
-const Avatar: React.FC<Props> = ({
-  imageSrc,
-  imageWidth,
-  imageHeight,
-  sp_imageWidth,
-  sp_imageHeight,
-  handleClick
-}) => {
+const Avatar: React.FC<Props> = ({ imageSrc, handleClick, className }) => {
   return (
     <Image
+      className={className}
       imageSrc={imageSrc}
-      imageWidth={imageWidth}
-      imageHeight={imageHeight}
-      sp_imageWidth={sp_imageWidth}
-      sp_imageHeight={sp_imageHeight}
       onClick={() => handleClick()}
     />
   );
@@ -32,10 +19,6 @@ const Avatar: React.FC<Props> = ({
 
 type ImageStyle = {
   imageSrc?: string;
-  imageWidth?: string;
-  imageHeight?: string;
-  sp_imageWidth?: string;
-  sp_imageHeight?: string;
 };
 
 const Image = styled.div<ImageStyle>`
@@ -43,17 +26,11 @@ const Image = styled.div<ImageStyle>`
       return imageSrc ? `url(${imageSrc})` : "#ffffff";
     }}
     center/cover no-repeat;
-  width: ${({ imageWidth }) => imageWidth};
-  height: ${({ imageHeight }) => imageHeight};
   border-radius: 50%;
   overflow: hidden;
   border: 1px solid #dbdbdb;
   :hover {
     cursor: pointer;
-  }
-  @media (max-width: 768px) {
-    width: ${({ sp_imageWidth }) => sp_imageWidth};
-    height: ${({ sp_imageHeight }) => sp_imageHeight};
   }
 `;
 

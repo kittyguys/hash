@@ -3,8 +3,7 @@ import { useState } from "react";
 import styled from "styled-components";
 
 type Props = {
-  inputWidth: number;
-  inputHeight: number;
+  className?: string;
   handleSetTags: any;
   handleSetBox: any;
   tags: string[];
@@ -12,8 +11,7 @@ type Props = {
 };
 
 const Input: React.FC<Props> = ({
-  inputWidth,
-  inputHeight,
+  className,
   handleSetTags,
   handleSetBox,
   tags,
@@ -21,31 +19,16 @@ const Input: React.FC<Props> = ({
 }) => {
   const [name, setName] = useState("");
   return (
-    <InputWrapper>
-      <InputText
-        value={name}
-        inputWidth={inputWidth}
-        inputHeight={inputHeight}
-        onChange={e => handleOnChange(e, handleSetTags, setName)}
-        onKeyDown={e => handleOnKeyDown(e, handleSetBox, tags, box, setName)}
-      />
-    </InputWrapper>
+    <InputText
+      className={className}
+      value={name}
+      onChange={e => handleOnChange(e, handleSetTags, setName)}
+      onKeyDown={e => handleOnKeyDown(e, handleSetBox, tags, box, setName)}
+    />
   );
 };
 
-const InputWrapper = styled.div`
-  width: 640px;
-  margin: 0 auto;
-`;
-
-type InputTextType = {
-  inputWidth: number;
-  inputHeight: number;
-};
-
-const InputText = styled.input<InputTextType>`
-  width: ${props => props.inputWidth}px;
-  height: ${props => props.inputHeight}px;
+const InputText = styled.input`
   color: #555;
   font-size: 16px;
   padding: 16px;

@@ -2,6 +2,7 @@ package interfaces
 
 import (
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -53,11 +54,16 @@ func (h *UserRepository) Login(t *string, b echo.Map) error {
 	u := &model.User{}
 
 	// Validate
-	if b["email"] == "" || b["password"] == "" {
+	if b["loginID"] == "" {
 		return echo.NewHTTPError(http.StatusUnauthorized, "Please provide valid cred")
 	}
 
-	h.Conn.First(&u, model.User{HashID: b["hashID"].(string)})
+	if strings.Contains(b["loginID"].(string), "@") {
+		h.Conn.First(&u, model.User{Email: b["loginID"].(string)})
+	} else {
+		h.Conn.First(&u, model.User{HashID: b["loginID"].(string)})
+	}
+
 	pwd := []byte(b["password"].(string))
 
 	if common.ComparePasswords(u.Password, pwd) {

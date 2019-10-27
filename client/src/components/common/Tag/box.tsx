@@ -4,28 +4,33 @@ import { Fragment } from "react";
 import styled from "styled-components";
 import Tag from "./index";
 
-type Props = {
-  tags: string[];
-  tagWrapperWidth?: string;
+type WrapperProps = {
+  className?: string;
+};
+export const Wrapper: React.FC<WrapperProps> = ({ className, children }) => {
+  return <TagWrapper className={className}>{children}</TagWrapper>;
 };
 
-const Box: React.FC<Props> = ({ tags, tagWrapperWidth }) => {
+type Props = {
+  className?: string;
+  tags: string[];
+  matching?: boolean;
+};
+
+export const Box: React.FC<Props> = ({
+  className,
+  tags,
+  matching,
+  children
+}) => {
   if (tags.length === 0) {
     return <Fragment />;
   }
   return (
-    <TagWrapper tagWrapperWidth={tagWrapperWidth}>
-      <Tag tags={tags} tagMargin="4px 8px" />
-    </TagWrapper>
+    <Tag className={className} tags={tags} matching={matching}>
+      {children}
+    </Tag>
   );
 };
 
-type TagWrapperStyle = {
-  tagWrapperWidth?: string;
-};
-
-const TagWrapper = styled.div<TagWrapperStyle>`
-  width: ${({ tagWrapperWidth }) => tagWrapperWidth};
-`;
-
-export default Box;
+const TagWrapper = styled.div``;

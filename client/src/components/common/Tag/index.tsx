@@ -1,36 +1,30 @@
 import * as React from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 type Props = {
+  className?: string;
   tags: any;
-  tagMargin?: string;
-  tagFontSize?: string;
-  sp_tagMargin?: string;
-  sp_tagFontSize?: string;
+  styledTag?: any;
+  matching?: boolean;
 };
 
-const Tag: React.FC<Props> = ({
-  tags,
-  tagMargin,
-  tagFontSize,
-  sp_tagMargin,
-  sp_tagFontSize
-}) => {
+const Tags: React.FC<Props> = ({ className, tags, matching, styledTag }) => {
+  const myData = useSelector((state: any) => state.myData);
+  const myTags = myData.tags.map((tag: any) => tag.name);
   const tagComponents = tags.map((tag: any, i: number) => {
-    return (
-      <Text
-        key={i}
-        onClick={() => pickColor()}
-        tagMargin={tagMargin}
-        tagFontSize={tagFontSize}
-        sp_tagMargin={sp_tagMargin}
-        sp_tagFontSize={sp_tagFontSize}
-      >
-        #{tag.name}
-      </Text>
-    );
+    const tagComponent = styledTag || <Tag tagName={tag.name} />;
+    if (matching) {
+      if (myTags.includes(tag.name)) {
+        return React.cloneElement(tagComponent, {
+          tagName: tag.name,
+          match: true
+        });
+      }
+    }
+    return React.cloneElement(tagComponent, { tagName: tag.name });
   });
-  return <TagWrapper>{tagComponents}</TagWrapper>;
+  return <TagWrapper className={className}>{tagComponents}</TagWrapper>;
 };
 
 const TagWrapper = styled.div`
@@ -38,30 +32,36 @@ const TagWrapper = styled.div`
   margin: 0 auto;
 `;
 
+export default Tags;
+
+type TagProps = {
+  className?: string;
+  tagName: string;
+  match?: boolean;
+};
+
+export const Tag: React.FC<TagProps> = ({ className, tagName, match }) => {
+  return (
+    <Text className={className} onClick={() => pickColor()} match={match}>
+      #{tagName}
+    </Text>
+  );
+};
+
 type TextType = {
-  tagMargin?: string;
-  tagFontSize?: string;
-  sp_tagMargin?: string;
-  sp_tagFontSize?: string;
+  match?: boolean;
 };
 
 const Text = styled.span<TextType>`
-  margin: ${({ tagMargin }) => tagMargin};
-  color: #777;
-  font-size: ${({ tagFontSize }) => tagFontSize};
+  margin: 4px 8px;
+  color: ${({ match }) => (match ? "#fff" : "#777")};
   padding: 6px 12px;
   border-radius: 6px;
-  background-color: #ffe5e5;
+  background-color: ${({ match }) => (match ? "blue" : "#ffe5e5")};
   cursor: pointer;
   display: inline-block;
-  @media (max-width: 768px) {
-    font-size: ${({ sp_tagFontSize }) => sp_tagFontSize};
-    margin: ${({ sp_tagMargin }) => sp_tagMargin};
-  }
 `;
 
 const pickColor = () => {
   const defaultColor = ["ff7722", "f92772"];
 };
-
-export default Tag;

@@ -2,46 +2,26 @@ import * as React from "react";
 import { Fragment, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import MainInput from "../components/common/Form/MainInput";
-import Logo from "../components/common/Logo";
+import MainInputForm, {
+  MainInput as BaseMainInput,
+} from "../components/common/Form/MainInput";
+import BaseLogo from "../components/common/Logo";
 import Header from "../components/common/Header";
-import { decodeJwt } from "../Utils/decodeJwt";
-import { myDataChange } from "../redux/MyData/action";
 import { homeInputChange } from "../redux/HomeInput/action";
-import axios from "axios";
+import { withRouter, RouteComponentProps } from "react-router";
+import Loading from "../components/common/Loading";
 
-const Home: React.FC = () => {
+type Props = {} & RouteComponentProps;
+
+const Home: React.FC<Props> = ({ history }) => {
   const dispatch = useDispatch();
-  const myData = useSelector((state: any) => state.myData);
   const homeInput = useSelector((state: any) => state.homeInput.search);
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      const token = localStorage.getItem("token");
-      const decodedToken = decodeJwt(token);
-      const userID = decodedToken.hashID;
-      axios
-        .get(`http://localhost:8080/users/${userID}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        .then(res => {
-          dispatch(
-            myDataChange({
-              userID: res.data.hashID,
-              userName: res.data.displayName,
-              avatar: "",
-              tags: res.data.tags
-            })
-          );
-        });
-    }
-  }, []);
+  const myData = useSelector((state: any) => state.myData);
 
   const homeSearch = (e: any) => {
     e.preventDefault();
-    console.log(homeInput);
     dispatch(homeInputChange(""));
+    history.push(`/users?tag=${homeInput}`);
   };
 
   const inputChange = (inputValue: string) => {
@@ -50,23 +30,28 @@ const Home: React.FC = () => {
 
   return (
     <Fragment>
-      {localStorage.getItem("token") ? (
-        <Header page={"home"} isLogin={true} />
+      {myData.status === "busy" || myData.status === "loading" ? (
+        <Loading />
       ) : (
-        <Header page={"home"} isLogin={false} />
+        <div>
+          {localStorage.getItem("token") ? (
+            <Header page={"home"} isLogin={true} />
+          ) : (
+            <Header page={"home"} isLogin={false} />
+          )}
+          <HomeLayout>
+            <MainLayout>
+              <Logo centering={true} />
+              <MainInputForm handleSubmit={e => homeSearch(e)}>
+                <MainInput
+                  inputValue={homeInput}
+                  handleChange={inputValue => inputChange(inputValue)}
+                />
+              </MainInputForm>
+            </MainLayout>
+          </HomeLayout>
+        </div>
       )}
-      <HomeLayout>
-        <MainLayout>
-          <Logo logoFontSize="48px" centering />
-          <MainInput
-            inputWidth="100%"
-            inputHeight="36px"
-            inputValue={homeInput}
-            handleSubmit={e => homeSearch(e)}
-            handleChange={inputValue => inputChange(inputValue)}
-          />
-        </MainLayout>
-      </HomeLayout>
     </Fragment>
   );
 };
@@ -86,4 +71,13 @@ const MainLayout = styled.div`
   transform: translateY(-200px);
 `;
 
-export default Home;
+const Logo = styled(BaseLogo)`
+  font-size: 48px;
+`;
+
+const MainInput = styled(BaseMainInput)`
+  width: 100%;
+  height: 36px;
+`;
+
+export default withRouter(Home);

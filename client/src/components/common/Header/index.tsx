@@ -2,11 +2,11 @@ import * as React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import Avatar from "../Avatar";
+import BaseAvatar from "../Avatar";
 import { withRouter, RouteComponentProps } from "react-router";
-import Logo from "../Logo";
-import NormalButton from "../Button/NormalButton";
-import UserName from "../UserName";
+import BaseLogo from "../Logo";
+import BaseNormalButton from "../Button/NormalButton";
+import BaseUserName from "../UserName";
 import { useSelector } from "react-redux";
 
 type Props = {
@@ -35,43 +35,14 @@ const Header: React.FC<Props> = ({ isLogin, page, history }) => {
   const headerModal = (
     <ModalWrapper>
       <ModalLayout1>
-        <Avatar
-          imageWidth="50px"
-          imageHeight="50px"
-          sp_imageWidth="40px"
-          sp_imageHeight="40px"
-        />
+        <Avatar1 imageSrc={myData.avatar} />
         <NameLayout>
-          <UserName
-            userName={myData.userName}
-            textFontSize="26px"
-            sp_textFontSize="20px"
-          />
+          <UserName userName={myData.userName} />
         </NameLayout>
       </ModalLayout1>
       <ModalLayout2>
-        <NormalButton
-          content="マイページ"
-          contentSize="16px"
-          btnWidth="100px"
-          btnHeight="30px"
-          btnColor="#4285f4"
-          sp_contentSize="14px"
-          sp_btnWidth="84px"
-          sp_btnHeight="24px"
-          handleClick={() => toMypage()}
-        />
-        <NormalButton
-          content="Sign out"
-          contentSize="16px"
-          btnWidth="100px"
-          btnHeight="30px"
-          btnColor="#4285f4"
-          sp_contentSize="14px"
-          sp_btnWidth="84px"
-          sp_btnHeight="24px"
-          handleClick={() => signOut()}
-        />
+        <NormalButton1 content="マイページ" handleClick={() => toMypage()} />
+        <NormalButton2 content="Sign out" handleClick={() => signOut()} />
       </ModalLayout2>
       <CloseButton onClick={() => modalChange(false)}>×</CloseButton>
     </ModalWrapper>
@@ -90,12 +61,9 @@ const Header: React.FC<Props> = ({ isLogin, page, history }) => {
 
   if (page === "home" && isLogin === true) {
     linkContents = [
-      <Avatar
+      <Avatar2
         key="avatar"
-        imageWidth="100px"
-        imageHeight="100px"
-        sp_imageWidth="60px"
-        sp_imageHeight="60px"
+        imageSrc={myData.avatar}
         handleClick={() => modalChange(true)}
       />
     ];
@@ -103,19 +71,10 @@ const Header: React.FC<Props> = ({ isLogin, page, history }) => {
 
   if (page === "common") {
     linkContents = [
-      <Logo
-        key="logo"
-        logoFontSize="40px"
-        sp_logoFontSize="30px"
-        logoMargin="0 auto 0 0;"
-        handleClick={() => toHome()}
-      />,
-      <Avatar
+      <Logo key="logo" handleClick={() => toHome()} />,
+      <Avatar2
         key="avatar"
-        imageWidth="100px"
-        imageHeight="100px"
-        sp_imageWidth="60px"
-        sp_imageHeight="60px"
+        imageSrc={myData.avatar}
         handleClick={() => modalChange(true)}
       />
     ];
@@ -143,7 +102,7 @@ const LinkWrapper = styled.div`
   margin: 0 auto;
   position: relative;
   @media (max-width: 768px) {
-    padding: 10px 8px;
+    padding: 10px 14px;
   }
 `;
 
@@ -169,7 +128,6 @@ const ModalWrapper = styled.div`
   margin: 20px -14px;
   padding: 14px 10px;
   @media (max-width: 768px) {
-    width: 200px;
     margin: 8px 0px;
     padding: 8px 8px;
   }
@@ -179,6 +137,57 @@ const ModalLayout1 = styled.div`
   display: flex;
   align-items: center;
 `;
+
+const Avatar1 = styled(BaseAvatar)`
+  width: 50px;
+  height: 50px;
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+  }
+`;
+
+const Avatar2 = styled(BaseAvatar)`
+  width: 100px;
+  height: 100px;
+  @media (max-width: 768px) {
+    width: 60px;
+    height: 60px;
+  }
+`;
+
+const Logo = styled(BaseLogo)`
+  font-size: 40px;
+  margin: 0 auto 0 0;
+  @media (max-width: 768px) {
+    font-size: 30px;
+  }
+`;
+
+const NormalButton1 = styled(BaseNormalButton)`
+  font-size: 16px;
+  width: 100px;
+  height: 30px;
+  background-color: #4285f4;
+  @media (max-width: 768px) {
+    font-size: 14px;
+    width: 84px;
+    height: 24px;
+  }
+`;
+
+const NormalButton2 = styled(BaseNormalButton)`
+  font-size: 16px;
+  width: 100px;
+  height: 30px;
+  background-color: #4285f4;
+  @media (max-width: 768px) {
+    font-size: 14px;
+    width: 84px;
+    height: 24px;
+  }
+`;
+
 const ModalLayout2 = styled.div`
   display: flex;
   justify-content: space-evenly;
@@ -190,6 +199,13 @@ const ModalLayout2 = styled.div`
 
 const NameLayout = styled.div`
   margin-left: 10px;
+`;
+
+const UserName = styled(BaseUserName)`
+  font-size: 26px;
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 `;
 
 const CloseButton = styled.div`
