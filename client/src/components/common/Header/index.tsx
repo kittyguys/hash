@@ -97,8 +97,7 @@ const LinkWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 10px 20px;
-  max-width: 900px;
+  padding: 16px 28px;
   margin: 0 auto;
   position: relative;
   @media (max-width: 768px) {
@@ -106,17 +105,21 @@ const LinkWrapper = styled.div`
   }
 `;
 
-const StyledA = styled.a`
-  margin-right: 10px;
-  color: #999;
-  border: 1px solid #999;
+const StyledLink = styled(Link)`
+  color: #fff;
+  border: 1px solid #4285f4;
+  font-weight: bold;
+  outline: none;
+  background: #4285f4;
+  padding: 6px 12px;
   border-radius: 2px;
-  font-size: 18px;
-  padding: 2px 10px;
+  font-size: 1.3rem;
+  margin-left: 20px;
   text-decoration: none;
+  :hover {
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+  }
 `;
-
-const StyledLink = StyledA.withComponent(Link);
 
 const ModalWrapper = styled.div`
   width: 250px;
@@ -165,7 +168,10 @@ const Logo = styled(BaseLogo)`
 `;
 
 const NormalButton1 = styled(BaseNormalButton)`
-  font-size: 16px;
+  border: 1px solid #4285f4;
+  font-weight: bold;
+  outline: none;
+  font-size: 1.3rem;
   width: 100px;
   height: 30px;
   background-color: #4285f4;
