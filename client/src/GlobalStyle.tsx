@@ -114,6 +114,10 @@ Twitter: @rich_clark
 
   html, body {
     font-size: 62.5%;
+    min-height: 100vh;
+  }
+  #root {
+    height: 100%;
   }
 `;
 
