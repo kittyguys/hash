@@ -1,6 +1,5 @@
 import * as React from "react";
 import styled from "styled-components";
-
 import BaseLogo from "../common/Logo";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -9,9 +8,9 @@ import { withRouter, RouteComponentProps } from "react-router";
 
 const Wrapper = styled.div`
   display: block;
-  width: 350px;
+  width: 378px;
   border: 1px solid #dbdbdb;
-  padding: 10px 10px;
+  padding: 30px 30px;
 `;
 
 const Logo = styled(BaseLogo)`
@@ -20,64 +19,76 @@ const Logo = styled(BaseLogo)`
 
 const Title = styled.div`
   display: block;
-  font-size: 20px;
+  font-size: 16px;
 `;
 
 const FormBlock = styled.div`
   display: block;
-  margin: 10px 0 0;
+  margin: 16px 0 0;
 `;
 
 const SubmitButton = styled.input`
   display: block;
   background-color: #4285f4;
   color: #fff;
-  width: 190px;
+  width: 100%;
   height: 38px;
   margin: 12px auto 0;
   border: none;
   outline: none;
   border-radius: 4px;
-  font-size: 18px;
+  font-size: 15px;
   &:hover {
     opacity: 0.7;
     cursor: pointer;
   }
 `;
 
-const InputStyle = {
-  color: "#555",
-  fontSize: "16px",
-  padding: "6px 10px",
-  borderRadius: "4px",
-  border: "1px solid #dfe1e5",
-  outline: "none"
-};
+const InputStyle = styled(Field)`
+  width: calc(50% - 10px);
+  color: #555;
+  font-size: 15px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #dfe1e5;
+  outline: none;
+`;
 
-const IDInput = {
-  color: "#555",
-  fontSize: "16px",
-  padding: "6px 10px",
-  borderRadius: "4px",
-  border: "1px solid #dfe1e5",
-  outline: "none",
-  width: "328px"
-};
+const NameInput = styled(Field)`
+  color: #555;
+  font-size: 15px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #dfe1e5;
+  outline: none;
+  width: calc(50% - 10px);
+`;
 
-const EmailInput = {
-  color: "#555",
-  fontSize: "16px",
-  padding: "6px 10px",
-  borderRadius: "4px",
-  border: "1px solid #dfe1e5",
-  outline: "none",
-  width: "328px"
-};
+const FlexForm = styled(FormBlock)`
+  display: flex;
+  margin: 16px 0 0;
+  justify-content: space-between;
+`;
 
-const LabelStyle = {
-  display: "block",
-  fontSize: "16px"
-};
+const IDInput = styled(Field)`
+  width: 100%;
+  color: #555;
+  font-size: 15px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #dfe1e5;
+  outline: none;
+`;
+
+const EmailInput = styled(Field)`
+  width: 100%;
+  color: #555;
+  font-size: 15px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #dfe1e5;
+  outline: none;
+`;
 
 const ErrorMessage = styled.div`
   display: block;
@@ -86,70 +97,85 @@ const ErrorMessage = styled.div`
   margin-top: 2px;
 `;
 
+const Border = styled.div`
+  height: 12px;
+  margin-top: 24px;
+  border-top: 1px solid #cbd2d6;
+  position: relative;
+  text-align: center;
+`;
+
+const Span = styled.span`
+  background-color: #fff;
+  padding: 0 0.5em;
+  position: relative;
+  color: #6c7378;
+  top: -0.7em;
+`;
+
 const InnerForm: React.FC = ({ values, errors, touched }: any) => {
   return (
     <Wrapper>
       <Logo />
-      <Title>hashアカウントを作成する</Title>
+      <Title>アカウントの作成</Title>
       <Form>
+        <FlexForm>
+          <NameInput value="" type="text" name="sei" placeholder="姓" />
+          <NameInput value="" type="text" name="mei" placeholder="名" />
+        </FlexForm>
         <FormBlock>
-          <label style={LabelStyle} htmlFor="hashid">
-            hash ID
-          </label>
-          <Field
-            style={IDInput}
+          <IDInput
             value={values.hashid}
             type="text"
             name="hashid"
+            placeholder="hash ID"
           />
           {touched.hashid && errors.hashid && (
             <ErrorMessage>{errors.hashid}</ErrorMessage>
           )}
         </FormBlock>
         <FormBlock>
-          <label style={LabelStyle} htmlFor="email">
-            Eメールアドレス
-          </label>
-          <Field
-            style={EmailInput}
+          <EmailInput
             value={values.email}
             type="email"
             name="email"
+            placeholder="Eメールアドレス"
           />
           {touched.email && errors.email && (
             <ErrorMessage>{errors.email}</ErrorMessage>
           )}
         </FormBlock>
-        <FormBlock>
-          <label style={LabelStyle} htmlFor="password">
-            パスワード
-          </label>
-          <Field
-            style={InputStyle}
+        <FlexForm>
+          <InputStyle
             value={values.password}
             type="text"
             name="password"
+            placeholder="パスワード"
           />
           {touched.password && errors.password && (
             <ErrorMessage>{errors.password}</ErrorMessage>
           )}
-        </FormBlock>
-        <FormBlock>
-          <label style={LabelStyle} htmlFor="passwordconfirm">
-            パスワード確認
-          </label>
-          <Field
-            style={InputStyle}
+          <InputStyle
             value={values.passwordConfirm}
             type="text"
             name="passwordConfirm"
+            placeholder="パスワード確認"
           />
           {touched.passwordConfirm && errors.passwordConfirm && (
             <ErrorMessage>{errors.passwordConfirm}</ErrorMessage>
           )}
-        </FormBlock>
+        </FlexForm>
         <FormBlock>
           <SubmitButton type="submit" value="確認" />
+        </FormBlock>
+        <Border>
+          <Span>or</Span>
+        </Border>
+        <FormBlock>
+          <SubmitButton
+            type="submit"
+            value="既にアカウントをお持ちの方はこちら"
+          />
         </FormBlock>
       </Form>
     </Wrapper>
@@ -161,7 +187,7 @@ const SignupFormFormik = withFormik({
     hashid: "",
     email: "",
     password: "",
-    passwordConfirm: ""
+    passwordConfirm: "",
   }),
   validationSchema: Yup.object().shape({
     hashid: Yup.string()
@@ -175,21 +201,21 @@ const SignupFormFormik = withFormik({
       .required("パスワードは必須項目です。"),
     passwordConfirm: Yup.string()
       .oneOf([Yup.ref("password")], "パスワードが一致しません。")
-      .required("パスワードの確認は必須です。")
+      .required("パスワードの確認は必須です。"),
   }),
   handleSubmit: (values: any) => {
     const userData: any = {
       hashID: values.hashid,
       displayName: values.hashid,
       email: values.email,
-      password: values.password
+      password: values.password,
     };
     axios.post("http://localhost:8080/signup", userData).then(res => {
       localStorage.setItem("token", res.data.token);
       alert("アカウントの作成が成功しました。");
       location.href = "/";
     });
-  }
+  },
 })(InnerForm);
 
 export default SignupFormFormik;
