@@ -1,16 +1,23 @@
+import App from "next/app";
 import * as React from "react";
 import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
-import { decodeJwt } from "../src/Utils/decodeJwt";
+import { Provider, useDispatch } from "react-redux";
+import withRedux from "next-redux-wrapper";
+import withReduxSaga from "next-redux-saga";
+import { configureStore } from "../src/redux/store";
 import {
   myDataChangeStart,
   myDataChangeFailed
 } from "../src/redux/MyData/action";
-const hashImage = require("./assets/images/hash.jpg");
+import GlobalStyle from "../src/GlobalStyle";
 
-const App: React.FC = () => {
-  // ユーザ情報の取得処理
+interface IProps {
+  Component: React.Component;
+  store: any;
+}
+
+// ユーザ情報の取得処理
+const GlobalState: React.FC = ({ children }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -19,8 +26,21 @@ const App: React.FC = () => {
       dispatch(myDataChangeFailed());
     }
   }, []);
-  return (
-  );
+  return <>{children}</>;
 };
 
-export default App;
+class MyApp extends App<IProps> {
+  render() {
+    const { Component, pageProps, store } = this.props;
+    return (
+      <Provider store={store}>
+        <GlobalState>
+          <Component {...pageProps} />
+          <GlobalStyle />
+        </GlobalState>
+      </Provider>
+    );
+  }
+}
+
+export default withRedux(configureStore)(withReduxSaga(MyApp));
