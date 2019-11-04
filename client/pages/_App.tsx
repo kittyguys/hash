@@ -3,17 +3,20 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { decodeJwt } from "./Utils/decodeJwt";
-import { myDataChangeStart, myDataChangeFailed } from "./redux/MyData/action";
+import { decodeJwt } from "../src/Utils/decodeJwt";
+import {
+  myDataChangeStart,
+  myDataChangeFailed
+} from "../src/redux/MyData/action";
 const hashImage = require("./assets/images/hash.jpg");
 
-import Home from "../pages/Home";
-import Signup from "../pages/Signup/Signup";
-import SignupConfirm from "../pages/Signup/SignupConfirm";
-import Signin from "../pages/Signin/Signin";
-import Users from "../pages/Users";
-import Mypage from "../pages/Mypage";
-import User from "../pages/User";
+import Home from "./Home";
+import Signup from "./Signup/Signup";
+import SignupConfirm from "./Signup/SignupConfirm";
+import Signin from "./Signin/Signin";
+import Users from "./Users";
+import Mypage from "./Mypage";
+import User from "./User";
 
 const App: React.FC = () => {
   // ユーザ情報の取得処理
