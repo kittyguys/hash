@@ -1,19 +1,19 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import GlobalStyle from "./GlobalStyle";
+import GlobalStyle from "../GlobalStyle";
 import { createStore, combineReducers, applyMiddleware } from "redux";
-import { rootSaga } from "./redux/sagas/rootSaga";
+import { rootSaga } from "./sagas/rootSaga";
 import createSagaMiddleware from "redux-saga";
 import { Provider } from "react-redux";
 
 // reducers
-import signupReducer from "./redux/Signup/reducer";
-import signinReducer from "./redux/Signin/reducer";
-import myDataReducer from "./redux/MyData/reducer";
-import mypageInputReducer from "./redux/MypageInput/reducer";
-import homeInputReducer from "./redux/HomeInput/reducer";
+import signupReducer from "./Signup/reducer";
+import signinReducer from "./Signin/reducer";
+import myDataReducer from "./MyData/reducer";
+import mypageInputReducer from "./MypageInput/reducer";
+import homeInputReducer from "./HomeInput/reducer";
 
-import App from "./App";
+import App from "../../pages/_App";
 
 const rootReducer = combineReducers({
   signup: signupReducer,
