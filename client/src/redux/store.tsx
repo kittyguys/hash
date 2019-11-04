@@ -1,10 +1,6 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import GlobalStyle from "../GlobalStyle";
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import { rootSaga } from "./sagas/rootSaga";
-import createSagaMiddleware from "redux-saga";
-import { Provider } from "react-redux";
+import createSagaMiddleware, { SagaMiddleware } from "redux-saga";
 
 // reducers
 import signupReducer from "./Signup/reducer";
@@ -12,8 +8,6 @@ import signinReducer from "./Signin/reducer";
 import myDataReducer from "./MyData/reducer";
 import mypageInputReducer from "./MypageInput/reducer";
 import homeInputReducer from "./HomeInput/reducer";
-
-import App from "../../pages/_App";
 
 const rootReducer = combineReducers({
   signup: signupReducer,
@@ -25,15 +19,29 @@ const rootReducer = combineReducers({
 
 const sagaMiddleWare = createSagaMiddleware();
 const store = createStore(rootReducer, applyMiddleware(sagaMiddleWare));
+const bindMiddleware = (middleware: [SagaMiddleware<object>]) => {
+  if (process.env.NODE_ENV !== "production") {
+    const { composeWithDevTools } = require("redux-devtools-extension");
+    return composeWithDevTools(applyMiddleware(...middleware));
+  }
+  return applyMiddleware(...middleware);
+};
 
-ReactDOM.render(
-  <>
-    <Provider store={store}>
-      <GlobalStyle />
-      <App />
-    </Provider>
-  </>,
-  document.getElementById("root")
-);
+declare module "redux" {
+  export interface Store {
+    sagaTask: any;
+  }
+}
 
-sagaMiddleWare.run(rootSaga);
+export const configureStore = (initialState = {}) => {
+  const sagaMiddleware = createSagaMiddleware();
+  const store = createStore(
+    rootReducer,
+    initialState,
+    bindMiddleware([sagaMiddleware])
+  );
+
+  store.sagaTask = sagaMiddleware.run(rootSaga);
+
+  return store;
+};
