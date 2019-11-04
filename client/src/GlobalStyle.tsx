@@ -113,6 +113,7 @@ Twitter: @rich_clark
 /* // Reset CSS */
 
   html, body {
+    font-family: 'ヒラギノ角ゴ Pro W3',　'ヒラギノ角ゴ W3',　"游ゴシック体", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", 'メイリオ', 'ＭＳ Ｐゴシック',　sans-serif;
     font-size: 62.5%;
     min-height: 100vh;
   }
