@@ -5,12 +5,12 @@ import styled from "styled-components";
 import { IoIosSearch } from "react-icons/io";
 import BaseMainInputForm, {
   MainInput as BaseMainInput
-} from "../components/common/Form/MainInput";
-import BaseLogo from "../components/common/Logo";
-import Header from "../components/common/Header";
-import { homeInputChange } from "../redux/HomeInput/action";
+} from "../src/components/common/Form/MainInput";
+import BaseLogo from "../src/components/common/Logo";
+import Header from "../src/components/common/Header";
+import { homeInputChange } from "../src/redux/HomeInput/action";
 import { withRouter, RouteComponentProps } from "react-router";
-import Loading from "../components/common/Loading";
+import Loading from "../src/components/common/Loading";
 
 type Props = {} & RouteComponentProps;
 

@@ -2,8 +2,8 @@ import * as React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 
-import SignupForm from "../../components/Signup/SignupForm";
-import SignupFormFormik from "../../components/Signup/SignupFormFormik";
+import SignupForm from "../../src/components/Signup/SignupForm";
+import SignupFormFormik from "../../src/components/Signup/SignupFormFormik";
 
 const Signup: React.FC = () => {
   const profile = useSelector((state: any) => state.signup.profile);

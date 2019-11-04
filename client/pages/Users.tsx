@@ -1,13 +1,13 @@
 import * as React from "react";
 import { Fragment, useState, useEffect } from "react";
 import styled from "styled-components";
-import UserCassette from "../components/UserCassette";
+import UserCassette from "../src/components/UserCassette";
 import axios from "axios";
-import Header from "../components/common/Header";
+import Header from "../src/components/common/Header";
 import {
   NoData as BaseNoData,
   NoDataText as BaseNoDataText
-} from "../components/common/NoData";
+} from "../src/components/common/NoData";
 const queryString = require("query-string");
 
 type Props = {

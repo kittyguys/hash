@@ -1,11 +1,11 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Fragment, useState, useEffect } from "react";
-import BaseAvatar from "../components/common/Avatar";
-import BaseUserName from "../components/common/UserName";
-import Tags from "../components/common/Tag";
+import BaseAvatar from "../src/components/common/Avatar";
+import BaseUserName from "../src/components/common/UserName";
+import Tags from "../src/components/common/Tag";
 import axios from "axios";
-import Header from "../components/common/Header";
+import Header from "../src/components/common/Header";
 const queryString = require("query-string");
 const hashImage = require("../assets/images/hash.jpg");
 
