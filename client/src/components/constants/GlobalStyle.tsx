@@ -109,16 +109,20 @@ Twitter: @rich_clark
   *::before,
   *::after {
     box-sizing: border-box;
+    font: inherit;
   }
 /* // Reset CSS */
 
   html, body {
-    font-family: 'ヒラギノ角ゴ Pro W3', 'ヒラギノ角ゴ W3', "游ゴシック体", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", 'メイリオ', 'ＭＳ Ｐゴシック', sans-serif;
+    font-family: 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ W3', 'Hiragino Sans', '游ゴシック体', YuGothic, '游ゴシック Medium', 'Yu Gothic Medium', '游ゴシック', 'Yu Gothic', 'メイリオ', 'ＭＳ Ｐゴシック', sans-serif;
     font-size: 62.5%;
     min-height: 100vh;
   }
   #root {
     height: 100%;
+  }
+  a, button, input[type="submit"] {
+    cursor: pointer;
   }
 `;
 

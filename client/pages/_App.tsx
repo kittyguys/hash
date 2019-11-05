@@ -9,7 +9,7 @@ import {
   myDataChangeStart,
   myDataChangeFailed
 } from "../src/redux/MyData/action";
-import GlobalStyle from "../src/GlobalStyle";
+import GlobalStyle from "../src/components/constants/GlobalStyle";
 
 interface IProps {
   Component: React.Component;

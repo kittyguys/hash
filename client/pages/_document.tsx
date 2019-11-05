@@ -1,4 +1,11 @@
-import Document, { DocumentContext } from "next/document";
+import * as React from "react";
+import Document, {
+  DocumentContext,
+  Html,
+  Head,
+  Main,
+  NextScript
+} from "next/document";
 import { ServerStyleSheet } from "styled-components";
 
 export default class MyDocument extends Document {
@@ -25,5 +32,31 @@ export default class MyDocument extends Document {
     } finally {
       sheet.seal();
     }
+  }
+
+  render() {
+    return (
+      <Html>
+        <html lang="ja">
+          <Head>
+            <meta charSet="UTF-8" />
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1.0"
+            />
+            <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+            <title>hash</title>
+            <link
+              href="https://fonts.googleapis.com/css?family=Lobster&display=swap"
+              rel="stylesheet"
+            />
+          </Head>
+          <body>
+            <Main />
+            <NextScript />
+          </body>
+        </html>
+      </Html>
+    );
   }
 }
