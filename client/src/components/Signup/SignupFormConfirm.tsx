@@ -4,11 +4,12 @@ import axios from "axios";
 
 import BaseLogo from "../common/Logo";
 import BaseNormalButton from "../common/Button/NormalButton";
-import { withRouter, RouteComponentProps } from "react-router";
+import Router from "next/router";
+// import { withRouter, RouteComponentProps } from "react-router";
 
 type Props = {
   profile: any;
-} & RouteComponentProps;
+};
 
 type UserData = {
   hashID: string;
@@ -17,7 +18,7 @@ type UserData = {
   password: string;
 };
 
-const SignupFormConfirm: React.FC<Props> = ({ history, ...props }) => {
+const SignupFormConfirm: React.FC<Props> = ({ ...props }) => {
   const createUser = () => {
     const userData: UserData = {
       hashID: props.profile.userName,
@@ -28,7 +29,7 @@ const SignupFormConfirm: React.FC<Props> = ({ history, ...props }) => {
     axios.post("http://localhost:8080/signup", userData).then(res => {
       localStorage.setItem("token", res.data.token);
       alert("アカウントの作成が成功しました。");
-      history.push("/");
+      Router.push("/");
     });
   };
   return (
@@ -102,4 +103,4 @@ const Text = styled.div`
   font-size: 20px;
 `;
 
-export default withRouter(SignupFormConfirm);
+export default SignupFormConfirm;

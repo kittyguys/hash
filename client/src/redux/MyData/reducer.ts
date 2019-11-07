@@ -1,5 +1,3 @@
-const hashImage = require("../../assets/images/hash.jpg");
-
 type State = {
   userID: string;
   userName: string;
@@ -13,7 +11,7 @@ const initialState: State = {
   userName: "",
   avatar: "",
   tags: [],
-  status: "busy",
+  status: "busy"
 };
 
 const myDataReducer = (state = initialState, action: any) => {
@@ -21,15 +19,15 @@ const myDataReducer = (state = initialState, action: any) => {
     case "MYDATA_CHANGE_START":
       return {
         ...state,
-        status: "loading",
+        status: "loading"
       };
     case "MYDATA_CHANGE_SUCCESS":
       return {
         userID: action.payload.hashID,
         userName: action.payload.displayName,
-        avatar: hashImage,
+        avatar: "/static/assets/images/hash.jpg",
         tags: action.payload.tags,
-        status: "success",
+        status: "success"
       };
     case "MYDATA_CHANGE_FAILED":
       return { ...state, status: "failed" };

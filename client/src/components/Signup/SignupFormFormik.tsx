@@ -4,7 +4,7 @@ import BaseLogo from "../common/Logo";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { withRouter, RouteComponentProps } from "react-router";
+// import { withRouter, RouteComponentProps } from "react-router";
 
 const Wrapper = styled.div`
   display: block;
@@ -187,7 +187,7 @@ const SignupFormFormik = withFormik({
     hashid: "",
     email: "",
     password: "",
-    passwordConfirm: "",
+    passwordConfirm: ""
   }),
   validationSchema: Yup.object().shape({
     hashid: Yup.string()
@@ -201,21 +201,21 @@ const SignupFormFormik = withFormik({
       .required("パスワードは必須項目です。"),
     passwordConfirm: Yup.string()
       .oneOf([Yup.ref("password")], "パスワードが一致しません。")
-      .required("パスワードの確認は必須です。"),
+      .required("パスワードの確認は必須です。")
   }),
   handleSubmit: (values: any) => {
     const userData: any = {
       hashID: values.hashid,
       displayName: values.hashid,
       email: values.email,
-      password: values.password,
+      password: values.password
     };
     axios.post("http://localhost:8080/signup", userData).then(res => {
       localStorage.setItem("token", res.data.token);
       alert("アカウントの作成が成功しました。");
       location.href = "/";
     });
-  },
+  }
 })(InnerForm);
 
 export default SignupFormFormik;

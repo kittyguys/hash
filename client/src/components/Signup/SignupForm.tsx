@@ -9,13 +9,14 @@ import LabelInputWrapper, {
 import BaseNormalButton from "../common/Button/NormalButton";
 import { useDispatch } from "react-redux";
 import { profileChange } from "../../redux/Signup/action";
-import { withRouter, RouteComponentProps } from "react-router";
+import Router from "next/router";
+// import { withRouter, RouteComponentProps } from "react-router";
 
 type Props = {
   profile: any;
-} & RouteComponentProps;
+};
 
-const SignupForm: React.FC<Props> = ({ history, ...props }) => {
+const SignupForm: React.FC<Props> = ({ ...props }) => {
   const dispatch = useDispatch();
 
   const usernameChange = (value: string) => {
@@ -67,7 +68,7 @@ const SignupForm: React.FC<Props> = ({ history, ...props }) => {
       <Layout3>
         <NormalButton
           content="次へ"
-          handleClick={() => history.push("/signup/confirm")}
+          handleClick={() => Router.push("/signup/confirm")}
         />
       </Layout3>
     </Wrapper>
@@ -123,4 +124,4 @@ const Title = styled.div`
   font-size: 26px;
 `;
 
-export default withRouter(SignupForm);
+export default SignupForm;
