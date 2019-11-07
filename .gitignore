@@ -113,3 +113,5 @@ api/tmp/
 
 # keys
 api/config/config.yaml
+
+env/
