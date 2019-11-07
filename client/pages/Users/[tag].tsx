@@ -1,14 +1,14 @@
 import * as React from "react";
 import { Fragment, useState, useEffect } from "react";
 import styled from "styled-components";
-import UserCassette from "../components/UserCassette";
 import axios from "axios";
-import Header from "../components/common/Header";
+import { useRouter } from "next/router";
+import UserCassette from "../../src/components/UserCassette";
+import Header from "../../src/components/common/Header";
 import {
   NoData as BaseNoData,
   NoDataText as BaseNoDataText
-} from "../components/common/NoData";
-const queryString = require("query-string");
+} from "../../src/components/common/NoData";
 
 type Props = {
   location: {
@@ -18,8 +18,8 @@ type Props = {
 
 const UserList: React.FC<Props> = props => {
   const [users, setUsers] = useState([]);
-  const qs = queryString.parse(props.location.search);
-  const tag = qs.tag;
+  const router = useRouter();
+  const { tag } = router.query;
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -58,7 +58,7 @@ const UserList: React.FC<Props> = props => {
         <NoData className="">
           <NoDataText
             className=""
-            searchWord={tag}
+            searchWord={tag[0]}
             targetField="ユーザー"
           ></NoDataText>
         </NoData>

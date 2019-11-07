@@ -5,16 +5,17 @@ import styled from "styled-components";
 import { IoIosSearch } from "react-icons/io";
 import BaseMainInputForm, {
   MainInput as BaseMainInput
-} from "../components/common/Form/MainInput";
-import BaseLogo from "../components/common/Logo";
-import Header from "../components/common/Header";
-import { homeInputChange } from "../redux/HomeInput/action";
-import { withRouter, RouteComponentProps } from "react-router";
-import Loading from "../components/common/Loading";
+} from "../src/components/common/Form/MainInput";
+import BaseLogo from "../src/components/common/Logo";
+import Header from "../src/components/common/Header";
+import { homeInputChange } from "../src/redux/HomeInput/action";
+import Router from "next/router";
+// import { withRouter, RouteComponentProps } from "react-router";
+import Loading from "../src/components/common/Loading";
 
-type Props = {} & RouteComponentProps;
+type Props = {};
 
-const Home: React.FC<Props> = ({ history }) => {
+const Home: React.FC<Props> = ({}) => {
   const dispatch = useDispatch();
   const homeInput = useSelector((state: any) => state.homeInput.search);
   const myData = useSelector((state: any) => state.myData);
@@ -22,7 +23,7 @@ const Home: React.FC<Props> = ({ history }) => {
   const homeSearch = (e: any) => {
     e.preventDefault();
     dispatch(homeInputChange(""));
-    history.push(`/users?tag=${homeInput}`);
+    Router.push(`/users/${homeInput}`);
   };
 
   const inputChange = (inputValue: string) => {
@@ -117,4 +118,4 @@ const MainInput = styled(BaseMainInput)`
   }
 `;
 
-export default withRouter(Home);
+export default Home;

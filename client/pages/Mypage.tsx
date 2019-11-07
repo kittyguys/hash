@@ -2,17 +2,20 @@ import * as React from "react";
 import styled from "styled-components";
 import { Fragment, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import BaseAvatar from "../components/common/Avatar";
-import BaseUserName from "../components/common/UserName";
-import BaseNormalButton from "../components/common/Button/NormalButton";
+import BaseAvatar from "../src/components/common/Avatar";
+import BaseUserName from "../src/components/common/UserName";
+import BaseNormalButton from "../src/components/common/Button/NormalButton";
 import MainInputForm, {
   MainInput as BaseMainInput
-} from "../components/common/Form/MainInput";
-import Tags, { Tag as BaseTag } from "../components/common/Tag";
-import { mypageInputChange } from "../redux/MypageInput/action";
+} from "../src/components/common/Form/MainInput";
+import Tags, { Tag as BaseTag } from "../src/components/common/Tag";
+import { mypageInputChange } from "../src/redux/MypageInput/action";
 import axios from "axios";
-import Header from "../components/common/Header";
-import { myDataChangeSuccess, myDataChangeTags } from "../redux/MyData/action";
+import Header from "../src/components/common/Header";
+import {
+  myDataChangeSuccess,
+  myDataChangeTags
+} from "../src/redux/MyData/action";
 
 const Mypage: React.FC = () => {
   const dispatch = useDispatch();

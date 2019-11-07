@@ -1,9 +1,10 @@
 import * as React from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import Router from "next/router";
 import BaseAvatar from "../Avatar";
-import { withRouter, RouteComponentProps } from "react-router";
+// import { withRouter, RouteComponentProps } from "react-router";
 import BaseLogo from "../Logo";
 import BaseNormalButton from "../Button/NormalButton";
 import BaseUserName from "../UserName";
@@ -12,25 +13,25 @@ import { useSelector } from "react-redux";
 type Props = {
   page: string;
   isLogin?: boolean;
-} & RouteComponentProps;
+};
 
-const Header: React.FC<Props> = ({ isLogin, page, history }) => {
+const Header: React.FC<Props> = ({ isLogin, page }) => {
   const myData = useSelector((state: any) => state.myData);
   const [modal, modalChange] = useState(false);
 
   const toMypage = () => {
-    history.push("/mypage");
+    Router.push("/mypage");
   };
   const toHome = () => {
-    history.push("/");
+    Router.push("/");
   };
   const signOut = () => {
     localStorage.removeItem("token");
-    history.push("/");
+    Router.push("/");
     modalChange(false);
   };
 
-  let linkContents: JSX.Element[] = [];
+  let linkContents: JSX.Element[];
 
   const headerModal = (
     <ModalWrapper>
@@ -50,12 +51,12 @@ const Header: React.FC<Props> = ({ isLogin, page, history }) => {
 
   if (page === "home" && isLogin === false) {
     linkContents = [
-      <StyledLink key="signup" to="/signup">
-        Sign up
-      </StyledLink>,
-      <StyledLink key="signin" to="/signin">
-        Sign in
-      </StyledLink>
+      <Link key="signup" href="/signup">
+        <StyledLink>Sign up</StyledLink>
+      </Link>,
+      <Link key="signin" href="/signin">
+        <StyledLink>Sign in</StyledLink>
+      </Link>
     ];
   }
 
@@ -105,7 +106,7 @@ const LinkWrapper = styled.div`
   }
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.a`
   color: #fff;
   border: 1px solid #4285f4;
   font-weight: bold;
@@ -222,4 +223,4 @@ const CloseButton = styled.div`
   cursor: pointer;
 `;
 
-export default withRouter(Header);
+export default Header;

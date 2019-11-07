@@ -7,7 +7,7 @@ import {
   Wrapper as BaseTagWrapper,
   Box as BaseTagBox
 } from "../common/Tag/box";
-import { Link as BaseLink } from "react-router-dom";
+import Link from "next/link";
 
 type Props = {
   userName: string;
@@ -25,19 +25,21 @@ const UserCassette: React.FC<Props> = ({
   const imageSrc = "";
 
   return (
-    <Link to={`/user?id=${userId}`}>
-      <Avatar imageSrc={imageSrc} />
-      <UserInfo>
-        <UserName userName={userName} />
-      </UserInfo>
-      <TagWrapper>
-        <TagBox tags={tags} matching={matching} />
-      </TagWrapper>
+    <Link href={`/user/${userId}`} passHref>
+      <LinkInner>
+        <Avatar imageSrc={imageSrc} />
+        <UserInfo>
+          <UserName userName={userName} />
+        </UserInfo>
+        <TagWrapper>
+          <TagBox tags={tags} matching={matching} />
+        </TagWrapper>
+      </LinkInner>
     </Link>
   );
 };
 
-const Link = styled(BaseLink)`
+const LinkInner = styled.a`
   width: 600px;
   padding: 20px;
   display: flex;

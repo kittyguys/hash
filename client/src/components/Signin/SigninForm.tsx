@@ -9,11 +9,12 @@ import LabelInputWrapper, {
 import BaseNormalButton from "../common/Button/NormalButton";
 import { useDispatch } from "react-redux";
 import { signinChange } from "../../redux/Signin/action";
-import { withRouter, RouteComponentProps } from "react-router";
+import Router from "next/router";
+// import { withRouter, RouteComponentProps } from "react-router";
 
 type Props = {
   profile: any;
-} & RouteComponentProps;
+};
 
 type UserData = {
   hashID: string;
@@ -22,7 +23,7 @@ type UserData = {
   password: string;
 };
 
-const SigninForm: React.FC<Props> = ({ history, ...props }) => {
+const SigninForm: React.FC<Props> = ({ ...props }) => {
   const login = () => {
     const userData: UserData = {
       hashID: props.profile.userName,
@@ -34,7 +35,7 @@ const SigninForm: React.FC<Props> = ({ history, ...props }) => {
     axios.post("http://localhost:8080/login", userData).then(res => {
       localStorage.setItem("token", res.data.token);
       alert("ログインに成功しました。");
-      history.push("/");
+      Router.push("/");
     });
   };
 
@@ -124,4 +125,4 @@ const NormalButton2 = styled(BaseNormalButton)`
   background-color: #38a1f3;
 `;
 
-export default withRouter(SigninForm);
+export default SigninForm;
