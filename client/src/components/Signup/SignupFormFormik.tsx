@@ -4,7 +4,6 @@ import BaseLogo from "../common/Logo";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-// import { withRouter, RouteComponentProps } from "react-router";
 
 const Wrapper = styled.div`
   display: block;

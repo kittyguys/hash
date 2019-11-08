@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import BaseAvatar from "../src/components/common/Avatar";
 import BaseUserName from "../src/components/common/UserName";
 import BaseNormalButton from "../src/components/common/Button/NormalButton";
-import MainInputForm, {
+import BaseMainInputForm, {
   MainInput as BaseMainInput
 } from "../src/components/common/Form/MainInput";
 import Tags, { Tag as BaseTag } from "../src/components/common/Tag";

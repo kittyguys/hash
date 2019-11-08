@@ -4,7 +4,10 @@ import styled from "styled-components";
 import Link from "next/link";
 import Router from "next/router";
 import BaseAvatar from "../Avatar";
-// import { withRouter, RouteComponentProps } from "react-router";
+import { IoIosSearch } from "react-icons/io";
+import BaseMainInputForm, {
+  MainInput as BaseMainInput
+} from "../../common/Form/MainInput";
 import BaseLogo from "../Logo";
 import BaseNormalButton from "../Button/NormalButton";
 import BaseUserName from "../UserName";
@@ -17,7 +20,7 @@ type Props = {
 
 const Header: React.FC<Props> = ({ isLogin, page }) => {
   const myData = useSelector((state: any) => state.myData);
-  const [modal, modalChange] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toMypage = () => {
     Router.push("/mypage");
@@ -28,10 +31,10 @@ const Header: React.FC<Props> = ({ isLogin, page }) => {
   const signOut = () => {
     localStorage.removeItem("token");
     Router.push("/");
-    modalChange(false);
+    setIsModalOpen(false);
   };
 
-  let linkContents: JSX.Element[];
+  let linkContents: JSX.Element;
 
   const headerModal = (
     <ModalWrapper>
@@ -45,78 +48,135 @@ const Header: React.FC<Props> = ({ isLogin, page }) => {
         <NormalButton1 content="マイページ" handleClick={() => toMypage()} />
         <NormalButton2 content="Sign out" handleClick={() => signOut()} />
       </ModalLayout2>
-      <CloseButton onClick={() => modalChange(false)}>×</CloseButton>
+      <CloseButton onClick={() => setIsModalOpen(false)}>×</CloseButton>
     </ModalWrapper>
   );
 
-  if (page === "home" && isLogin === false) {
-    linkContents = [
-      <Link key="signup" href="/signup">
-        <StyledLink>Sign up</StyledLink>
-      </Link>,
-      <Link key="signin" href="/signin">
-        <StyledLink>Sign in</StyledLink>
-      </Link>
-    ];
-  }
-
-  if (page === "home" && isLogin === true) {
-    linkContents = [
+  if (isLogin === false) {
+    linkContents = (
+      <NotLoginLink>
+        <Link key="signup" href="/signup">
+          <NormalLink>アカウントを作る</NormalLink>
+        </Link>
+        <Link key="signin" href="/signin">
+          <StyledLink>ログイン</StyledLink>
+        </Link>
+      </NotLoginLink>
+    );
+  } else {
+    linkContents = (
       <Avatar2
         key="avatar"
         imageSrc={myData.avatar}
-        handleClick={() => modalChange(true)}
+        handleClick={() => setIsModalOpen(true)}
       />
-    ];
-  }
-
-  if (page === "common") {
-    linkContents = [
-      <Logo key="logo" handleClick={() => toHome()} />,
-      <Avatar2
-        key="avatar"
-        imageSrc={myData.avatar}
-        handleClick={() => modalChange(true)}
-      />
-    ];
+    );
   }
 
   return (
-    <HeaderWrapper>
+    <HeaderWrapper page={page} isLogin={isLogin}>
+      {page === "common" && (
+        <>
+          <Logo key="logo" handleClick={() => toHome()} />
+          <MainInputForm>
+            <MainInputLabel htmlFor="mainInput">
+              <IoIosSearch size="20px" color="#9AA0A6" />
+            </MainInputLabel>
+            <MainInput id="mainInput" />
+          </MainInputForm>
+        </>
+      )}
       <LinkWrapper>
         {linkContents}
-        {modal && headerModal}
+        {isModalOpen && headerModal}
       </LinkWrapper>
     </HeaderWrapper>
   );
 };
 
-const HeaderWrapper = styled.div`
+const HeaderWrapper = styled.div<{ page: string; isLogin: boolean }>`
+  display: flex;
+  align-items: center;
   width: 100%;
+  height: ${({ page }) => (page === "common" ? "84px" : "auto")};
+  border-bottom: ${({ page }) =>
+    !(page === "common") ? 0 : `1px solid #DDDDDD`};
+  position: fixed;
+  top: 0;
+  left: 0;
 `;
+
+const MainInputForm = styled(BaseMainInputForm)`
+  width: 582px;
+  height: 44px;
+  margin-left: 48px;
+  position: relative;
+`;
+
+const MainInputLabel = styled.label`
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translate(0, -50%);
+  z-index: 2;
+`;
+
+const MainInput = styled(BaseMainInput)`
+  width: 100%;
+  height: 100%;
+  padding-left: 48px;
+  background: #fff;
+  display: flex;
+  border: 1px solid #dfe1e5;
+  box-shadow: none;
+  border-radius: 24px;
+  z-index: 3;
+  :hover {
+    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
+    border-color: rgba(223, 225, 229, 0);
+  }
+`;
+
 const LinkWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
   padding: 16px 28px;
-  margin: 0 auto;
+  margin-left: auto;
   position: relative;
   @media (max-width: 768px) {
     padding: 10px 14px;
   }
 `;
 
+const NotLoginLink = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const NormalLink = styled.a`
+  font-size: 1.3rem;
+  font-weight: bold;
+  white-space: nowrap;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 const StyledLink = styled.a`
   color: #fff;
   border: 1px solid #4285f4;
-  font-weight: bold;
   outline: none;
   background: #4285f4;
-  padding: 6px 12px;
+  padding: 4px 8px;
   border-radius: 2px;
   font-size: 1.3rem;
+  font-weight: bold;
   margin-left: 20px;
   text-decoration: none;
+  white-space: nowrap;
   :hover {
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
   }
@@ -152,17 +212,21 @@ const Avatar1 = styled(BaseAvatar)`
 `;
 
 const Avatar2 = styled(BaseAvatar)`
-  width: 100px;
-  height: 100px;
+  width: 35px;
+  height: 35px;
+  border: 3px solid #fff;
   @media (max-width: 768px) {
     width: 60px;
     height: 60px;
   }
+  &:hover {
+    border-color: #bbb;
+  }
 `;
 
 const Logo = styled(BaseLogo)`
+  margin-left: 20px;
   font-size: 40px;
-  margin: 0 auto 0 0;
   @media (max-width: 768px) {
     font-size: 30px;
   }

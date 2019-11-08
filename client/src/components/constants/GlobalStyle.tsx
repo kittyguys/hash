@@ -118,8 +118,8 @@ Twitter: @rich_clark
     font-size: 62.5%;
     min-height: 100vh;
   }
-  #root {
-    height: 100%;
+  body {
+    padding-top: 84px;
   }
   a, button, input[type="submit"] {
     cursor: pointer;

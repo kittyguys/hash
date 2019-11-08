@@ -5,7 +5,6 @@ import axios from "axios";
 import BaseLogo from "../common/Logo";
 import BaseNormalButton from "../common/Button/NormalButton";
 import Router from "next/router";
-// import { withRouter, RouteComponentProps } from "react-router";
 
 type Props = {
   profile: any;
