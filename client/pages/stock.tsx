@@ -51,20 +51,25 @@ const LoadingBox = styled.div`
 `;
 
 const MainInputForm = styled(BaseMainInputForm)`
-  width: 92%;
-  max-width: 582px;
+  width: 100%;
+  padding: 20px 20px;
   position: fixed;
   bottom: 0;
+  background: #f5fdfd;
 `;
 
 const TeatArea = styled.textarea`
   width: 100%;
   height: 100%;
-  margin-top: 20px;
   background: #fff;
   border: 1px solid #dfe1e5;
   box-shadow: none;
-  border-radius: 2px;
+  border-radius: 4px;
+  resize: none;
+  padding: 8px 12px;
+  font-size: 1.4rem;
+  outline: none;
+  height: 3em;
 `;
 
 export default Stock;
