@@ -8,27 +8,19 @@ type Props = {
 
 // TODO(orita)文字列は後にprops渡しに変更
 const Cassette: React.FC<Props> = ({ className }: Props) => (
-  <Root className={className}>
+  <Wrapper className={className}>
+    <Label>
+      <DateText>Nov 8</DateText>
+      <TimeText>12:00 AM</TimeText>
+    </Label>
     <Content>
-      <Label>
-        <Date>Nov 8</Date>
-        <TimeLabel>12:00 AM</TimeLabel>
-      </Label>
-      <Wrapper>
-        <Text>
-          <span>明日は汐留でもくもくしますかー？</span>
-        </Text>
-      </Wrapper>
+      <Text>明日は汐留でもくもくしますかー？</Text>
     </Content>
-  </Root>
+  </Wrapper>
 );
 export default Cassette;
 
-const Root = styled.div`
-  box-sizing: inherit;
-`;
-
-const Content = styled.div`
+const Wrapper = styled.div`
   padding: 7px 12px 12px 12px;
   border-radius: 8px;
   margin-bottom: 10px;
@@ -46,28 +38,30 @@ const Label = styled.div`
   display: flex;
   flex-wrap: nowrap;
   color: rgba(97, 96, 97);
-  font-size: 13px;
+  font-size: 1.3rem;
   text-decoration: none;
   max-width: 100%;
-  line-height: 20px;
+  margin-top: 5px;
 `;
 
-const Date = styled.span`
+const DateText = styled.span`
   flex-shrink: 0;
-  font-size: 12px;
+  font-size: 1.2rem;
   font-weight: Bold;
 `;
 
-const TimeLabel = styled.span`
+const TimeText = styled.span`
   flex-shrink: 0;
-  font-size: 12px;
+  font-size: 1.2rem;
   margin-left: 4px;
 `;
 
-const Wrapper = styled.div``;
+const Content = styled.div`
+  margin-top: 10px;
+`;
 
 const Text = styled.div`
   margin: 4px 0 0 0;
   line-height: 1.46668;
-  font-size: 16px;
+  font-size: 1.6rem;
 `;
