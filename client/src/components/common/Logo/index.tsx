@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
+import Color from "../../constants/Color";
 
 type Props = {
   className?: string;
@@ -30,6 +31,7 @@ const LogoWrapper = styled.div<LogoWrapperType>`
 
 const Text = styled.span`
   font-family: "Lobster", cursive;
+  color: ${Color.Brand};
 `;
 
 export default Logo;

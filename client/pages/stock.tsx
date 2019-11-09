@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { IoIosSearch } from "react-icons/io";
+import Color from "../src/components/constants/Color";
 import BaseMainInputForm, {
   MainInput as BaseMainInput
 } from "../src/components/common/Form/MainInput";
@@ -31,6 +32,7 @@ const Stock: React.FC<Props> = ({}) => {
           )}
           <MainInputForm handleSubmit={e => e.preventDefault}>
             <TeatArea />
+            <SubmitButton>送信</SubmitButton>
           </MainInputForm>
         </>
       )}
@@ -39,7 +41,7 @@ const Stock: React.FC<Props> = ({}) => {
 };
 
 const LoadingWrapper = styled.div`
-  height: 100vh;
+  height: calc(100vh - 168px);
   position: relative;
 `;
 
@@ -51,14 +53,19 @@ const LoadingBox = styled.div`
 `;
 
 const MainInputForm = styled(BaseMainInputForm)`
-  width: 100%;
+  display: flex;
+  width: calc(100% - 40px);
+  height: 3em;
+  font-size: 1.4rem;
   padding: 20px 20px;
   position: fixed;
   bottom: 0;
   background: #f5fdfd;
+  box-sizing: content-box;
 `;
 
 const TeatArea = styled.textarea`
+  display: block;
   width: 100%;
   height: 100%;
   background: #fff;
@@ -67,9 +74,17 @@ const TeatArea = styled.textarea`
   border-radius: 4px;
   resize: none;
   padding: 8px 12px;
-  font-size: 1.4rem;
   outline: none;
-  height: 3em;
+`;
+
+const SubmitButton = styled.button`
+  background-color: ${Color.Brand};
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  margin-left: 4px;
+  white-space: nowrap;
+  padding: 0 24px;
 `;
 
 export default Stock;
