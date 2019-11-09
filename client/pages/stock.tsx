@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { IoIosSearch } from "react-icons/io";
 import Color from "../src/components/constants/Color";
 import BaseMainInputForm, {
-  MainInput as BaseMainInput
+  MainInput as BaseMainInput,
 } from "../src/components/common/Form/MainInput";
 import Header from "../src/components/common/Header";
 import Loading from "../src/components/common/Loading";
@@ -32,6 +32,7 @@ const Stock: React.FC<Props> = ({}) => {
             <Header page="common" isLogin={false} />
           )}
           <StockWrap>
+            <StockCassette />
             <StockCassette />
             <StockCassette />
             <StockCassette />
