@@ -6,6 +6,24 @@ type Props = {
   className?: string;
 };
 
+// TODO(orita)文字列は後にprops渡しに変更
+const Cassette: React.FC<Props> = ({ className }: Props) => (
+  <Root className={className}>
+    <Content>
+      <Label>
+        <Date>Nov 8</Date>
+        <TimeLabel>12:00 AM</TimeLabel>
+      </Label>
+      <Wrapper>
+        <Text>
+          <span>明日は汐留でもくもくしますかー？</span>
+        </Text>
+      </Wrapper>
+    </Content>
+  </Root>
+);
+export default Cassette;
+
 const Root = styled.div`
   box-sizing: inherit;
 `;
@@ -54,21 +72,3 @@ const Text = styled.div`
   line-height: 1.46668;
   font-size: 16px;
 `;
-
-// TODO(orita)文字列は後にprops渡しに変更
-const Cassette: React.FC<Props> = ({ className }: Props) => (
-  <Root className={className}>
-    <Content>
-      <Label>
-        <Date>Nov 8</Date>
-        <TimeLabel>12:00 AM</TimeLabel>
-      </Label>
-      <Wrapper>
-        <Text>
-          <span>明日は汐留でもくもくしますかー？</span>
-        </Text>
-      </Wrapper>
-    </Content>
-  </Root>
-);
-export default Cassette;
