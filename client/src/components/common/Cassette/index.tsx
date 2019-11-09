@@ -30,14 +30,13 @@ const Root = styled.div`
 
 const Content = styled.div`
   padding: 7px 12px 12px 12px;
-  --saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);
   border-radius: 8px;
   margin-bottom: 10px;
-  background-color: rgba(var(--sk_primary_background, 255, 255, 255), 1);
-  box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.15);
+  background-color: rgba(255, 255, 255);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
   &:hover {
     background-color: ${Color.HoverGray};
-    box-shadow: 0 0 0 1px var(--saf-0);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.13);
     cursor: hand;
     cursor: pointer;
   }
@@ -46,7 +45,7 @@ const Content = styled.div`
 const Label = styled.div`
   display: flex;
   flex-wrap: nowrap;
-  color: rgba(var(--sk_foreground_max_solid, 97, 96, 97), 1);
+  color: rgba(97, 96, 97);
   font-size: 13px;
   text-decoration: none;
   max-width: 100%;
