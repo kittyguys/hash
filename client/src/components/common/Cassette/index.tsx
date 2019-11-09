@@ -21,9 +21,9 @@ const Cassette: React.FC<Props> = ({ className }: Props) => (
 export default Cassette;
 
 const Wrapper = styled.div`
-  padding: 7px 12px 12px 12px;
+  padding: 8px 12px 12px 12px;
   border-radius: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
   &:hover {
     background-color: ${Color.HoverGray};
@@ -37,7 +37,7 @@ const ContentHead = styled.div`
   flex-wrap: nowrap;
   color: #616061;
   font-size: 1.3rem;
-  margin-top: 5px;
+  margin-top: 4px;
 `;
 
 const DateText = styled.span`
@@ -53,10 +53,10 @@ const TimeText = styled.span`
 `;
 
 const Content = styled.div`
-  margin-top: 10px;
+  margin-top: 12px;
 `;
 
 const Text = styled.div`
-  margin: 4px 0 0 0;
+  margin-top: 4px;
   font-size: 1.6rem;
 `;
