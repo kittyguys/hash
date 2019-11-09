@@ -9,10 +9,10 @@ type Props = {
 // TODO(orita)文字列は後にprops渡しに変更
 const Cassette: React.FC<Props> = ({ className }: Props) => (
   <Wrapper className={className}>
-    <Label>
+    <ContentHead>
       <DateText>Nov 8</DateText>
       <TimeText>12:00 AM</TimeText>
-    </Label>
+    </ContentHead>
     <Content>
       <Text>明日は汐留でもくもくしますかー？</Text>
     </Content>
@@ -34,13 +34,11 @@ const Wrapper = styled.div`
   }
 `;
 
-const Label = styled.div`
+const ContentHead = styled.div`
   display: flex;
   flex-wrap: nowrap;
-  color: rgba(97, 96, 97);
+  color: #616061;
   font-size: 1.3rem;
-  text-decoration: none;
-  max-width: 100%;
   margin-top: 5px;
 `;
 
