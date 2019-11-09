@@ -7,7 +7,7 @@ type Props = {
 };
 
 // TODO(orita)文字列は後にprops渡しに変更
-const Cassette: React.FC<Props> = ({ className }: Props) => (
+const StockCassette: React.FC<Props> = ({ className }: Props) => (
   <Wrapper className={className}>
     <ContentHead>
       <DateText>Nov 8</DateText>
@@ -18,7 +18,7 @@ const Cassette: React.FC<Props> = ({ className }: Props) => (
     </Content>
   </Wrapper>
 );
-export default Cassette;
+export default StockCassette;
 
 const Wrapper = styled.div`
   padding: 8px 12px 12px 12px;

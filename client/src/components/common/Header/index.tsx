@@ -12,6 +12,7 @@ import BaseLogo from "../Logo";
 import BaseNormalButton from "../Button/NormalButton";
 import BaseUserName from "../UserName";
 import { useSelector } from "react-redux";
+import Color from "../../constants/Color";
 
 type Props = {
   page: string;
@@ -104,6 +105,7 @@ const HeaderWrapper = styled.div<{ page: string; isLogin: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
+  background-color: ${Color.White};
 `;
 
 const MainInputForm = styled(BaseMainInputForm)`

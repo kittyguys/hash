@@ -9,6 +9,7 @@ import BaseMainInputForm, {
 } from "../src/components/common/Form/MainInput";
 import Header from "../src/components/common/Header";
 import Loading from "../src/components/common/Loading";
+import StockCassette from "../src/components/common/StockCassette";
 
 type Props = {};
 
@@ -30,6 +31,14 @@ const Stock: React.FC<Props> = ({}) => {
           ) : (
             <Header page="common" isLogin={false} />
           )}
+          <StockWrap>
+            <StockCassette />
+            <StockCassette />
+            <StockCassette />
+            <StockCassette />
+            <StockCassette />
+          </StockWrap>
+
           <MainInputForm handleSubmit={e => e.preventDefault}>
             <TeatArea />
             <SubmitButton>送信</SubmitButton>
@@ -50,6 +59,11 @@ const LoadingBox = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+`;
+
+const StockWrap = styled.div`
+  max-width: 720px;
+  margin: 0 auto;
 `;
 
 const MainInputForm = styled(BaseMainInputForm)`
