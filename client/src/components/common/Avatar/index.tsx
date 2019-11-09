@@ -17,14 +17,9 @@ const Avatar: React.FC<Props> = ({ imageSrc, handleClick, className }) => {
   );
 };
 
-type ImageStyle = {
-  imageSrc?: string;
-};
-
-const Image = styled.div<ImageStyle>`
-  background: ${({ imageSrc }) => {
-      return imageSrc ? `url(${imageSrc})` : "#ffffff";
-    }}
+const Image = styled.div<{ imageSrc?: string }>`
+  background: ${({ imageSrc }) =>
+      imageSrc ? `url(${imageSrc})` : `url(/static/assets/images/hash.jpg)`}
     center/cover no-repeat;
   border-radius: 50%;
   overflow: hidden;

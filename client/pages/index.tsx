@@ -10,7 +10,6 @@ import BaseLogo from "../src/components/common/Logo";
 import Header from "../src/components/common/Header";
 import { homeInputChange } from "../src/redux/HomeInput/action";
 import Router from "next/router";
-// import { withRouter, RouteComponentProps } from "react-router";
 import Loading from "../src/components/common/Loading";
 
 type Props = {};
