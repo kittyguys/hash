@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
+import Color from "../../constants/Color";
 
 type Props = {
   className?: string;
@@ -12,10 +13,16 @@ const Root = styled.div`
 const Content = styled.div`
   padding: 7px 12px 12px 12px;
   --saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);
-  border: 1px solid var(--saf-0);
   border-radius: 8px;
   margin-bottom: 10px;
   background-color: rgba(var(--sk_primary_background, 255, 255, 255), 1);
+  box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.15);
+  &:hover {
+    background-color: ${Color.HoverGray};
+    box-shadow: 0 0 0 1px var(--saf-0);
+    cursor: hand;
+    cursor: pointer;
+  }
 `;
 
 const Label = styled.div`
@@ -42,18 +49,13 @@ const TimeLabel = styled.span`
 
 const Wrapper = styled.div``;
 
-// const TimeLabel = styled.div`
-//   line-height: 1;
-//   font-size: 12px;
-//   color: #616061;
-// `;
-
 const Text = styled.div`
   margin: 4px 0 0 0;
   line-height: 1.46668;
   font-size: 16px;
 `;
 
+// TODO(orita)文字列は後にprops渡しに変更
 const Cassette: React.FC<Props> = ({ className }: Props) => (
   <Root className={className}>
     <Content>
@@ -62,9 +64,6 @@ const Cassette: React.FC<Props> = ({ className }: Props) => (
         <TimeLabel>12:00 AM</TimeLabel>
       </Label>
       <Wrapper>
-        {/* <TimeLabel>
-          <span>12:00 AM</span>
-        </TimeLabel> */}
         <Text>
           <span>明日は汐留でもくもくしますかー？</span>
         </Text>
