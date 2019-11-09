@@ -3,7 +3,7 @@ const Color = {
   Black: "#555",
   WeakBlack: "#858585",
   Gray: "#c6c6c6",
-  HoverGray: "#F5F5F5",
+  HoverGray: "#f5f5f5",
   White: "#fff",
   Link: "#7294b8",
   ButtonHover: "#444",

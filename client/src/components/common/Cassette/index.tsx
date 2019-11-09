@@ -24,7 +24,6 @@ const Wrapper = styled.div`
   padding: 7px 12px 12px 12px;
   border-radius: 8px;
   margin-bottom: 10px;
-  background-color: rgba(255, 255, 255);
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
   &:hover {
     background-color: ${Color.HoverGray};
