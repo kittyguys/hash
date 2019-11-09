@@ -28,7 +28,6 @@ const Wrapper = styled.div`
   &:hover {
     background-color: ${Color.HoverGray};
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.13);
-    cursor: hand;
     cursor: pointer;
   }
 `;
@@ -59,6 +58,5 @@ const Content = styled.div`
 
 const Text = styled.div`
   margin: 4px 0 0 0;
-  line-height: 1.46668;
   font-size: 1.6rem;
 `;
