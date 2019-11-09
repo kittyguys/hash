@@ -8,10 +8,6 @@ const Color = {
   White: "#fff",
   Link: "#7294b8",
   ButtonHover: "#444",
-<<<<<<< HEAD
   ButtonDisabled: "e6e6e6"
-=======
-  ButtonDisabled: "e6e6e6",
->>>>>>> 962240038ecd73d838af8c485a111388e7860052
 } as const;
 export default Color;
