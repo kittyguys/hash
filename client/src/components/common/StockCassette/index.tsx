@@ -1,24 +1,38 @@
 import * as React from "react";
 import styled from "styled-components";
 import Color from "../../constants/Color";
+import { Draggable } from "react-beautiful-dnd";
 
 type Props = {
   className?: string;
+  // TODO 型定義を types ファイルにまとめたい
+  stock: {
+    id: string;
+    content: string;
+  };
+  index: number;
 };
 
-// TODO(orita)文字列は後にprops渡しに変更
-const StockCassette: React.FC<Props> = ({ className }: Props) => (
-  <Wrapper className={className}>
-    <ContentHead>
-      <DateText>Nov 8</DateText>
-      <TimeText>12:00 AM</TimeText>
-    </ContentHead>
-    <Content>
-      <Text>明日は汐留でもくもくしますかー？</Text>
-    </Content>
-  </Wrapper>
+const StockCassette: React.FC<Props> = ({ className, stock, index }: Props) => (
+  <Draggable draggableId={stock.id} index={index}>
+    {provided => (
+      <Wrapper
+        className={className}
+        ref={provided.innerRef}
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+      >
+        <ContentHead>
+          <DateText>Nov 8</DateText>
+          <TimeText>12:00 AM</TimeText>
+        </ContentHead>
+        <Content>
+          <Text>{stock.content}</Text>
+        </Content>
+      </Wrapper>
+    )}
+  </Draggable>
 );
-export default StockCassette;
 
 const Wrapper = styled.div`
   padding: 8px 12px 12px 12px;
@@ -60,3 +74,5 @@ const Text = styled.div`
   margin-top: 4px;
   font-size: 1.6rem;
 `;
+
+export default StockCassette;
