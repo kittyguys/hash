@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Fragment, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { IoIosSearch } from "react-icons/io";
@@ -29,37 +29,39 @@ const Home: React.FC<Props> = ({}) => {
     dispatch(homeInputChange(inputValue));
   };
 
-  return (
-    <Fragment>
-      {myData.status === "busy" || myData.status === "loading" ? (
-        <LoadingWrapper>
-          <LoadingBox>
-            <Loading />
-          </LoadingBox>
-        </LoadingWrapper>
+  const [loggedin, setLoggedin] = useState(true);
+
+  useEffect(() => {
+    {
+      localStorage.getItem("token") ? (
+        <Header page={"home"} isLogin={true} />
       ) : (
-        <>
-          {localStorage.getItem("token") ? (
-            <Header page={"home"} isLogin={true} />
-          ) : (
-            <Header page={"home"} isLogin={false} />
-          )}
-          <MainLayout>
-            <Logo centering={true} />
-            <MainInputForm handleSubmit={e => homeSearch(e)}>
-              <MainInputLabel htmlFor="mainInput">
-                <IoIosSearch size="20px" color="#9AA0A6" />
-              </MainInputLabel>
-              <MainInput
-                id="mainInput"
-                inputValue={homeInput}
-                handleChange={inputValue => inputChange(inputValue)}
-              />
-            </MainInputForm>
-          </MainLayout>
-        </>
+        <Header page={"home"} isLogin={false} />
+      );
+    }
+  }, []);
+
+  return (
+    <>
+      {loggedin ? (
+        <Header page={"home"} isLogin={true} />
+      ) : (
+        <Header page={"home"} isLogin={false} />
       )}
-    </Fragment>
+      <MainLayout>
+        <Logo centering={true} />
+        <MainInputForm handleSubmit={e => homeSearch(e)}>
+          <MainInputLabel htmlFor="mainInput">
+            <IoIosSearch size="20px" color="#9AA0A6" />
+          </MainInputLabel>
+          <MainInput
+            id="mainInput"
+            inputValue={homeInput}
+            handleChange={inputValue => inputChange(inputValue)}
+          />
+        </MainInputForm>
+      </MainLayout>
+    </>
   );
 };
 

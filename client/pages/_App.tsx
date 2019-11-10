@@ -1,46 +1,36 @@
-import App from "next/app";
-import * as React from "react";
-import { useEffect } from "react";
-import { Provider, useDispatch } from "react-redux";
+import NextApp from "next/app";
+import { Provider } from "react-redux";
 import withRedux from "next-redux-wrapper";
-import withReduxSaga from "next-redux-saga";
-import { configureStore } from "../src/redux/store";
-import {
-  myDataChangeStart,
-  myDataChangeFailed
-} from "../src/redux/MyData/action";
-import GlobalStyle from "../src/components/constants/GlobalStyle";
 
-interface IProps {
+import { configureStore } from "../src/redux/store";
+import GlobalStyle from "../src/components/constants/GlobalStyle";
+import AuthService from "../utils/AuthService";
+
+interface Props {
   Component: React.Component;
   store: any;
+  pageProps: any;
 }
 
-// ユーザ情報の取得処理
-const GlobalState: React.FC = ({ children }) => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      dispatch(myDataChangeStart());
-    } else {
-      dispatch(myDataChangeFailed());
+class MyApp extends NextApp<Props> {
+  // getInitialPropsで初期化を行うとlocalstorageが取得できないのでcomponentDidMountでログイン状態を確認
+  componentDidMount() {
+    const { store } = this.props;
+    const Auth = new AuthService();
+    if (Auth.signedIn()) {
+      store.dispatch({ type: "SET_SIGNIN_STATUS", payload: { status: true } });
     }
-  }, []);
-  return <>{children}</>;
-};
+  }
 
-class MyApp extends App<IProps> {
   render() {
     const { Component, pageProps, store } = this.props;
     return (
       <Provider store={store}>
-        <GlobalState>
-          <Component {...pageProps} />
-          <GlobalStyle />
-        </GlobalState>
+        <Component {...pageProps} />
+        <GlobalStyle />
       </Provider>
     );
   }
 }
 
-export default withRedux(configureStore)(withReduxSaga(MyApp));
+export default withRedux(configureStore)(MyApp);
