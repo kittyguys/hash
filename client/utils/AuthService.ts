@@ -11,17 +11,18 @@ export default class AuthService {
   signedIn() {
     // Checks if there is a saved token and it's still valid
     const token: string = this.getToken();
-    return !!token && !isTokenExpired(token); // handwaiving here
+    return !!token;
+    // return !!token && !isTokenExpired(token); // handwaiving here
   }
 
   setToken(idToken: string) {
     // Saves user token to localStorage
-    localStorage.setItem("id_token", idToken);
+    localStorage.setItem("jwt", idToken);
   }
 
   getToken() {
     // Retrieves the user token from localStorage
-    return localStorage.getItem("id_token");
+    return localStorage.getItem("jwt");
   }
 
   logout() {
