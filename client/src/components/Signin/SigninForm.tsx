@@ -10,7 +10,6 @@ import BaseNormalButton from "../common/Button/NormalButton";
 import { useDispatch } from "react-redux";
 import { signinChange } from "../../redux/Signin/action";
 import Router from "next/router";
-// import { withRouter, RouteComponentProps } from "react-router";
 
 type Props = {
   profile: any;
