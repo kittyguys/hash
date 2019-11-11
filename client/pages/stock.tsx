@@ -74,38 +74,30 @@ const Stock: React.FC<Props> = ({}) => {
 
   return (
     <Fragment>
-      {myData.status === "busy" || myData.status === "loading" ? (
-        <LoadingWrapper>
-          <LoadingBox>
-            <Loading />
-          </LoadingBox>
-        </LoadingWrapper>
-      ) : (
-        <>
-          {localStorage.getItem("token") ? (
-            <Header page="common" isLogin={true} />
-          ) : (
-            <Header page="common" isLogin={false} />
-          )}
-          <StockWrap>
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="list">
-                {provided => (
-                  <div ref={provided.innerRef} {...provided.droppableProps}>
-                    <StockList stocks={stocks} />
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
-          </StockWrap>
+      <>
+        {localStorage.getItem("token") ? (
+          <Header page="common" isLogin={true} />
+        ) : (
+          <Header page="common" isLogin={false} />
+        )}
+        <StockWrap>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="list">
+              {provided => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  <StockList stocks={stocks} />
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </StockWrap>
 
-          <MainInputForm handleSubmit={e => e.preventDefault}>
-            <TeatArea />
-            <SubmitButton>送信</SubmitButton>
-          </MainInputForm>
-        </>
-      )}
+        <MainInputForm handleSubmit={e => e.preventDefault}>
+          <TeatArea />
+          <SubmitButton>送信</SubmitButton>
+        </MainInputForm>
+      </>
     </Fragment>
   );
 };
