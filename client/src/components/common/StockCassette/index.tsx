@@ -15,30 +15,38 @@ type Props = {
 
 const StockCassette: React.FC<Props> = ({ className, stock, index }: Props) => (
   <Draggable draggableId={stock.id} index={index}>
-    {provided => (
-      <Wrapper
-        className={className}
-        ref={provided.innerRef}
-        {...provided.draggableProps}
-        {...provided.dragHandleProps}
-      >
-        <ContentHead>
-          <DateText>Nov 8</DateText>
-          <TimeText>12:00 AM</TimeText>
-        </ContentHead>
-        <Content>
-          <Text>{stock.content}</Text>
-        </Content>
-      </Wrapper>
-    )}
+    {(provided, snapshot) => {
+      return (
+        <Wrapper
+          className={className}
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          snapshot={snapshot}
+        >
+          <ContentHead>
+            <DateText>Nov 8</DateText>
+            <TimeText>12:00 AM</TimeText>
+          </ContentHead>
+          <Content>
+            <Text>{stock.content}</Text>
+          </Content>
+        </Wrapper>
+      );
+    }}
   </Draggable>
 );
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ snapshot?: { isDragging: boolean } }>`
   padding: 8px 12px 12px 12px;
   border-radius: 8px;
   margin-bottom: 12px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: ${({ snapshot }) =>
+    snapshot.isDragging
+      ? "0 3px 9px 0 rgba(0, 0, 0, 0.15)"
+      : "0 1px 3px 0 rgba(0, 0, 0, 0.15)"};
+  background-color: ${({ snapshot }) =>
+    snapshot.isDragging ? Color.HoverGray : "#fff"};
   &:hover {
     background-color: ${Color.HoverGray};
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.13);
