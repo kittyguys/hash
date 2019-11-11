@@ -5,10 +5,9 @@ import styled from "styled-components";
 import { IoIosSearch } from "react-icons/io";
 import Color from "../src/components/constants/Color";
 import BaseMainInputForm, {
-  MainInput as BaseMainInput
+  MainInput as BaseMainInput,
 } from "../src/components/common/Form/MainInput";
 import Header from "../src/components/common/Header";
-import Loading from "../src/components/common/Loading";
 import StockCassette from "../src/components/common/StockCassette";
 
 type Props = {};
@@ -18,33 +17,25 @@ const Stock: React.FC<Props> = ({}) => {
 
   return (
     <Fragment>
-      {myData.status === "busy" || myData.status === "loading" ? (
-        <LoadingWrapper>
-          <LoadingBox>
-            <Loading />
-          </LoadingBox>
-        </LoadingWrapper>
-      ) : (
-        <>
-          {localStorage.getItem("token") ? (
-            <Header page="common" isLogin={true} />
-          ) : (
-            <Header page="common" isLogin={false} />
-          )}
-          <StockWrap>
-            <StockCassette />
-            <StockCassette />
-            <StockCassette />
-            <StockCassette />
-            <StockCassette />
-          </StockWrap>
-
-          <MainInputForm handleSubmit={e => e.preventDefault}>
-            <TeatArea />
-            <SubmitButton>送信</SubmitButton>
-          </MainInputForm>
-        </>
-      )}
+      <>
+        {/* {localStorage.getItem("token") ? (
+          <Header page="common" isLogin={true} />
+        ) : (
+          <Header page="common" isLogin={false} />
+        )} */}
+        <Header page="common" isLogin={true} />
+        <StockWrap>
+          <StockCassette />
+          <StockCassette />
+          <StockCassette />
+          <StockCassette />
+          <StockCassette />
+        </StockWrap>
+        <MainInputForm handleSubmit={e => e.preventDefault}>
+          <TeatArea />
+          <SubmitButton>送信</SubmitButton>
+        </MainInputForm>
+      </>
     </Fragment>
   );
 };
