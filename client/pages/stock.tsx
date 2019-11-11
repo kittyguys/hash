@@ -15,6 +15,7 @@ import BaseMainInputForm, {
 import Header from "../src/components/common/Header";
 import StockCassette from "../src/components/common/StockCassette";
 import StockList from "../src/components/common/StockList";
+import MarkDown from "../src/components/common/MarkDown";
 
 type Props = {};
 
