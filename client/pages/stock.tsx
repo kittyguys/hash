@@ -75,11 +75,7 @@ const Stock: React.FC<Props> = ({}) => {
   return (
     <Fragment>
       <>
-        {localStorage.getItem("token") ? (
-          <Header page="common" isLogin={true} />
-        ) : (
-          <Header page="common" isLogin={false} />
-        )}
+        <Header page="common" isLogin={false} />
         <StockWrap>
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="list">
