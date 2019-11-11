@@ -1,50 +1,99 @@
 import * as React from "react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { IoIosSearch } from "react-icons/io";
+import {
+  DragDropContext,
+  Droppable,
+  DropResult,
+  ResponderProvided
+} from "react-beautiful-dnd";
 import Color from "../src/components/constants/Color";
 import BaseMainInputForm, {
   MainInput as BaseMainInput
 } from "../src/components/common/Form/MainInput";
 import Header from "../src/components/common/Header";
 import Loading from "../src/components/common/Loading";
-import StockCassette from "../src/components/common/StockCassette";
+import StockList from "../src/components/common/StockList";
 
 type Props = {};
 
+// TODO 型定義を types ファイルにまとめたい
+type Stocks = { id: string; content: string }[];
+
+// TODO Redux データの配列を map する予定
+const initial = Array.from({ length: 10 }, (v, k) => k).map(k => {
+  const custom = {
+    id: `id-${k}`,
+    content: `Stock ${k}`
+  };
+
+  return custom;
+});
+
+type Reorder = (
+  list: Stocks,
+  startIndex: number,
+  endIndex: number
+) => {
+  id: string;
+  content: string;
+}[];
+
+const reorder: Reorder = (list, startIndex, endIndex) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
+};
+
+type OnDragEnd = (result: DropResult, provided: ResponderProvided) => void;
+
 const Stock: React.FC<Props> = ({}) => {
   const myData = useSelector((state: any) => state.myData);
+  const [stocks, setStocks] = useState(initial);
+
+  const onDragEnd: OnDragEnd = result => {
+    if (!result.destination) {
+      return;
+    }
+
+    if (result.destination.index === result.source.index) {
+      return;
+    }
+
+    const stocksArr = reorder(
+      stocks,
+      result.source.index,
+      result.destination.index
+    );
+
+    setStocks(stocksArr);
+  };
 
   return (
     <Fragment>
-      {myData.status === "busy" || myData.status === "loading" ? (
-        <LoadingWrapper>
-          <LoadingBox>
-            <Loading />
-          </LoadingBox>
-        </LoadingWrapper>
-      ) : (
-        <>
-          {localStorage.getItem("token") ? (
-            <Header page="common" isLogin={true} />
-          ) : (
-            <Header page="common" isLogin={false} />
-          )}
-          <StockWrap>
-            <StockCassette />
-            <StockCassette />
-            <StockCassette />
-            <StockCassette />
-            <StockCassette />
-          </StockWrap>
+      <>
+        <Header page="common" isLogin={false} />
+        <StockWrap>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="list">
+              {provided => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  <StockList stocks={stocks} />
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </StockWrap>
 
-          <MainInputForm handleSubmit={e => e.preventDefault}>
-            <TeatArea />
-            <SubmitButton>送信</SubmitButton>
-          </MainInputForm>
-        </>
-      )}
+        <MainInputForm handleSubmit={e => e.preventDefault}>
+          <TeatArea />
+          <SubmitButton>送信</SubmitButton>
+        </MainInputForm>
+      </>
     </Fragment>
   );
 };
