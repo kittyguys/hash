@@ -8,12 +8,16 @@ type Props = {
   centering?: boolean;
 };
 
-const Logo: React.FC<Props> = ({ className, centering, handleClick }) => {
+const Logo: React.FC<Props> = ({
+  className,
+  centering,
+  handleClick = null
+}) => {
   return (
     <LogoWrapper
       className={className}
       centering={centering}
-      onClick={() => handleClick()}
+      onClick={() => (!!handleClick ? handleClick() : null)}
     >
       <Text>#hash</Text>
     </LogoWrapper>

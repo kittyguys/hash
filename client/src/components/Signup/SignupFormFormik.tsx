@@ -1,13 +1,23 @@
-import { FC } from "react";
+import Router from "next/router";
 import { bindActionCreators, Dispatch } from "redux";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { withFormik, Form, Field } from "formik";
-import BaseLogo from "../common/Logo";
+import { withFormik, Form, Field, FormikProps } from "formik";
 import * as Yup from "yup";
-import { signupAsync } from "../../../src/redux/Signup/action";
+// Components
+import BaseLogo from "../common/Logo";
+// Actions
+import { signupAsync } from "../../redux/auth/action";
 
-const InnerForm: FC = ({ values, errors, touched }: any) => {
+type FormValues = {
+  userName: string;
+  signinID: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
+};
+
+const InnerForm = ({ values, errors, touched }: FormikProps<FormValues>) => {
   return (
     <Wrapper>
       <Logo />
@@ -75,37 +85,8 @@ const InnerForm: FC = ({ values, errors, touched }: any) => {
   );
 };
 
-const SignupFormFormik = withFormik({
-  mapPropsToValues: () => ({
-    userName: "",
-    email: "",
-    password: "",
-    passwordConfirm: ""
-  }),
-  validationSchema: Yup.object().shape({
-    userName: Yup.string().required("ユーザーネームは必須項目です。"),
-    email: Yup.string()
-      .email("形式がメールアドレスではありません。")
-      .required("メールアドレスは必須項目です。"),
-    password: Yup.string()
-      .min(8, "パスワードは8文字以上で設定してください。")
-      .required("パスワードは必須項目です。"),
-    passwordConfirm: Yup.string()
-      .oneOf([Yup.ref("password")], "パスワードが一致しません。")
-      .required("パスワードの確認は必須です。")
-  }),
-  handleSubmit: (values: any, { props }: any) => {
-    const { signupAsync } = props;
-    const userData: any = {
-      userName: values.userName,
-      email: values.email,
-      password: values.password
-    };
-    signupAsync(userData);
-  }
-})(InnerForm);
-
 const Wrapper = styled.div`
+  width: 360px;
   border: 1px solid #dbdbdb;
   padding: 30px 30px;
 `;
@@ -124,7 +105,7 @@ const Title = styled.div`
 
 const FormBlock = styled.div`
   display: block;
-  margin: 8px 0 0;
+  margin: 16px 0 0;
 `;
 
 const SubmitButton = styled.input`
@@ -137,7 +118,7 @@ const SubmitButton = styled.input`
   border: none;
   outline: none;
   border-radius: 4px;
-  font-size: 15px;
+  font-size: 1.6rem;
   &:hover {
     opacity: 0.7;
     cursor: pointer;
@@ -153,22 +134,6 @@ const InputStyle = styled(Field)`
   border: 1px solid #dfe1e5;
   outline: none;
   background-color: #eee;
-`;
-
-const NameInput = styled(Field)`
-  color: #555;
-  font-size: 15px;
-  padding: 6px 10px;
-  border-radius: 4px;
-  border: 1px solid #dfe1e5;
-  outline: none;
-  width: calc(50% - 10px);
-`;
-
-const FlexForm = styled(FormBlock)`
-  display: flex;
-  margin: 16px 0 0;
-  justify-content: space-between;
 `;
 
 const IDInput = styled(Field)`
@@ -217,8 +182,39 @@ const Span = styled.span`
   top: -0.7em;
 `;
 
+const SignupFormFormik = withFormik({
+  mapPropsToValues: () => ({
+    userName: "",
+    email: "",
+    password: "",
+    passwordConfirm: ""
+  }),
+  validationSchema: Yup.object().shape({
+    userName: Yup.string().required("ユーザーネームは必須項目です。"),
+    email: Yup.string()
+      .email("形式がメールアドレスではありません。")
+      .required("メールアドレスは必須項目です。"),
+    password: Yup.string()
+      .min(8, "パスワードは8文字以上で設定してください。")
+      .required("パスワードは必須項目です。"),
+    passwordConfirm: Yup.string()
+      .oneOf([Yup.ref("password")], "パスワードが一致しません。")
+      .required("パスワードの確認は必須です。")
+  }),
+  handleSubmit: (values: FormValues, { props }: any) => {
+    const { signup } = props;
+    const userData: any = {
+      userName: values.userName,
+      email: values.email,
+      password: values.password
+    };
+    signup(userData);
+    Router.push("/");
+  }
+})(InnerForm);
+
 const mapDispatchToProps = (dispatch: Dispatch) => {
-  return bindActionCreators({ signupAsync }, dispatch);
+  return bindActionCreators({ signup: signupAsync }, dispatch);
 };
 
 export default connect(

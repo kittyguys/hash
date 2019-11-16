@@ -33,37 +33,3 @@ export const configureStore = (initialState = {}) => {
   );
   return store;
 };
-
-export const reducer = (
-  state = { lastUpdate: 0, light: false },
-  action: any
-) => {
-  switch (action.type) {
-    case "TICK":
-      return { lastUpdate: action.ts, light: !!action.light };
-    default:
-      return state;
-  }
-};
-
-export const startClock = () => (dispatch: any) => {
-  setInterval(
-    () => dispatch({ type: "TICK", light: true, ts: Date.now() }),
-    800
-  );
-};
-
-export const initStore = (reducer: any, initialState: any, isServer: any) => {
-  if (isServer && typeof window === "undefined") {
-    return createStore(reducer, initialState, applyMiddleware(thunk));
-  } else {
-    if (!window.store) {
-      window.store = createStore(reducer, initialState, applyMiddleware(thunk));
-    }
-    return window.store;
-  }
-};
-
-export const makeStore = (initialState: any, options: any) => {
-  return createStore(reducer, initialState);
-};

@@ -13,7 +13,11 @@ const initialState: State = {
 const signupReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case "SIGNUP_SUCCESS":
-      console.log(3);
+      return {
+        ...state,
+        profile: action.payload
+      };
+    case "SIGNUP_FAIL":
       return {
         ...state,
         profile: action.payload

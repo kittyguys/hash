@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { IoIosSearch } from "react-icons/io";
@@ -10,14 +10,11 @@ import BaseLogo from "../src/components/common/Logo";
 import Header from "../src/components/common/Header";
 import { homeInputChange } from "../src/redux/HomeInput/action";
 import Router from "next/router";
-import Loading from "../src/components/common/Loading";
 
-type Props = {};
-
-const Home: NextPage = ({}) => {
+const Home: NextPage = () => {
   const dispatch = useDispatch();
   const homeInput = useSelector((state: any) => state.homeInput.search);
-  const myData = useSelector((state: any) => state.myData);
+  const isSignin = useSelector((state: any) => state.auth.isSignin);
 
   const homeSearch = (e: any) => {
     e.preventDefault();
@@ -29,25 +26,19 @@ const Home: NextPage = ({}) => {
     dispatch(homeInputChange(inputValue));
   };
 
-  const [loggedin, setLoggedin] = useState(true);
-
   useEffect(() => {
     {
-      localStorage.getItem("token") ? (
-        <Header page={"home"} isLogin={false} />
-      ) : (
-        <Header page={"home"} isLogin={false} />
-      );
+      isSignin ? <Header page={"home"} /> : <Header page={"home"} />;
     }
   }, []);
 
+  const toHome = () => {
+    Router.push("/");
+  };
+
   return (
     <>
-      {loggedin ? (
-        <Header page={"home"} isLogin={false} />
-      ) : (
-        <Header page={"home"} isLogin={false} />
-      )}
+      <Header page={"home"} />
       <MainLayout>
         <Logo centering={true} />
         <MainInputForm handleSubmit={e => homeSearch(e)}>
@@ -65,9 +56,8 @@ const Home: NextPage = ({}) => {
   );
 };
 
-Home.getInitialProps = async ({ req }) => {
-  const userAgent = req ? req.headers["user-agent"] || "" : navigator.userAgent;
-  return { userAgent };
+Home.getInitialProps = async ctx => {
+  return {};
 };
 
 const LoadingWrapper = styled.div`

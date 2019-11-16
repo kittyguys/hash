@@ -8,13 +8,13 @@ import {
   DropResult,
   ResponderProvided
 } from "react-beautiful-dnd";
-import Color from "../src/components/constants/Color";
+import Color from "../../src/components/constants/Color";
 import BaseMainInputForm, {
   MainInput as BaseMainInput
-} from "../src/components/common/Form/MainInput";
-import Header from "../src/components/common/Header";
-import Loading from "../src/components/common/Loading";
-import StockList from "../src/components/common/StockList";
+} from "../../src/components/common/Form/MainInput";
+import Header from "../../src/components/common/Header";
+import Loading from "../../src/components/common/Loading";
+import StockList from "../../src/components/common/StockList";
 
 type Props = {};
 
@@ -75,7 +75,7 @@ const Stock: React.FC<Props> = ({}) => {
   return (
     <Fragment>
       <>
-        <Header page="common" isLogin={false} />
+        <Header page="common" />
         <StockWrap>
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="list">
