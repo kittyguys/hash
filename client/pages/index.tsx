@@ -1,5 +1,4 @@
 import { NextPage } from "next";
-import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { IoIosSearch } from "react-icons/io";
@@ -14,7 +13,6 @@ import Router from "next/router";
 const Home: NextPage = () => {
   const dispatch = useDispatch();
   const homeInput = useSelector((state: any) => state.homeInput.search);
-  const isSignin = useSelector((state: any) => state.auth.isSignin);
 
   const homeSearch = (e: any) => {
     e.preventDefault();
@@ -24,16 +22,6 @@ const Home: NextPage = () => {
 
   const inputChange = (inputValue: string) => {
     dispatch(homeInputChange(inputValue));
-  };
-
-  useEffect(() => {
-    {
-      isSignin ? <Header page={"home"} /> : <Header page={"home"} />;
-    }
-  }, []);
-
-  const toHome = () => {
-    Router.push("/");
   };
 
   return (
@@ -54,10 +42,6 @@ const Home: NextPage = () => {
       </MainLayout>
     </>
   );
-};
-
-Home.getInitialProps = async ctx => {
-  return {};
 };
 
 const LoadingWrapper = styled.div`

@@ -1,9 +1,12 @@
+import NextApp, { AppContext } from "next/app";
+import { NextPageContext, NextPage } from "next";
 import * as React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import Router from "next/router";
 import Cookies from "js-cookie";
+import cookies from "next-cookies";
 import BaseAvatar from "../Avatar";
 import { IoIosSearch } from "react-icons/io";
 import BaseMainInputForm, {
@@ -17,10 +20,19 @@ import Color from "../../constants/Color";
 import { signout } from "../../../redux/auth/action";
 
 type Props = {
-  page: string;
+  page?: string;
 };
 
-const Header: React.FC<Props> = ({ page }) => {
+interface NextContext extends NextPageContext {
+  store: any;
+  isServer: boolean;
+}
+
+interface NextAppContext extends AppContext {
+  ctx: NextContext;
+}
+
+const Header: NextPage<Props> = ({ page }) => {
   const dispatch = useDispatch();
   const myData = useSelector((state: any) => state.myData);
   const isSignin = useSelector((state: any) => state.auth.isSignin);
@@ -59,7 +71,7 @@ const Header: React.FC<Props> = ({ page }) => {
   if (isSignin === true) {
     linkContents = (
       <>
-        <Link key="stock" href="/stock">
+        <Link key="stock" href="/stock" as="stock">
           <NormalLink>Stock</NormalLink>
         </Link>
         <StyledLink onClick={() => signOut()}>ログアウト</StyledLink>
@@ -71,10 +83,10 @@ const Header: React.FC<Props> = ({ page }) => {
     } else {
       linkContents = (
         <NotLoginLink>
-          <Link key="signup" href="/signup">
+          <Link key="signup" href="/signup" as="signup">
             <NormalLink>アカウントを作る</NormalLink>
           </Link>
-          <Link key="signin" href="/signin">
+          <Link key="signin" href="/signin" as="signin">
             <StyledLink>ログイン</StyledLink>
           </Link>
         </NotLoginLink>
@@ -103,13 +115,25 @@ const Header: React.FC<Props> = ({ page }) => {
   );
 };
 
+Header.getInitialProps = async ({ ctx }: any) => {
+  const allCookies = cookies(ctx);
+  const token = allCookies.jwt;
+  if (typeof token === "string") {
+    ctx.store.dispatch({
+      type: "SET_SIGNIN_STATUS",
+      payload: { status: true }
+    });
+  }
+  return {};
+};
+
 const HeaderWrapper = styled.div<{ page: string }>`
   display: flex;
   align-items: center;
   width: 100%;
-  height: ${({ page }) => (page === "common" ? "84px" : "auto")};
+  height: 84px;
   border-bottom: ${({ page }) =>
-    !(page === "common") ? 0 : `1px solid #DDDDDD`};
+    !(page === "common") ? `1px solid #FFFFFF` : `1px solid #DDDDDD`};
   position: fixed;
   top: 0;
   left: 0;
