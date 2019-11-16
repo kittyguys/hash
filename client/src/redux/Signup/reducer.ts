@@ -1,22 +1,19 @@
 type State = {
   profile: {
     userName: string;
-    email: string;
-    password: string;
   };
 };
 
 const initialState: State = {
   profile: {
-    userName: "",
-    email: "",
-    password: ""
+    userName: ""
   }
 };
 
 const signupReducer = (state = initialState, action: any) => {
   switch (action.type) {
-    case "PROFILE_CHANGE":
+    case "SIGNUP_SUCCESS":
+      console.log(3);
       return {
         ...state,
         profile: action.payload

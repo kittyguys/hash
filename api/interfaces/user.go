@@ -1,120 +1,121 @@
 package interfaces
 
 import (
-	"net/http"
-	"strings"
-	"time"
+	"log"
 
-	"github.com/dgrijalva/jwt-go"
-	"github.com/jinzhu/gorm"
+	"database/sql"
+
 	"github.com/kittyguys/hash/api/common"
-	"github.com/kittyguys/hash/api/model"
 	"github.com/kittyguys/hash/api/repository"
-	"github.com/labstack/echo"
 )
 
-// NewUserRepo Initialize user repository
-func NewUserRepo(conn *gorm.DB) repository.UserRepository {
+// UserRepository contains db
+type UserRepository struct {
+	Conn *sql.DB
+}
+
+// NewUserRepo returns user repository that contains db
+func NewUserRepo(conn *sql.DB) repository.UserRepository {
 	return &UserRepository{
 		Conn: conn,
 	}
 }
 
-// UserRepository Handler with DB
-type UserRepository struct {
-	Conn *gorm.DB
+// SignUp inserts user data into mysql and returns JWT
+func (h *UserRepository) SignUp(d *repository.SignUp) int {
+
+	stmt, err := h.Conn.Prepare("INSERT INTO users(user_name,display_name, email, password) VALUES(?,?,?,?)")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	pwd := []byte(d.Password)
+	hashedPassword := common.HashAndSalt(pwd)
+
+	res, err := stmt.Exec(d.UserName, d.UserName, d.Email, hashedPassword)
+	if err != nil {
+		log.Fatal(err)
+	}
+	lastID, err := res.LastInsertId() // 挿入した行のIDを返却
+	if err != nil {
+		log.Fatal(err)
+	}
+	rowCnt, err := res.RowsAffected() // 影響を受けた行数
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Printf("ID = %d, affected = %d\n", lastID, rowCnt)
+
+	return int(lastID)
 }
 
-// SignUp SignUp
-func (h *UserRepository) SignUp(u *model.User) error {
+// // Login Login
+// func (h *UserRepository) Login(t *string, b echo.Map) error {
+// 	u := &model.User{}
 
-	// Validate
-	if u.Password == "" {
-		return echo.NewHTTPError(http.StatusUnauthorized, "Please provide valid cred")
-	}
+// 	// Validate
+// 	if b["loginID"] == "" {
+// 		return echo.NewHTTPError(http.StatusUnauthorized, "Please provide valid cred")
+// 	}
 
-	pwd := []byte(u.Password)
-	hash := common.HashAndSalt(pwd)
-	hashID := u.HashID
+// 	if strings.Contains(b["loginID"].(string), "@") {
+// 		h.Conn.First(&u, model.User{Email: b["loginID"].(string)})
+// 	} else {
+// 		h.Conn.First(&u, model.User{HashID: b["loginID"].(string)})
+// 	}
 
-	u.HashID = hashID
-	u.Password = hash
-	if !h.Conn.NewRecord(&u) {
-		panic("could not create new record")
-	}
-	if err := h.Conn.Create(&u).Error; err != nil {
-		panic(err.Error())
-	}
+// 	pwd := []byte(b["password"].(string))
 
-	return nil
-}
+// 	if common.ComparePasswords(u.Password, pwd) {
+// 		token := jwt.New(jwt.SigningMethodHS256)
+// 		claims := token.Claims.(jwt.MapClaims)
+// 		claims["admin"] = true
+// 		claims["hashID"] = u.HashID
+// 		claims["displayName"] = u.DisplayName
+// 		claims["iat"] = time.Now()
+// 		claims["exp"] = time.Now().Add(time.Hour * 24 * 90).Unix()
+// 		tokenString, _ := token.SignedString([]byte("secret"))
 
-// Login Login
-func (h *UserRepository) Login(t *string, b echo.Map) error {
-	u := &model.User{}
+// 		*t = tokenString
+// 	}
 
-	// Validate
-	if b["loginID"] == "" {
-		return echo.NewHTTPError(http.StatusUnauthorized, "Please provide valid cred")
-	}
+// 	return nil
+// }
 
-	if strings.Contains(b["loginID"].(string), "@") {
-		h.Conn.First(&u, model.User{Email: b["loginID"].(string)})
-	} else {
-		h.Conn.First(&u, model.User{HashID: b["loginID"].(string)})
-	}
+// // GetUser GetUser
+// func (h *UserRepository) GetUser(u *model.User, t *[]model.Tag, id string) error {
+// 	h.Conn.First(&u, model.User{HashID: id})
+// 	h.Conn.Model(&u).Association("Tags").Find(&t)
 
-	pwd := []byte(b["password"].(string))
+// 	return nil
+// }
 
-	if common.ComparePasswords(u.Password, pwd) {
-		token := jwt.New(jwt.SigningMethodHS256)
-		claims := token.Claims.(jwt.MapClaims)
-		claims["admin"] = true
-		claims["hashID"] = u.HashID
-		claims["displayName"] = u.DisplayName
-		claims["iat"] = time.Now()
-		claims["exp"] = time.Now().Add(time.Hour * 24 * 90).Unix()
-		tokenString, _ := token.SignedString([]byte("secret"))
+// // CreateTag CreateTag
+// func (h *UserRepository) CreateTag(u *model.User, t *[]model.Tag, b map[string]interface{}) error {
+// 	var tag model.Tag
 
-		*t = tokenString
-	}
+// 	tag.Name = b["tags"].(string)
 
-	return nil
-}
+// 	h.Conn.First(&u, model.User{HashID: b["id"].(string)})
+// 	h.Conn.Model(&u).Related(&t, "Tags")
 
-// GetUser GetUser
-func (h *UserRepository) GetUser(u *model.User, t *[]model.Tag, id string) error {
-	h.Conn.First(&u, model.User{HashID: id})
-	h.Conn.Model(&u).Association("Tags").Find(&t)
+// 	if !isDuplicate(t, tag.Name) {
+// 		h.Conn.Model(&u).Association("Tags").Append(&tag)
+// 	}
 
-	return nil
-}
+// 	h.Conn.Model(&u).Association("Tags").Find(&t)
 
-// CreateTag CreateTag
-func (h *UserRepository) CreateTag(u *model.User, t *[]model.Tag, b map[string]interface{}) error {
-	var tag model.Tag
+// 	return nil
+// }
 
-	tag.Name = b["tags"].(string)
-
-	h.Conn.First(&u, model.User{HashID: b["id"].(string)})
-	h.Conn.Model(&u).Related(&t, "Tags")
-
-	if !isDuplicate(t, tag.Name) {
-		h.Conn.Model(&u).Association("Tags").Append(&tag)
-	}
-
-	h.Conn.Model(&u).Association("Tags").Find(&t)
-
-	return nil
-}
-
-func isDuplicate(tags *[]model.Tag, tag string) bool {
-	var result bool
-	for _, v := range *tags {
-		if v.Name == tag {
-			result = true
-			break
-		}
-	}
-	return result
-}
+// func isDuplicate(tags *[]model.Tag, tag string) bool {
+// 	var result bool
+// 	for _, v := range *tags {
+// 		if v.Name == tag {
+// 			result = true
+// 			break
+// 		}
+// 	}
+// 	return result
+// }
