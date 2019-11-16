@@ -7,6 +7,7 @@ import (
 
 	"github.com/kittyguys/hash/api/common"
 	"github.com/kittyguys/hash/api/repository"
+	"github.com/shgysd/hash/api/utils/crypto"
 )
 
 // UserRepository contains db
@@ -48,6 +49,39 @@ func (h *UserRepository) SignUp(d *repository.SignUp) int {
 	log.Printf("ID = %d, affected = %d\n", lastID, rowCnt)
 
 	return int(lastID)
+}
+
+// SignIn returns JWT
+func (h *UserRepository) SignIn(d *repository.SignIn) int {
+	var (
+		id       int
+		password string
+	)
+	rows, err := h.Conn.Query("SELECT id, password FROM users WHERE id = ?", d.ID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		err := rows.Scan(&id, &password)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println(password)
+	}
+	err = rows.Err()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	pwd := []byte(d.Password)
+
+	err = crypto.ComparePasswords(password, pwd)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return id
 }
 
 // // Login Login
