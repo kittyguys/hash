@@ -8,7 +8,7 @@ IF NOT EXISTS hash.users
   user_name varchar(64) NOT NULL,
   display_name varchar(64) NOT NULL,
   email varchar(64) NOT NULL,
-  password varchar(64) NOT NULL,
+  password varchar(255) NOT NULL,
   created_at datetime  default current_timestamp,
   updated_at timestamp default current_timestamp on update current_timestamp
 );

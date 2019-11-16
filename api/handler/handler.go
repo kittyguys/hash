@@ -11,7 +11,7 @@ func NewRouter(db *sql.DB, e *echo.Echo) *echo.Echo {
 	user := NewUserHandler(db)
 	// Auth
 	e.POST("/signup", user.SignUp)
-	// e.POST("/login", user.Login)
+	e.POST("/signin", user.SignIn)
 	// // User
 	// e.GET("/users/:id", user.GetUser)
 	// e.POST("/users/:id/tags", user.CreateTag)

@@ -42,6 +42,27 @@ func (h *UserHandler) SignUp(c echo.Context) (err error) {
 	return c.JSON(http.StatusCreated, resp)
 }
 
+// SignIn returns JWT
+func (h *UserHandler) SignIn(c echo.Context) (err error) {
+	var data repository.SignIn
+	var token string
+	if err = c.Bind(&data); err != nil {
+		return
+	}
+
+	id := h.repo.SignIn(&data)
+
+	token, err = common.CreateJSONWebToken(id)
+	if err != nil {
+		log.Println(err.Error())
+		return err
+	}
+
+	resp := map[string]interface{}{"token": token}
+
+	return c.JSON(http.StatusCreated, resp)
+}
+
 // // Login log in
 // func (h *UserHandler) Login(c echo.Context) (err error) {
 // 	var body echo.Map

@@ -2,20 +2,20 @@ import * as React from "react";
 import styled from "styled-components";
 import { Fragment, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import BaseAvatar from "../src/components/common/Avatar";
-import BaseUserName from "../src/components/common/UserName";
-import BaseNormalButton from "../src/components/common/Button/NormalButton";
+import BaseAvatar from "../../src/components/common/Avatar";
+import BaseUserName from "../../src/components/common/UserName";
+import BaseNormalButton from "../../src/components/common/Button/NormalButton";
 import BaseMainInputForm, {
-  MainInput as BaseMainInput,
-} from "../src/components/common/Form/MainInput";
-import Tags, { Tag as BaseTag } from "../src/components/common/Tag";
-import { mypageInputChange } from "../src/redux/MypageInput/action";
+  MainInput as BaseMainInput
+} from "../../src/components/common/Form/MainInput";
+import Tags, { Tag as BaseTag } from "../../src/components/common/Tag";
+import { mypageInputChange } from "../../src/redux/MypageInput/action";
 import axios from "axios";
-import Header from "../src/components/common/Header";
+import Header from "../../src/components/common/Header";
 import {
   myDataChangeSuccess,
-  myDataChangeTags,
-} from "../src/redux/MyData/action";
+  myDataChangeTags
+} from "../../src/redux/MyData/action";
 
 const Mypage: React.FC = () => {
   const dispatch = useDispatch();
@@ -35,8 +35,8 @@ const Mypage: React.FC = () => {
         { tags: tags },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
-          },
+            Authorization: `Bearer ${token}`
+          }
         }
       )
       .then(res => {
@@ -60,12 +60,12 @@ const Mypage: React.FC = () => {
           </SubLayout>
         </MainLayout>
         <MainInputLayout>
-          <MainInputForm handleSubmit={e => addTag(e)}>
+          <BaseMainInputForm handleSubmit={e => addTag(e)}>
             <MainInput
               inputValue={mypageInput}
               handleChange={inputValue => inputChange(inputValue)}
             />
-          </MainInputForm>
+          </BaseMainInputForm>
         </MainInputLayout>
         <TagBoxLayout>
           <Tags tags={myData.tags} styledTag={<Tag tagName="" />} />

@@ -9,11 +9,12 @@ type SignUp struct {
 
 // SignIn contains login data
 type SignIn struct {
-	ID       int    `json:"id" validate:"required"`
+	ID       string `json:"signinID" validate:"required"`
 	Password string `json:"password" validate:"required"`
 }
 
 // UserRepository defines user method
 type UserRepository interface {
 	SignUp(d *SignUp) int
+	SignIn(d *SignIn) int
 }

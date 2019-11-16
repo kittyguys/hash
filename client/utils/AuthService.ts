@@ -1,15 +1,10 @@
+import React, { Component } from "react";
+import { Dispatch, bindActionCreators } from "redux";
+import { connect } from "react-redux";
 import jwt_decode from "jwt-decode";
-import { signupAsync } from "../src/redux/Signup/action";
-import { useSelector, useDispatch } from "react-redux";
 
-export default class AuthService {
-  constructor() {}
-
-  signUp = (userData: any) => {
-    console.log(0);
-    const dis = useDispatch();
-    dis(signupAsync(userData));
-  };
+class AuthService extends Component {
+  signUp = (userData: any) => {};
 
   login = (email: string, password: string) => {
     // TODO
@@ -56,3 +51,16 @@ export const isTokenExpired = (token: string) => {
     return false;
   }
 };
+
+const mapDispatchToProps = (dispatch: Dispatch) =>
+  bindActionCreators(
+    {
+      signup: signup
+    },
+    dispatch
+  );
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(AuthService);

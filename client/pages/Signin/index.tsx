@@ -1,15 +1,11 @@
-import * as React from "react";
-import { useSelector } from "react-redux";
+import { NextPage } from "next";
 import styled from "styled-components";
 
-import SigninForm from "../../src/components/Signin/SigninForm";
 import SigninFormFormik from "../../src/components/Signin/SigninFormFormik";
 
-const Signin: React.FC = () => {
-  const profile = useSelector((state: any) => state.signin.profile);
+const Signin: NextPage = () => {
   return (
     <Layout>
-      {/* <SigninForm profile={profile} /> */}
       <SigninFormFormik />
     </Layout>
   );

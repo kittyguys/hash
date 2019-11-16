@@ -6,16 +6,15 @@ import {
   DragDropContext,
   Droppable,
   DropResult,
-  ResponderProvided,
+  ResponderProvided
 } from "react-beautiful-dnd";
-import Color from "../src/components/constants/Color";
+import Color from "../../src/components/constants/Color";
 import BaseMainInputForm, {
-  MainInput as BaseMainInput,
-} from "../src/components/common/Form/MainInput";
-import Header from "../src/components/common/Header";
-import StockCassette from "../src/components/common/StockCassette";
-import StockList from "../src/components/common/StockList";
-import MarkDown from "../src/components/common/MarkDown";
+  MainInput as BaseMainInput
+} from "../../src/components/common/Form/MainInput";
+import Header from "../../src/components/common/Header";
+import Loading from "../../src/components/common/Loading";
+import StockList from "../../src/components/common/StockList";
 
 type Props = {};
 
@@ -26,7 +25,7 @@ type Stocks = { id: string; content: string }[];
 const initial = Array.from({ length: 10 }, (v, k) => k).map(k => {
   const custom = {
     id: `id-${k}`,
-    content: `Stock ${k}`,
+    content: `Stock ${k}`
   };
 
   return custom;
@@ -76,7 +75,7 @@ const Stock: React.FC<Props> = ({}) => {
   return (
     <Fragment>
       <>
-        <Header page="common" isLogin={false} />
+        <Header page="common" />
         <StockWrap>
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="list">

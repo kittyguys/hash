@@ -3,6 +3,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import Router from "next/router";
+import Cookies from "js-cookie";
 import BaseAvatar from "../Avatar";
 import { IoIosSearch } from "react-icons/io";
 import BaseMainInputForm, {
@@ -11,16 +12,18 @@ import BaseMainInputForm, {
 import BaseLogo from "../Logo";
 import BaseNormalButton from "../Button/NormalButton";
 import BaseUserName from "../UserName";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Color from "../../constants/Color";
+import { signout } from "../../../redux/auth/action";
 
 type Props = {
   page: string;
-  isLogin?: boolean;
 };
 
-const Header: React.FC<Props> = ({ isLogin, page }) => {
+const Header: React.FC<Props> = ({ page }) => {
+  const dispatch = useDispatch();
   const myData = useSelector((state: any) => state.myData);
+  const isSignin = useSelector((state: any) => state.auth.isSignin);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toMypage = () => {
@@ -30,9 +33,9 @@ const Header: React.FC<Props> = ({ isLogin, page }) => {
     Router.push("/");
   };
   const signOut = () => {
-    localStorage.removeItem("token");
+    Cookies.remove("jwt");
+    dispatch(signout());
     Router.push("/");
-    setIsModalOpen(false);
   };
 
   let linkContents: JSX.Element;
@@ -53,29 +56,34 @@ const Header: React.FC<Props> = ({ isLogin, page }) => {
     </ModalWrapper>
   );
 
-  if (isLogin === false) {
+  if (isSignin === true) {
     linkContents = (
-      <NotLoginLink>
-        <Link key="signup" href="/signup">
-          <NormalLink>アカウントを作る</NormalLink>
+      <>
+        <Link key="stock" href="/stock">
+          <NormalLink>Stock</NormalLink>
         </Link>
-        <Link key="signin" href="/signin">
-          <StyledLink>ログイン</StyledLink>
-        </Link>
-      </NotLoginLink>
+        <StyledLink onClick={() => signOut()}>ログアウト</StyledLink>
+      </>
     );
   } else {
-    linkContents = (
-      <Avatar2
-        key="avatar"
-        imageSrc={myData.avatar}
-        handleClick={() => setIsModalOpen(true)}
-      />
-    );
+    if (isSignin === "busy") {
+      linkContents = <></>;
+    } else {
+      linkContents = (
+        <NotLoginLink>
+          <Link key="signup" href="/signup">
+            <NormalLink>アカウントを作る</NormalLink>
+          </Link>
+          <Link key="signin" href="/signin">
+            <StyledLink>ログイン</StyledLink>
+          </Link>
+        </NotLoginLink>
+      );
+    }
   }
 
   return (
-    <HeaderWrapper page={page} isLogin={isLogin}>
+    <HeaderWrapper page={page}>
       {page === "common" && (
         <>
           <Logo key="logo" handleClick={() => toHome()} />
@@ -95,7 +103,7 @@ const Header: React.FC<Props> = ({ isLogin, page }) => {
   );
 };
 
-const HeaderWrapper = styled.div<{ page: string; isLogin: boolean }>`
+const HeaderWrapper = styled.div<{ page: string }>`
   display: flex;
   align-items: center;
   width: 100%;

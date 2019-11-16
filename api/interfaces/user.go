@@ -7,6 +7,7 @@ import (
 
 	"github.com/kittyguys/hash/api/common"
 	"github.com/kittyguys/hash/api/repository"
+	"github.com/shgysd/hash/api/utils/crypto"
 )
 
 // UserRepository contains db
@@ -26,7 +27,7 @@ func (h *UserRepository) SignUp(d *repository.SignUp) int {
 
 	stmt, err := h.Conn.Prepare("INSERT INTO users(user_name,display_name, email, password) VALUES(?,?,?,?)")
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	pwd := []byte(d.Password)
@@ -34,20 +35,52 @@ func (h *UserRepository) SignUp(d *repository.SignUp) int {
 
 	res, err := stmt.Exec(d.UserName, d.UserName, d.Email, hashedPassword)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	lastID, err := res.LastInsertId() // 挿入した行のIDを返却
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	rowCnt, err := res.RowsAffected() // 影響を受けた行数
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	log.Printf("ID = %d, affected = %d\n", lastID, rowCnt)
 
 	return int(lastID)
+}
+
+// SignIn returns JWT
+func (h *UserRepository) SignIn(d *repository.SignIn) int {
+	var (
+		id       int
+		password string
+	)
+	rows, err := h.Conn.Query("SELECT id, password FROM users WHERE user_name = ?", d.ID)
+	if err != nil {
+		log.Println(err)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		err := rows.Scan(&id, &password)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+	err = rows.Err()
+	if err != nil {
+		log.Println(err)
+	}
+
+	pwd := []byte(d.Password)
+
+	err = crypto.ComparePasswords(password, pwd)
+	if err != nil {
+		log.Println(err)
+	}
+
+	return id
 }
 
 // // Login Login
