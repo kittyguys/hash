@@ -1,4 +1,4 @@
-import * as React from "react";
+import { NextPage } from "next";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
@@ -14,7 +14,7 @@ import Loading from "../src/components/common/Loading";
 
 type Props = {};
 
-const Home: React.FC<Props> = ({}) => {
+const Home: NextPage = ({}) => {
   const dispatch = useDispatch();
   const homeInput = useSelector((state: any) => state.homeInput.search);
   const myData = useSelector((state: any) => state.myData);
@@ -34,7 +34,7 @@ const Home: React.FC<Props> = ({}) => {
   useEffect(() => {
     {
       localStorage.getItem("token") ? (
-        <Header page={"home"} isLogin={true} />
+        <Header page={"home"} isLogin={false} />
       ) : (
         <Header page={"home"} isLogin={false} />
       );
@@ -44,7 +44,7 @@ const Home: React.FC<Props> = ({}) => {
   return (
     <>
       {loggedin ? (
-        <Header page={"home"} isLogin={true} />
+        <Header page={"home"} isLogin={false} />
       ) : (
         <Header page={"home"} isLogin={false} />
       )}
@@ -65,6 +65,11 @@ const Home: React.FC<Props> = ({}) => {
   );
 };
 
+Home.getInitialProps = async ({ req }) => {
+  const userAgent = req ? req.headers["user-agent"] || "" : navigator.userAgent;
+  return { userAgent };
+};
+
 const LoadingWrapper = styled.div`
   height: 100vh;
   position: relative;
@@ -80,7 +85,7 @@ const LoadingBox = styled.div`
 const MainLayout = styled.div`
   width: 92%;
   max-width: 582px;
-  margin: 10% auto 0;
+  margin: 20% auto 0;
 `;
 
 const Logo = styled(BaseLogo)`

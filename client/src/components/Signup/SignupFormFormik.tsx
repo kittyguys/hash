@@ -1,11 +1,13 @@
-import * as React from "react";
+import { FC } from "react";
+import { bindActionCreators, Dispatch } from "redux";
+import { connect } from "react-redux";
 import styled from "styled-components";
-import BaseLogo from "../common/Logo";
 import { withFormik, Form, Field } from "formik";
+import BaseLogo from "../common/Logo";
 import * as Yup from "yup";
-import axios from "axios";
+import { signupAsync } from "../../../src/redux/Signup/action";
 
-const InnerForm: React.FC = ({ values, errors, touched }: any) => {
+const InnerForm: FC = ({ values, errors, touched }: any) => {
   return (
     <Wrapper>
       <Logo />
@@ -92,16 +94,14 @@ const SignupFormFormik = withFormik({
       .oneOf([Yup.ref("password")], "パスワードが一致しません。")
       .required("パスワードの確認は必須です。")
   }),
-  handleSubmit: (values: any) => {
+  handleSubmit: (values: any, { props }: any) => {
+    const { signupAsync } = props;
     const userData: any = {
       userName: values.userName,
       email: values.email,
       password: values.password
     };
-    axios.get("http://localhost:5000/signup", userData).then(res => {
-      localStorage.setItem("jwt", res.data[0].token);
-      location.href = "/";
-    });
+    signupAsync(userData);
   }
 })(InnerForm);
 
@@ -217,4 +217,11 @@ const Span = styled.span`
   top: -0.7em;
 `;
 
-export default SignupFormFormik;
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return bindActionCreators({ signupAsync }, dispatch);
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(SignupFormFormik);
