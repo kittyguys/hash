@@ -6,7 +6,7 @@ import BaseAvatar from "../src/components/common/Avatar";
 import BaseUserName from "../src/components/common/UserName";
 import BaseNormalButton from "../src/components/common/Button/NormalButton";
 import BaseMainInputForm, {
-  MainInput as BaseMainInput
+  MainInput as BaseMainInput,
 } from "../src/components/common/Form/MainInput";
 import Tags, { Tag as BaseTag } from "../src/components/common/Tag";
 import { mypageInputChange } from "../src/redux/MypageInput/action";
@@ -14,7 +14,7 @@ import axios from "axios";
 import Header from "../src/components/common/Header";
 import {
   myDataChangeSuccess,
-  myDataChangeTags
+  myDataChangeTags,
 } from "../src/redux/MyData/action";
 
 const Mypage: React.FC = () => {
@@ -35,8 +35,8 @@ const Mypage: React.FC = () => {
         { tags: tags },
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       )
       .then(res => {

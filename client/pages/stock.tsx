@@ -6,15 +6,16 @@ import {
   DragDropContext,
   Droppable,
   DropResult,
-  ResponderProvided
+  ResponderProvided,
 } from "react-beautiful-dnd";
 import Color from "../src/components/constants/Color";
 import BaseMainInputForm, {
-  MainInput as BaseMainInput
+  MainInput as BaseMainInput,
 } from "../src/components/common/Form/MainInput";
 import Header from "../src/components/common/Header";
-import Loading from "../src/components/common/Loading";
+import StockCassette from "../src/components/common/StockCassette";
 import StockList from "../src/components/common/StockList";
+import MarkDown from "../src/components/common/MarkDown";
 
 type Props = {};
 
@@ -25,7 +26,7 @@ type Stocks = { id: string; content: string }[];
 const initial = Array.from({ length: 10 }, (v, k) => k).map(k => {
   const custom = {
     id: `id-${k}`,
-    content: `Stock ${k}`
+    content: `Stock ${k}`,
   };
 
   return custom;
@@ -98,18 +99,6 @@ const Stock: React.FC<Props> = ({}) => {
   );
 };
 
-const LoadingWrapper = styled.div`
-  height: calc(100vh - 168px);
-  position: relative;
-`;
-
-const LoadingBox = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-
 const StockWrap = styled.div`
   max-width: 720px;
   margin: 0 auto;
@@ -123,7 +112,6 @@ const MainInputForm = styled(BaseMainInputForm)`
   padding: 20px 20px;
   position: fixed;
   bottom: 0;
-  background: #f5fdfd;
   box-sizing: content-box;
 `;
 
@@ -132,7 +120,7 @@ const TeatArea = styled.textarea`
   width: 100%;
   height: 100%;
   background: #fff;
-  border: 1px solid #dfe1e5;
+  border: 1px solid ${Color.Black};
   box-shadow: none;
   border-radius: 4px;
   resize: none;
