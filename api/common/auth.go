@@ -13,7 +13,7 @@ import (
 
 func IsAllowdPath(c echo.Context) bool {
 	// Skip authentication for and signup login requests
-	if c.Path() == "/login" || c.Path() == "/signup" {
+	if c.Path() == "/signin" || c.Path() == "/signup" {
 		return true
 	}
 	return false

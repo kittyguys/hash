@@ -57,7 +57,7 @@ func (h *UserRepository) SignIn(d *repository.SignIn) int {
 		id       int
 		password string
 	)
-	rows, err := h.Conn.Query("SELECT id, password FROM users WHERE id = ?", d.ID)
+	rows, err := h.Conn.Query("SELECT id, password FROM users WHERE user_name = ?", d.ID)
 	if err != nil {
 		log.Fatal(err)
 	}
