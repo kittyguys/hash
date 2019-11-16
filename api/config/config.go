@@ -12,13 +12,8 @@ type Config struct {
 		Password string
 		Host     string
 	}
-	Twitter struct {
-		Token            string
-		Secret           string
-		RequestURI       string
-		AuthorizationURI string
-		TokenRequestURI  string
-		CallbackURI      string
+	KEY struct {
+		JWT string
 	}
 }
 

@@ -44,7 +44,6 @@ export default class MyDocument extends Document {
               content="width=device-width, initial-scale=1.0"
             />
             <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-            <title>hash</title>
             <link
               href="https://fonts.googleapis.com/css?family=Lobster&display=swap"
               rel="stylesheet"

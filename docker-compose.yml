@@ -38,13 +38,13 @@ services:
     networks:
       - api-default
 
-  json-server:
-    build: ./json-server
-    ports:
-      - "5000:3000"
-    volumes:
-      - ./json-server/db.json:/data/db.json
-    command: json-server --watch db.json --host 0.0.0.0
+  # json-server:
+  #   build: ./json-server
+  #   ports:
+  #     - "5000:3000"
+  #   volumes:
+  #     - ./json-server/db.json:/data/db.json
+  #   command: json-server --watch db.json --host 0.0.0.0
 
 networks:
   api-default:

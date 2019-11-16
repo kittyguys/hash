@@ -1,7 +1,15 @@
 import jwt_decode from "jwt-decode";
+import { signupAsync } from "../src/redux/Signup/action";
+import { useSelector, useDispatch } from "react-redux";
 
 export default class AuthService {
   constructor() {}
+
+  signUp = (userData: any) => {
+    console.log(0);
+    const dis = useDispatch();
+    dis(signupAsync(userData));
+  };
 
   login = (email: string, password: string) => {
     // TODO
@@ -16,7 +24,6 @@ export default class AuthService {
   }
 
   setToken(idToken: string) {
-    // Saves user token to localStorage
     localStorage.setItem("jwt", idToken);
   }
 

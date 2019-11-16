@@ -3,22 +3,25 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
 // hooksを使った非同期処理のサンプル
-export const useSignUp = () => {
+export const useSignUp = (params: any) => {
   const [error, setError] = useState(false);
   const [data, setData] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/signup")
-      .then(res => {
-        setData(res);
-        dispatch({ type: "TEST_SUCCESS", payload: { test: 123 } });
-      })
-      .catch(err => {
-        setError(err);
-        dispatch({ type: "TEST_FAIL", payload: { test: 123 } });
-      });
+    async function signUp() {
+      await axios
+        .post("http://localhost:8080/signup", params)
+        .then(res => {
+          setData(res.data.token);
+          dispatch({ type: "SIGNUP_SUCCESS", payload: { status: true } });
+        })
+        .catch(err => {
+          setError(err);
+          dispatch({ type: "SIGNUP_FAIL", payload: { status: false } });
+        });
+    }
+    signUp();
   }, []);
   return [data, error];
 };

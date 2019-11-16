@@ -5,7 +5,7 @@ CREATE TABLE
 IF NOT EXISTS hash.users
 (
   id int PRIMARY KEY AUTO_INCREMENT,
-  name varchar(64) NOT NULL,
+  user_name varchar(64) NOT NULL,
   display_name varchar(64) NOT NULL,
   email varchar(64) NOT NULL,
   password varchar(64) NOT NULL,
