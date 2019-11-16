@@ -66,16 +66,20 @@ const Header: React.FC<Props> = ({ page }) => {
       </>
     );
   } else {
-    linkContents = (
-      <NotLoginLink>
-        <Link key="signup" href="/signup">
-          <NormalLink>アカウントを作る</NormalLink>
-        </Link>
-        <Link key="signin" href="/signin">
-          <StyledLink>ログイン</StyledLink>
-        </Link>
-      </NotLoginLink>
-    );
+    if (isSignin === "busy") {
+      linkContents = <></>;
+    } else {
+      linkContents = (
+        <NotLoginLink>
+          <Link key="signup" href="/signup">
+            <NormalLink>アカウントを作る</NormalLink>
+          </Link>
+          <Link key="signin" href="/signin">
+            <StyledLink>ログイン</StyledLink>
+          </Link>
+        </NotLoginLink>
+      );
+    }
   }
 
   return (

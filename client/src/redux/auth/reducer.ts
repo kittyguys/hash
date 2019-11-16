@@ -1,10 +1,10 @@
 type State = {
-  isSignin: boolean;
+  isSignin: boolean | string;
 };
 
 type Action = {
   type: string;
-  payload: { status: boolean };
+  payload: { status: boolean | string };
 };
 
 const initialState: any = {
@@ -28,6 +28,13 @@ const authReducer = (state: State = initialState, action: Action) => {
       };
     }
     case "SIGNUP_FAIL": {
+      const { status } = action.payload;
+      return {
+        ...state,
+        isSignin: status
+      };
+    }
+    case "SIGNIN_REQUEST": {
       const { status } = action.payload;
       return {
         ...state,

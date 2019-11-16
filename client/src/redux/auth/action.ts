@@ -28,7 +28,8 @@ export const signupFail = () => ({
 });
 
 export const signinRequest = () => ({
-  type: SIGNIN_REQUEST
+  type: SIGNIN_REQUEST,
+  payload: { status: "busy" }
 });
 
 export const signinSuccess = () => ({
@@ -67,7 +68,7 @@ export const signinAsync = (
   params: any
 ): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-    dispatch(signupRequest());
+    dispatch(signinRequest());
     axios
       .post("http://localhost:8080/signin", params)
       .then(res => {
