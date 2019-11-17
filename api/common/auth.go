@@ -3,11 +3,11 @@ package common
 import (
 	"log"
 	"net/http"
-	"os"
 	"time"
 
 	jwtmiddleware "github.com/auth0/go-jwt-middleware"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/kittyguys/hash/api/config"
 	"github.com/labstack/echo"
 )
 
@@ -40,7 +40,7 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 
 	// 電子署名
-	tokenString, _ := token.SignedString([]byte(os.Getenv("KEY")))
+	tokenString, _ := token.SignedString([]byte(config.New().KEY.JWT))
 
 	// JWTを返却
 	w.Write([]byte(tokenString))
@@ -49,7 +49,7 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 // JWTMiddleware check token
 var JWTMiddleware = jwtmiddleware.New(jwtmiddleware.Options{
 	ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
-		return []byte(os.Getenv("KEY")), nil
+		return []byte(config.New().KEY.JWT), nil
 	},
 	SigningMethod: jwt.SigningMethodHS256,
 })
@@ -66,7 +66,7 @@ func CreateJSONWebToken(id int) (string, error) {
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 
 	// Create signed token
-	tokenString, err := token.SignedString([]byte(os.Getenv("KEY")))
+	tokenString, err := token.SignedString([]byte(config.New().KEY.JWT))
 	if err != nil {
 		log.Println(err.Error())
 	}

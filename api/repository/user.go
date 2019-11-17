@@ -13,8 +13,14 @@ type SignIn struct {
 	Password string `json:"password" validate:"required"`
 }
 
+// IsUnique contains UserName
+type IsUnique struct {
+	UserName string `json:"userName" validate:"required"`
+}
+
 // UserRepository defines user method
 type UserRepository interface {
-	SignUp(d *SignUp) int
-	SignIn(d *SignIn) int
+	SignUp(d *SignUp) (int, error)
+	SignIn(d *SignIn) (int, error)
+	IsUnique(d interface{}) bool
 }

@@ -31,7 +31,12 @@ func (h *UserHandler) SignUp(c echo.Context) (err error) {
 		return err
 	}
 
-	id := h.repo.SignUp(&data)
+	id, err := h.repo.SignUp(&data)
+	if err != nil {
+		resp := map[string]interface{}{"error": err.Error()}
+
+		return c.JSON(http.StatusCreated, resp)
+	}
 
 	tokenString, err := common.CreateJSONWebToken(id)
 	if err != nil {
@@ -50,7 +55,12 @@ func (h *UserHandler) SignIn(c echo.Context) (err error) {
 		return
 	}
 
-	id := h.repo.SignIn(&data)
+	id, err := h.repo.SignIn(&data)
+	if err != nil {
+		resp := map[string]interface{}{"error": err}
+
+		return c.JSON(http.StatusCreated, resp)
+	}
 
 	token, err = common.CreateJSONWebToken(id)
 	if err != nil {
@@ -63,24 +73,19 @@ func (h *UserHandler) SignIn(c echo.Context) (err error) {
 	return c.JSON(http.StatusCreated, resp)
 }
 
-// // Login log in
-// func (h *UserHandler) Login(c echo.Context) (err error) {
-// 	var body echo.Map
-// 	var token string
-// 	if err = c.Bind(&body); err != nil {
-// 		return
-// 	}
+// IsUnique returns JWT
+func (h *UserHandler) IsUnique(c echo.Context) (err error) {
+	var data repository.IsUnique
+	if err = c.Bind(&data); err != nil {
+		return
+	}
 
-// 	h.repo.Login(&token, body)
+	isUnique := h.repo.IsUnique(data.UserName)
 
-// 	if token != "" {
-// 		data := map[string]interface{}{"token": token}
+	resp := map[string]interface{}{"result": isUnique}
 
-// 		return c.JSON(http.StatusCreated, data)
-// 	}
-
-// 	return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid email or password"}
-// }
+	return c.JSON(http.StatusCreated, resp)
+}
 
 // // GetUser for getting user info by ID
 // func (h *UserHandler) GetUser(c echo.Context) (err error) {

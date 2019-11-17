@@ -1,27 +1,21 @@
 package common
 
 import (
-	"log"
-
 	"golang.org/x/crypto/bcrypt"
 )
 
 // HashAndSalt パスワードをハッシュ化
-func HashAndSalt(pwd []byte) string {
+func HashAndSalt(pwd []byte) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
-	if err != nil {
-		log.Println(err)
-	}
-	return string(hash)
+	return string(hash), err
 }
 
 // ComparePasswords ハッシュ化されたパスワードと入力されたパスワードを比較する
-func ComparePasswords(hashedPwd string, plainPwd []byte) bool {
+func ComparePasswords(hashedPwd string, plainPwd []byte) error {
 	byteHash := []byte(hashedPwd)
 	err := bcrypt.CompareHashAndPassword(byteHash, plainPwd)
 	if err != nil {
-		log.Println(err)
-		return false
+		return err
 	}
-	return true
+	return nil
 }

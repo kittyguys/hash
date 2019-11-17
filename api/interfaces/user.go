@@ -1,13 +1,13 @@
 package interfaces
 
 import (
+	"fmt"
 	"log"
 
 	"database/sql"
 
 	"github.com/kittyguys/hash/api/common"
 	"github.com/kittyguys/hash/api/repository"
-	"github.com/shgysd/hash/api/utils/crypto"
 )
 
 // UserRepository contains db
@@ -23,7 +23,11 @@ func NewUserRepo(conn *sql.DB) repository.UserRepository {
 }
 
 // SignUp inserts user data into mysql and returns JWT
-func (h *UserRepository) SignUp(d *repository.SignUp) int {
+func (h *UserRepository) SignUp(d *repository.SignUp) (int, error) {
+
+	if !h.IsUnique(d.UserName) {
+		return 0, fmt.Errorf("User name is already token: %s", d.UserName)
+	}
 
 	stmt, err := h.Conn.Prepare("INSERT INTO users(user_name,display_name, email, password) VALUES(?,?,?,?)")
 	if err != nil {
@@ -31,7 +35,10 @@ func (h *UserRepository) SignUp(d *repository.SignUp) int {
 	}
 
 	pwd := []byte(d.Password)
-	hashedPassword := common.HashAndSalt(pwd)
+	hashedPassword, err := common.HashAndSalt(pwd)
+	if err != nil {
+		log.Println(err)
+	}
 
 	res, err := stmt.Exec(d.UserName, d.UserName, d.Email, hashedPassword)
 	if err != nil {
@@ -48,11 +55,11 @@ func (h *UserRepository) SignUp(d *repository.SignUp) int {
 
 	log.Printf("ID = %d, affected = %d\n", lastID, rowCnt)
 
-	return int(lastID)
+	return int(lastID), nil
 }
 
 // SignIn returns JWT
-func (h *UserRepository) SignIn(d *repository.SignIn) int {
+func (h *UserRepository) SignIn(d *repository.SignIn) (int, error) {
 	var (
 		id       int
 		password string
@@ -75,12 +82,32 @@ func (h *UserRepository) SignIn(d *repository.SignIn) int {
 
 	pwd := []byte(d.Password)
 
-	err = crypto.ComparePasswords(password, pwd)
+	err = common.ComparePasswords(password, pwd)
 	if err != nil {
 		log.Println(err)
+		return id, err
 	}
 
-	return id
+	return id, nil
+}
+
+// IsUnique checks that desired UserName is unique
+func (h *UserRepository) IsUnique(n interface{}) bool {
+	stmtOut, err := h.Conn.Prepare("SELECT user_name FROM users WHERE user_name = ?")
+	if err != nil {
+		log.Println(err.Error())
+	}
+	defer stmtOut.Close()
+
+	var name string
+
+	err = stmtOut.QueryRow(n).Scan(&name)
+	if err != nil {
+		log.Println(err.Error())
+		return true
+	}
+
+	return false
 }
 
 // // Login Login
