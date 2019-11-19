@@ -1,74 +1,61 @@
 package db
 
 import (
-	"github.com/jinzhu/gorm"
+	"database/sql"
+	"fmt"
+	"os"
+	"strings"
+
 	"github.com/kittyguys/hash/api/config"
-	"github.com/kittyguys/hash/api/model"
 )
 
-var db *gorm.DB
+var db *sql.DB
 
-// New Connect to MySQL
-func New(d *config.Config) *gorm.DB {
-	conn, err := gorm.Open("mysql", d.MySQL.User+":"+d.MySQL.Password+"@tcp("+d.MySQL.Host+")/"+d.MySQL.Name+"?charset=utf8&parseTime=True&loc=Local")
+// New returns sql.DB
+func New(d *config.Config) *sql.DB {
+	connectionString := getConnectionString(d)
+	conn, err := sql.Open("mysql", connectionString)
 	if err != nil {
 		panic(err.Error())
 	}
+
+	err = conn.Ping()
+	if err != nil {
+		panic(err.Error())
+	}
+
 	db = conn
+
 	return db
 }
 
-// Init Migration
-func Init() {
-	db.AutoMigrate(&model.User{}, &model.Tag{}, &model.Subtag{}, &model.SocialLogin{})
-	return
-}
-
-// GetDB for getting db
-func GetDB() *gorm.DB {
+// GetDB returns sql.DB
+func GetDB() *sql.DB {
 	return db
 }
 
-// func (d *DB) connect() *gorm.DB {
-// 	db, err := gorm.Open("mysql", d.Username+":"+d.Password+"@tcp("+d.Host+")/"+d.DBName+"?charset=utf8&parseTime=True&loc=Local")
-// 	if err != nil {
-// 		panic(err.Error())
-// 	}
-// 	return db
-// }
+func getConnectionString(d *config.Config) string {
+	host := getParamString("MYSQL_DB_HOST", "mysql")
+	port := getParamString("MYSQL_PORT", "3306")
+	user := getParamString("MYSQL_USER", d.MySQL.User)
+	pass := getParamString("MYSQL_PASSWORD", d.MySQL.Password)
+	dbname := getParamString("MYSQL_DB", d.MySQL.Name)
+	protocol := getParamString("MYSQL_PROTOCOL", "tcp")
+	dbargs := getParamString("MYSQL_DBARGS", " ")
 
-// Create 保存
-func Create(value interface{}) *gorm.DB {
-	return db.Create(value)
+	if strings.Trim(dbargs, " ") != "" {
+		dbargs = "?" + dbargs
+	} else {
+		dbargs = ""
+	}
+	return fmt.Sprintf("%s:%s@%s([%s]:%s)/%s%s",
+		user, pass, protocol, host, port, dbname, dbargs)
 }
 
-// func (db *DB) Exec(sql string, values ...interface{}) *gorm.DB {
-// 	return db.Connect.Exec(sql, values...)
-// }
-
-// Find 検索
-func Find(out interface{}, where ...interface{}) *gorm.DB {
-	return db.Find(out, where...)
+func getParamString(param string, defaultValue string) string {
+	env := os.Getenv(param)
+	if env != "" {
+		return env
+	}
+	return defaultValue
 }
-
-// func (db *DB) First(out interface{}, where ...interface{}) *gorm.DB {
-// 	return db.Connect.First(out, where...)
-// }
-
-// NewRecord 新しいレコード
-func NewRecord(value interface{}) bool {
-	return db.NewRecord(value)
-}
-
-// func (db *DB) Raw(sql string, values ...interface{}) *gorm.DB {
-// 	return db.Connect.Raw(sql, values...)
-// }
-
-// Save SAVE
-func Save(value interface{}) *gorm.DB {
-	return db.Save(value)
-}
-
-// func (db *DB) Where(query interface{}, args ...interface{}) *gorm.DB {
-// 	return db.Connect.Where(query, args...)
-// }

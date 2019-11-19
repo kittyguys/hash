@@ -1,0 +1,53 @@
+version: "3.3"
+
+services:
+  web:
+    build: "./client"
+    ports:
+      - "3000:3000"
+    volumes:
+      - "./client:/usr/src/app"
+      - /user/src/app/node_modules
+    networks:
+      - api-default
+    command: npm run dev
+
+  api:
+    build: "./api"
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./api:/app"
+    working_dir: "/app"
+    env_file:
+      - ./env/db.env
+    networks:
+      - api-default
+    command: ["./shell/wait-for-it.sh", "fresh"]
+
+  mysql:
+    build: "./mysql"
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - "mysql-data:/var/lib/mysql"
+      - "./mysql/init:/docker-entrypoint-initdb.d"
+    env_file:
+      - ./env/db.env
+    networks:
+      - api-default
+
+  # json-server:
+  #   build: ./json-server
+  #   ports:
+  #     - "5000:3000"
+  #   volumes:
+  #     - ./json-server/db.json:/data/db.json
+  #   command: json-server --watch db.json --host 0.0.0.0
+
+networks:
+  api-default:
+
+volumes:
+  mysql-data:

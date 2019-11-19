@@ -1,36 +1,55 @@
+import NextApp, { AppContext } from "next/app";
+import { NextPageContext, NextPage } from "next";
 import * as React from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import Router from "next/router";
+import Cookies from "js-cookie";
 import BaseAvatar from "../Avatar";
-import { withRouter, RouteComponentProps } from "react-router";
+import { IoIosSearch } from "react-icons/io";
+import BaseMainInputForm, {
+  MainInput as BaseMainInput
+} from "../../common/Form/MainInput";
 import BaseLogo from "../Logo";
 import BaseNormalButton from "../Button/NormalButton";
 import BaseUserName from "../UserName";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import Color from "../../constants/Color";
+import { signout } from "../../../redux/auth/action";
 
 type Props = {
-  page: string;
-  isLogin?: boolean;
-} & RouteComponentProps;
+  page?: string;
+};
 
-const Header: React.FC<Props> = ({ isLogin, page, history }) => {
+interface NextContext extends NextPageContext {
+  store: any;
+  isServer: boolean;
+}
+
+interface NextAppContext extends AppContext {
+  ctx: NextContext;
+}
+
+const Header: NextPage<Props> = ({ page }) => {
+  const dispatch = useDispatch();
   const myData = useSelector((state: any) => state.myData);
-  const [modal, modalChange] = useState(false);
+  const isSignin = useSelector((state: any) => state.auth.isSignin);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toMypage = () => {
-    history.push("/mypage");
+    Router.push("/mypage");
   };
   const toHome = () => {
-    history.push("/");
+    Router.push("/");
   };
   const signOut = () => {
-    localStorage.removeItem("token");
-    history.push("/");
-    modalChange(false);
+    Cookies.remove("jwt");
+    dispatch(signout());
+    Router.push("/");
   };
 
-  let linkContents: JSX.Element[] = [];
+  let linkContents: JSX.Element;
 
   const headerModal = (
     <ModalWrapper>
@@ -44,79 +63,145 @@ const Header: React.FC<Props> = ({ isLogin, page, history }) => {
         <NormalButton1 content="マイページ" handleClick={() => toMypage()} />
         <NormalButton2 content="Sign out" handleClick={() => signOut()} />
       </ModalLayout2>
-      <CloseButton onClick={() => modalChange(false)}>×</CloseButton>
+      <CloseButton onClick={() => setIsModalOpen(false)}>×</CloseButton>
     </ModalWrapper>
   );
 
-  if (page === "home" && isLogin === false) {
-    linkContents = [
-      <StyledLink key="signup" to="/signup">
-        Sign up
-      </StyledLink>,
-      <StyledLink key="signin" to="/signin">
-        Sign in
-      </StyledLink>
-    ];
-  }
-
-  if (page === "home" && isLogin === true) {
-    linkContents = [
-      <Avatar2
-        key="avatar"
-        imageSrc={myData.avatar}
-        handleClick={() => modalChange(true)}
-      />
-    ];
-  }
-
-  if (page === "common") {
-    linkContents = [
-      <Logo key="logo" handleClick={() => toHome()} />,
-      <Avatar2
-        key="avatar"
-        imageSrc={myData.avatar}
-        handleClick={() => modalChange(true)}
-      />
-    ];
+  if (isSignin === true) {
+    linkContents = (
+      <>
+        <Link key="stock" href="/stock" as="stock">
+          <NormalLink>Stock</NormalLink>
+        </Link>
+        <StyledLink onClick={() => signOut()}>ログアウト</StyledLink>
+      </>
+    );
+  } else {
+    if (isSignin === "busy") {
+      linkContents = <></>;
+    } else {
+      linkContents = (
+        <NotLoginLink>
+          <Link key="signup" href="/signup" as="signup">
+            <NormalLink>アカウントを作る</NormalLink>
+          </Link>
+          <Link key="signin" href="/signin" as="signin">
+            <StyledLink>ログイン</StyledLink>
+          </Link>
+        </NotLoginLink>
+      );
+    }
   }
 
   return (
-    <HeaderWrapper>
+    <HeaderWrapper page={page}>
+      {page === "common" && (
+        <>
+          <Logo key="logo" handleClick={() => toHome()} />
+          <MainInputForm>
+            <MainInputLabel htmlFor="mainInput">
+              <IoIosSearch size="20px" color="#9AA0A6" />
+            </MainInputLabel>
+            <MainInput id="mainInput" />
+          </MainInputForm>
+        </>
+      )}
       <LinkWrapper>
         {linkContents}
-        {modal && headerModal}
+        {isModalOpen && headerModal}
       </LinkWrapper>
     </HeaderWrapper>
   );
 };
 
-const HeaderWrapper = styled.div`
+const HeaderWrapper = styled.div<{ page: string }>`
+  display: flex;
+  align-items: center;
   width: 100%;
+  height: 84px;
+  border-bottom: ${({ page }) =>
+    !(page === "common") ? `1px solid #FFFFFF` : `1px solid #DDDDDD`};
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: ${Color.White};
 `;
+
+const MainInputForm = styled(BaseMainInputForm)`
+  width: 582px;
+  height: 44px;
+  margin-left: 48px;
+  position: relative;
+`;
+
+const MainInputLabel = styled.label`
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translate(0, -50%);
+  z-index: 2;
+`;
+
+const MainInput = styled(BaseMainInput)`
+  width: 100%;
+  height: 100%;
+  padding-left: 48px;
+  background: #fff;
+  display: flex;
+  border: 1px solid #dfe1e5;
+  box-shadow: none;
+  border-radius: 24px;
+  z-index: 3;
+  :hover {
+    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
+    border-color: rgba(223, 225, 229, 0);
+  }
+`;
+
 const LinkWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 10px 20px;
-  max-width: 900px;
-  margin: 0 auto;
+  padding: 16px 28px;
+  margin-left: auto;
   position: relative;
   @media (max-width: 768px) {
     padding: 10px 14px;
   }
 `;
 
-const StyledA = styled.a`
-  margin-right: 10px;
-  color: #999;
-  border: 1px solid #999;
-  border-radius: 2px;
-  font-size: 18px;
-  padding: 2px 10px;
-  text-decoration: none;
+const NotLoginLink = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
-const StyledLink = StyledA.withComponent(Link);
+const NormalLink = styled.a`
+  font-size: 1.3rem;
+  font-weight: bold;
+  white-space: nowrap;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const StyledLink = styled.a`
+  color: #fff;
+  border: 1px solid #4285f4;
+  outline: none;
+  background: #4285f4;
+  padding: 4px 8px;
+  border-radius: 2px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-left: 20px;
+  text-decoration: none;
+  white-space: nowrap;
+  :hover {
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+  }
+`;
 
 const ModalWrapper = styled.div`
   width: 250px;
@@ -148,24 +233,31 @@ const Avatar1 = styled(BaseAvatar)`
 `;
 
 const Avatar2 = styled(BaseAvatar)`
-  width: 100px;
-  height: 100px;
+  width: 35px;
+  height: 35px;
+  border: 3px solid #fff;
   @media (max-width: 768px) {
     width: 60px;
     height: 60px;
   }
+  &:hover {
+    border-color: #bbb;
+  }
 `;
 
 const Logo = styled(BaseLogo)`
+  margin-left: 20px;
   font-size: 40px;
-  margin: 0 auto 0 0;
   @media (max-width: 768px) {
     font-size: 30px;
   }
 `;
 
 const NormalButton1 = styled(BaseNormalButton)`
-  font-size: 16px;
+  border: 1px solid #4285f4;
+  font-weight: bold;
+  outline: none;
+  font-size: 1.3rem;
   width: 100px;
   height: 30px;
   background-color: #4285f4;
@@ -216,4 +308,4 @@ const CloseButton = styled.div`
   cursor: pointer;
 `;
 
-export default withRouter(Header);
+export default Header;

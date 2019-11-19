@@ -1,9 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-
-const gifImage = require("../../../assets/images/loaderIcon.gif");
 
 type Props = {
   content: string;
@@ -14,7 +11,7 @@ const Loading: React.FC = ({}) => {
     <>
       <StyledText>Loading...</StyledText>
       <Wrapper>
-        <img src={gifImage} />
+        <img src="/static/assets/images/loaderIcon.gif" />
       </Wrapper>
     </>
   );

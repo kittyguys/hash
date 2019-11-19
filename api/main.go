@@ -1,22 +1,24 @@
 package main
 
 import (
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/kittyguys/hash/api/common"
 	"github.com/kittyguys/hash/api/config"
 	"github.com/kittyguys/hash/api/db"
 	"github.com/kittyguys/hash/api/handler"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func init() {
 	config := config.New()
 
 	db.New(config)
-	db.Init()
 }
 
 func main() {
+	config := config.New()
 	db := db.GetDB()
 	defer db.Close()
 
@@ -25,18 +27,12 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.CORS())
 	e.Use(middleware.JWTWithConfig(middleware.JWTConfig{
-		SigningKey: []byte(handler.Key),
-		Skipper: func(c echo.Context) bool {
-			// Skip authentication for and signup login requests
-			if c.Path() == "/login" || c.Path() == "/signup" || c.Path() == "/auth/twitter" || c.Path() == "/auth/twitter/callback" {
-				return true
-			}
-			return false
-		},
+		SigningKey: []byte(config.KEY.JWT),
+		Skipper:    common.IsAllowdPath,
 	}))
 
-	// Initialize handler
-	handler.InitializeRouter(db, e)
+	// // Initialize handler
+	handler.NewRouter(db, e)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))

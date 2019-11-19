@@ -28,18 +28,21 @@ export default MainInputForm;
 
 type InputProps = {
   className?: string;
+  id?: string;
   inputValue?: string;
   handleChange?: (inputValue: string) => void;
 };
 
 export const MainInput: React.FC<InputProps> = ({
   className,
+  id,
   inputValue,
   handleChange
 }) => {
   return (
     <Input
       className={className}
+      id={id}
       value={inputValue}
       onChange={e => handleChange(e.target.value)}
     />

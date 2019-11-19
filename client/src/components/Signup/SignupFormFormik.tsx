@@ -1,83 +1,162 @@
-import * as React from "react";
+import Router from "next/router";
+import { bindActionCreators, Dispatch } from "redux";
+import { connect } from "react-redux";
 import styled from "styled-components";
-
-import BaseLogo from "../common/Logo";
-import { withFormik, Form, Field } from "formik";
+import { withFormik, Form, Field, FormikProps } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
-import { withRouter, RouteComponentProps } from "react-router";
+// Components
+import BaseLogo from "../common/Logo";
+// Actions
+import { signupAsync } from "../../redux/auth/action";
+
+type FormValues = {
+  userName: string;
+  signinID: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
+};
+
+const InnerForm = ({ values, errors, touched }: FormikProps<FormValues>) => {
+  return (
+    <Wrapper>
+      <Logo />
+      <Title>アカウントの作成</Title>
+      <Form>
+        <FormBlock>
+          <IDInput
+            value={values.userName}
+            type="text"
+            name="userName"
+            placeholder="ユーザーネーム"
+          />
+          {touched.userName && errors.userName && (
+            <ErrorMessage>{errors.userName}</ErrorMessage>
+          )}
+        </FormBlock>
+        <FormBlock>
+          <EmailInput
+            value={values.email}
+            type="email"
+            name="email"
+            placeholder="メールアドレス"
+          />
+          {touched.email && errors.email && (
+            <ErrorMessage>{errors.email}</ErrorMessage>
+          )}
+        </FormBlock>
+        <FormBlock>
+          <InputStyle
+            value={values.password}
+            type="password"
+            name="password"
+            placeholder="パスワード"
+          />
+          {touched.password && errors.password && (
+            <ErrorMessage>{errors.password}</ErrorMessage>
+          )}
+        </FormBlock>
+        <FormBlock>
+          <InputStyle
+            value={values.passwordConfirm}
+            type="password"
+            name="passwordConfirm"
+            placeholder="パスワードの確認"
+          />
+          {touched.passwordConfirm && errors.passwordConfirm && (
+            <ErrorMessage>{errors.passwordConfirm}</ErrorMessage>
+          )}
+        </FormBlock>
+
+        <FormBlock>
+          <SubmitButton type="submit" value="確認" />
+        </FormBlock>
+        <Border>
+          <Span>or</Span>
+        </Border>
+        <FormBlock>
+          <SubmitButton
+            type="submit"
+            value="既にアカウントをお持ちの方はこちら"
+          />
+        </FormBlock>
+      </Form>
+    </Wrapper>
+  );
+};
 
 const Wrapper = styled.div`
-  display: block;
-  width: 350px;
+  width: 360px;
   border: 1px solid #dbdbdb;
-  padding: 10px 10px;
+  padding: 30px 30px;
 `;
 
 const Logo = styled(BaseLogo)`
-  font-size: 28px;
+  display: block;
+  font-size: 40px;
 `;
 
 const Title = styled.div`
-  display: block;
-  font-size: 20px;
+  display: inline-block;
+  font-size: 18px;
+  font-weigth: bold;
+  margin-top: 12px;
 `;
 
 const FormBlock = styled.div`
   display: block;
-  margin: 10px 0 0;
+  margin: 16px 0 0;
 `;
 
 const SubmitButton = styled.input`
   display: block;
   background-color: #4285f4;
   color: #fff;
-  width: 190px;
+  width: 100%;
   height: 38px;
   margin: 12px auto 0;
   border: none;
   outline: none;
   border-radius: 4px;
-  font-size: 18px;
+  font-size: 1.6rem;
   &:hover {
     opacity: 0.7;
     cursor: pointer;
   }
 `;
 
-const InputStyle = {
-  color: "#555",
-  fontSize: "16px",
-  padding: "6px 10px",
-  borderRadius: "4px",
-  border: "1px solid #dfe1e5",
-  outline: "none"
-};
+const InputStyle = styled(Field)`
+  width: 100%;
+  color: #555;
+  font-size: 15px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #dfe1e5;
+  outline: none;
+  background-color: #eee;
+`;
 
-const IDInput = {
-  color: "#555",
-  fontSize: "16px",
-  padding: "6px 10px",
-  borderRadius: "4px",
-  border: "1px solid #dfe1e5",
-  outline: "none",
-  width: "328px"
-};
+const IDInput = styled(Field)`
+  width: 100%;
+  color: #555;
+  font-size: 15px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #dfe1e5;
+  outline: none;
+  background-color: #eee;
+`;
 
-const EmailInput = {
-  color: "#555",
-  fontSize: "16px",
-  padding: "6px 10px",
-  borderRadius: "4px",
-  border: "1px solid #dfe1e5",
-  outline: "none",
-  width: "328px"
-};
-
-const LabelStyle = {
-  display: "block",
-  fontSize: "16px"
-};
+const EmailInput = styled(Field)`
+  width: 100%;
+  color: #555;
+  font-size: 15px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #dfe1e5;
+  outline: none;
+  background-color: #eee;
+`;
 
 const ErrorMessage = styled.div`
   display: block;
@@ -86,90 +165,35 @@ const ErrorMessage = styled.div`
   margin-top: 2px;
 `;
 
-const InnerForm: React.FC = ({ values, errors, touched }: any) => {
-  return (
-    <Wrapper>
-      <Logo />
-      <Title>hashアカウントを作成する</Title>
-      <Form>
-        <FormBlock>
-          <label style={LabelStyle} htmlFor="hashid">
-            hash ID
-          </label>
-          <Field
-            style={IDInput}
-            value={values.hashid}
-            type="text"
-            name="hashid"
-          />
-          {touched.hashid && errors.hashid && (
-            <ErrorMessage>{errors.hashid}</ErrorMessage>
-          )}
-        </FormBlock>
-        <FormBlock>
-          <label style={LabelStyle} htmlFor="email">
-            Eメールアドレス
-          </label>
-          <Field
-            style={EmailInput}
-            value={values.email}
-            type="email"
-            name="email"
-          />
-          {touched.email && errors.email && (
-            <ErrorMessage>{errors.email}</ErrorMessage>
-          )}
-        </FormBlock>
-        <FormBlock>
-          <label style={LabelStyle} htmlFor="password">
-            パスワード
-          </label>
-          <Field
-            style={InputStyle}
-            value={values.password}
-            type="text"
-            name="password"
-          />
-          {touched.password && errors.password && (
-            <ErrorMessage>{errors.password}</ErrorMessage>
-          )}
-        </FormBlock>
-        <FormBlock>
-          <label style={LabelStyle} htmlFor="passwordconfirm">
-            パスワード確認
-          </label>
-          <Field
-            style={InputStyle}
-            value={values.passwordConfirm}
-            type="text"
-            name="passwordConfirm"
-          />
-          {touched.passwordConfirm && errors.passwordConfirm && (
-            <ErrorMessage>{errors.passwordConfirm}</ErrorMessage>
-          )}
-        </FormBlock>
-        <FormBlock>
-          <SubmitButton type="submit" value="確認" />
-        </FormBlock>
-      </Form>
-    </Wrapper>
-  );
-};
+const Border = styled.div`
+  height: 12px;
+  margin-top: 24px;
+  border-top: 1px solid #cbd2d6;
+  position: relative;
+  text-align: center;
+`;
+
+const Span = styled.span`
+  font-size: 1.5rem;
+  background-color: #fff;
+  padding: 0 0.5em;
+  position: relative;
+  color: #6c7378;
+  top: -0.7em;
+`;
 
 const SignupFormFormik = withFormik({
   mapPropsToValues: () => ({
-    hashid: "",
+    userName: "",
     email: "",
     password: "",
     passwordConfirm: ""
   }),
   validationSchema: Yup.object().shape({
-    hashid: Yup.string()
-      .min(8, "hashIDは8文字以上で入力してください。")
-      .required("hashIDは必須項目です。"),
+    userName: Yup.string().required("ユーザーネームは必須項目です。"),
     email: Yup.string()
-      .email("形式がEメールではありません。")
-      .required("Eメールは必須項目です。"),
+      .email("形式がメールアドレスではありません。")
+      .required("メールアドレスは必須項目です。"),
     password: Yup.string()
       .min(8, "パスワードは8文字以上で設定してください。")
       .required("パスワードは必須項目です。"),
@@ -177,19 +201,23 @@ const SignupFormFormik = withFormik({
       .oneOf([Yup.ref("password")], "パスワードが一致しません。")
       .required("パスワードの確認は必須です。")
   }),
-  handleSubmit: (values: any) => {
+  handleSubmit: (values: FormValues, { props }: any) => {
+    const { signup } = props;
     const userData: any = {
-      hashID: values.hashid,
-      displayName: values.hashid,
+      userName: values.userName,
       email: values.email,
       password: values.password
     };
-    axios.post("http://localhost:8080/signup", userData).then(res => {
-      localStorage.setItem("token", res.data.token);
-      alert("アカウントの作成が成功しました。");
-      location.href = "/";
-    });
+    signup(userData);
+    Router.push("/");
   }
 })(InnerForm);
 
-export default SignupFormFormik;
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return bindActionCreators({ signup: signupAsync }, dispatch);
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(SignupFormFormik);

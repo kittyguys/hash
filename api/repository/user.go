@@ -1,14 +1,26 @@
 package repository
 
-import (
-	"github.com/kittyguys/hash/api/model"
-	"github.com/labstack/echo"
-)
+// SignUp contains default user info
+type SignUp struct {
+	UserName string `json:"userName" validate:"required"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
+}
 
-// UserRepository Define user method
+// SignIn contains login data
+type SignIn struct {
+	ID       string `json:"signinID" validate:"required"`
+	Password string `json:"password" validate:"required"`
+}
+
+// IsUnique contains UserName
+type IsUnique struct {
+	UserName string `json:"userName" validate:"required"`
+}
+
+// UserRepository defines user method
 type UserRepository interface {
-	SignUp(u *model.User) error
-	Login(t *string, n echo.Map) error
-	GetUser(u *model.User, t *[]model.Tag, id string) error
-	CreateTag(u *model.User, t *[]model.Tag, b map[string]interface{}) error
+	SignUp(d *SignUp) (int, error)
+	SignIn(d *SignIn) (int, error)
+	IsUnique(d interface{}) bool
 }
