@@ -6,7 +6,6 @@ import styled from "styled-components";
 import Link from "next/link";
 import Router from "next/router";
 import Cookies from "js-cookie";
-import cookies from "next-cookies";
 import BaseAvatar from "../Avatar";
 import { IoIosSearch } from "react-icons/io";
 import BaseMainInputForm, {
@@ -113,18 +112,6 @@ const Header: NextPage<Props> = ({ page }) => {
       </LinkWrapper>
     </HeaderWrapper>
   );
-};
-
-Header.getInitialProps = async ({ ctx }: any) => {
-  const allCookies = cookies(ctx);
-  const token = allCookies.jwt;
-  if (typeof token === "string") {
-    ctx.store.dispatch({
-      type: "SET_SIGNIN_STATUS",
-      payload: { status: true }
-    });
-  }
-  return {};
 };
 
 const HeaderWrapper = styled.div<{ page: string }>`

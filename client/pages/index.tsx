@@ -2,6 +2,7 @@ import { NextPage } from "next";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { IoIosSearch } from "react-icons/io";
+import cookies from "next-cookies";
 import BaseMainInputForm, {
   MainInput as BaseMainInput
 } from "../src/components/common/Form/MainInput";
@@ -42,6 +43,18 @@ const Home: NextPage = () => {
       </MainLayout>
     </>
   );
+};
+
+Home.getInitialProps = async (ctx: any) => {
+  const allCookies = cookies(ctx);
+  const token = allCookies.jwt;
+  if (typeof token === "string") {
+    ctx.store.dispatch({
+      type: "SET_SIGNIN_STATUS",
+      payload: { status: true }
+    });
+  }
+  return {};
 };
 
 const LoadingWrapper = styled.div`
