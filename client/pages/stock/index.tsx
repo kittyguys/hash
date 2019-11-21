@@ -6,7 +6,8 @@ import {
   DragDropContext,
   Droppable,
   DropResult,
-  ResponderProvided
+  ResponderProvided,
+  resetServerContext
 } from "react-beautiful-dnd";
 import Color from "../../src/components/constants/Color";
 import BaseMainInputForm, {
@@ -22,7 +23,7 @@ type Props = {};
 type Stocks = { id: string; content: string }[];
 
 // TODO Redux データの配列を map する予定
-const initial = Array.from({ length: 10 }, (v, k) => k).map(k => {
+const initialStocks = Array.from({ length: 10 }, (v, k) => k).map(k => {
   const custom = {
     id: `id-${k}`,
     content: `Stock ${k}`
@@ -51,8 +52,10 @@ const reorder: Reorder = (list, startIndex, endIndex) => {
 type OnDragEnd = (result: DropResult, provided: ResponderProvided) => void;
 
 const Stock: React.FC<Props> = ({}) => {
+  resetServerContext();
   const myData = useSelector((state: any) => state.myData);
-  const [stocks, setStocks] = useState(initial);
+  const [stocks, setStocks] = useState(initialStocks);
+  const [reorderedStocks, setReorderedStocks] = useState(initialStocks);
 
   const onDragEnd: OnDragEnd = result => {
     if (!result.destination) {
@@ -69,6 +72,7 @@ const Stock: React.FC<Props> = ({}) => {
       result.destination.index
     );
 
+    setReorderedStocks(stocksArr);
     setStocks(stocksArr);
   };
 
@@ -77,6 +81,7 @@ const Stock: React.FC<Props> = ({}) => {
       <>
         <Header page="common" />
         <StockWrap>
+          {reorderedStocks.map(stock => `${stock.id}, `)}
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="list">
               {provided => (
@@ -101,6 +106,7 @@ const Stock: React.FC<Props> = ({}) => {
 const StockWrap = styled.div`
   max-width: 720px;
   margin: 0 auto;
+  padding: 100px 0;
 `;
 
 const MainInputForm = styled(BaseMainInputForm)`
