@@ -1,12 +1,12 @@
 import * as React from "react";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import {
   DragDropContext,
   Droppable,
   DropResult,
-  ResponderProvided,
+  DraggableLocation,
   resetServerContext
 } from "react-beautiful-dnd";
 import Color from "../../src/components/constants/Color";
@@ -14,26 +14,28 @@ import BaseMainInputForm, {
   MainInput as BaseMainInput
 } from "../../src/components/common/Form/MainInput";
 import Header from "../../src/components/common/Header";
-import Loading from "../../src/components/common/Loading";
 import StockList from "../../src/components/common/StockList";
 
 type Props = {};
 
+type Stock = { id: string; content: string };
+
 // TODO 型定義を types ファイルにまとめたい
-type Stocks = { id: string; content: string }[];
+type StockLists = {
+  [stocks: string]: Stock[];
+};
 
 // TODO Redux データの配列を map する予定
-const initialStocks = Array.from({ length: 10 }, (v, k) => k).map(k => {
-  const custom = {
+const initialStockLists: StockLists = {
+  stocks: Array.from({ length: 10 }, (v, k) => k).map(k => ({
     id: `id-${k}`,
     content: `Stock ${k}`
-  };
-
-  return custom;
-});
+  })),
+  groupedStocks: []
+};
 
 type Reorder = (
-  list: Stocks,
+  list: Stock[],
   startIndex: number,
   endIndex: number
 ) => {
@@ -49,64 +51,139 @@ const reorder: Reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-type OnDragEnd = (result: DropResult, provided: ResponderProvided) => void;
+/**
+ * Moves an item from one list to another list.
+ */
+const move = (
+  source: Stock[],
+  destination: Stock[],
+  droppableSource: DraggableLocation,
+  droppableDestination: DraggableLocation
+) => {
+  const sourceClone = Array.from(source);
+  const destClone = Array.from(destination);
+  const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+  destClone.splice(droppableDestination.index, 0, removed);
+
+  const result: { [index: string]: Stock[] } = {};
+  result[droppableSource.droppableId] = sourceClone;
+  result[droppableDestination.droppableId] = destClone;
+
+  return result;
+};
 
 const Stock: React.FC<Props> = ({}) => {
+  // SSR の場合にこの関数を使用する必要がある
   resetServerContext();
+
   const myData = useSelector((state: any) => state.myData);
-  const [stocks, setStocks] = useState(initialStocks);
-  const [reorderedStocks, setReorderedStocks] = useState(initialStocks);
+  const [stockLists, setStockLists] = useState(initialStockLists);
 
-  const onDragEnd: OnDragEnd = result => {
-    if (!result.destination) {
+  /**
+   * A semi-generic way to handle multiple lists. Matches
+   * the IDs of the droppable container to the names of the
+   * source arrays stored in the state.
+   */
+  const id2List: {
+    [index: string]: string;
+  } = {
+    droppable: "stocks",
+    droppable2: "groupedStocks"
+  };
+
+  const getList = (id: string) => stockLists[id2List[id]];
+
+  const onDragEnd = (result: DropResult) => {
+    const { source, destination } = result;
+
+    // dropped outside the list
+    if (!destination) {
       return;
     }
 
-    if (result.destination.index === result.source.index) {
-      return;
+    if (source.droppableId === destination.droppableId) {
+      const stocks = reorder(
+        getList(source.droppableId),
+        source.index,
+        destination.index
+      );
+      let state: { [index: string]: Stock[] } = {};
+      state[id2List[source.droppableId]] = stocks;
+      setStockLists({
+        ...stockLists,
+        ...state
+      });
+    } else {
+      const result = move(
+        getList(source.droppableId),
+        getList(destination.droppableId),
+        source,
+        destination
+      );
+
+      setStockLists({
+        stocks: result.droppable,
+        groupedStocks: result.droppable2
+      });
     }
-
-    const stocksArr = reorder(
-      stocks,
-      result.source.index,
-      result.destination.index
-    );
-
-    setReorderedStocks(stocksArr);
-    setStocks(stocksArr);
   };
 
   return (
-    <Fragment>
-      <>
-        <Header page="common" />
-        <StockWrap>
-          {reorderedStocks.map(stock => `${stock.id}, `)}
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="list">
+    <>
+      <Header page="common" />
+      <StockWrap>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Container>
+            {stockLists.stocks.map(stock => `${stock.id}, `)}
+            <Droppable droppableId="droppable">
               {provided => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
-                  <StockList stocks={stocks} />
+                  <StockList stocks={stockLists.stocks} />
                   {provided.placeholder}
                 </div>
               )}
             </Droppable>
-          </DragDropContext>
-        </StockWrap>
+          </Container>
 
-        <MainInputForm handleSubmit={e => e.preventDefault}>
-          <TeatArea />
-          <SubmitButton>送信</SubmitButton>
-        </MainInputForm>
-      </>
-    </Fragment>
+          <Container>
+            {stockLists.groupedStocks.map(stock => `${stock.id}, `)}
+            <Droppable droppableId="droppable2">
+              {provided => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  <StockList stocks={stockLists.groupedStocks} />
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </Container>
+        </DragDropContext>
+      </StockWrap>
+
+      <MainInputForm handleSubmit={e => e.preventDefault}>
+        <TeatArea />
+        <SubmitButton>送信</SubmitButton>
+      </MainInputForm>
+    </>
   );
 };
 
 const StockWrap = styled.div`
-  max-width: 720px;
+  display: flex;
+  justify-content: space-between;
   margin: 0 auto;
   padding: 100px 0;
+  max-width: 720px;
+`;
+
+const Container = styled.div`
+  width: 340px;
+  > * {
+    width: 100%;
+    height: 100%;
+    background-color: ${Color.HoverGray};
+    padding: 20px;
+  }
 `;
 
 const MainInputForm = styled(BaseMainInputForm)`
