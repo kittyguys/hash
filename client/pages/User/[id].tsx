@@ -7,7 +7,6 @@ import BaseUserName from "../../src/components/common/UserName";
 import Tags from "../../src/components/common/Tag";
 import axios from "axios";
 import Header from "../../src/components/common/Header";
-const queryString = require("query-string");
 
 type Props = {
   location: {
