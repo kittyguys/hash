@@ -1,9 +1,9 @@
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
-import window from "../../types/window";
 
 // reducers
 import authReducer from "./auth/reducer";
+import stockReducer from "./stock/reducer";
 import signupReducer from "./Signup/reducer";
 import signinReducer from "./Signin/reducer";
 import myDataReducer from "./MyData/reducer";
@@ -17,7 +17,8 @@ const rootReducer = combineReducers({
   myData: myDataReducer,
   mypageInput: mypageInputReducer,
   homeInput: homeInputReducer,
-  auth: authReducer
+  auth: authReducer,
+  stockReducer
 });
 
 const middleWares = [thunk];

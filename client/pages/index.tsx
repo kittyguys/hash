@@ -11,7 +11,7 @@ import Header from "../src/components/common/Header";
 import { homeInputChange } from "../src/redux/HomeInput/action";
 import Router from "next/router";
 
-const Home: NextPage = () => {
+const Home: NextPage = ({ store }: any) => {
   const dispatch = useDispatch();
   const homeInput = useSelector((state: any) => state.homeInput.search);
 
@@ -54,7 +54,7 @@ Home.getInitialProps = async (ctx: any) => {
       payload: { status: true }
     });
   }
-  return {};
+  return { store: ctx.store };
 };
 
 const LoadingWrapper = styled.div`
