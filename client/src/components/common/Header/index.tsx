@@ -124,6 +124,7 @@ const HeaderWrapper = styled.div<{ page: string }>`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 9999;
   background-color: ${Color.White};
 `;
 
