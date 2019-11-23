@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import {
   DragDropContext,
@@ -80,6 +80,7 @@ const Stock: React.FC<Props> = ({}) => {
 
   const myData = useSelector((state: any) => state.myData);
   const [stockLists, setStockLists] = useState(initialStockLists);
+  const dispatch = useDispatch();
 
   /**
    * A semi-generic way to handle multiple lists. Matches
@@ -130,6 +131,10 @@ const Stock: React.FC<Props> = ({}) => {
     }
   };
 
+  useEffect(() => {
+    dispatch({ type: "SET_DEFAULT_STOCK", payload: { stocks: stockLists } });
+  }, [stockLists]);
+
   return (
     <>
       <Header page="common" />
@@ -162,7 +167,7 @@ const Stock: React.FC<Props> = ({}) => {
       </StockWrap>
 
       <MainInputForm handleSubmit={e => e.preventDefault}>
-        <TeatArea />
+        <Textarea />
         <SubmitButton>送信</SubmitButton>
       </MainInputForm>
     </>

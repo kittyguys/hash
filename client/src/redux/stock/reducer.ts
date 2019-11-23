@@ -4,11 +4,22 @@ type State = {
 
 type Action = {
   type: string;
-  payload: { value: string };
+  payload: { value: string; stocks: initialStockLists };
+};
+
+type initialStockLists = {
+  stocks: [];
+  groupedStocks: [];
+};
+
+const stockList: initialStockLists = {
+  stocks: [],
+  groupedStocks: []
 };
 
 const initialState: any = {
-  stockValue: ""
+  stockValue: "",
+  stockList: stockList
 };
 
 const stockReducer = (state: State = initialState, action: Action) => {
@@ -18,6 +29,14 @@ const stockReducer = (state: State = initialState, action: Action) => {
       return {
         ...state,
         stockValue: value
+      };
+    }
+    case "SET_DEFAULT_STOCK": {
+      const { value, stocks } = action.payload;
+      return {
+        ...state,
+        stockValue: value,
+        stockList: stocks
       };
     }
     default:
