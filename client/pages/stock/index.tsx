@@ -132,7 +132,7 @@ const Stock: React.FC<Props> = ({}) => {
   };
 
   useEffect(() => {
-    dispatch({ type: "SET_DEFAULT_STOCK", payload: { stocks: stockLists } });
+    dispatch({ type: "SET_STOCK_LIST", payload: { stocks: stockLists } });
   }, [stockLists]);
 
   return (

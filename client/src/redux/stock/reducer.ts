@@ -31,7 +31,7 @@ const stockReducer = (state: State = initialState, action: Action) => {
         stockValue: value
       };
     }
-    case "SET_DEFAULT_STOCK": {
+    case "SET_STOCK_LIST": {
       const { value, stocks } = action.payload;
       return {
         ...state,
