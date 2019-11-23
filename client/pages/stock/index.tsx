@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,7 +16,13 @@ import BaseMainInputForm, {
 } from "../../src/components/common/Form/MainInput";
 import Header from "../../src/components/common/Header";
 import StockList from "../../src/components/common/StockList";
-import Textarea from "../../src/components/pages/stock/Textarea";
+
+const Textarea = dynamic(
+  () => import("../../src/components/pages/stock/Textarea"),
+  {
+    ssr: false
+  }
+);
 
 type Props = {};
 
@@ -168,7 +175,7 @@ const Stock: React.FC<Props> = ({}) => {
 
       <MainInputForm handleSubmit={e => e.preventDefault}>
         <Textarea />
-        <SubmitButton>送信</SubmitButton>
+        {/* <SubmitButton>送信</SubmitButton> */}
       </MainInputForm>
     </>
   );
@@ -193,13 +200,13 @@ const Container = styled.div`
 `;
 
 const MainInputForm = styled(BaseMainInputForm)`
-  display: flex;
+  // display: flex;
   width: calc(100% - 40px);
-  height: 3em;
+  // height: 3em;
   font-size: 1.4rem;
   padding: 20px 20px;
-  position: fixed;
-  bottom: 0;
+  //position: fixed;
+  // bottom: 0;
   box-sizing: content-box;
 `;
 

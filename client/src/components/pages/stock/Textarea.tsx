@@ -3,26 +3,56 @@ import { useState } from "react";
 import { Dispatch } from "redux";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import ReactQuill from "react-quill";
+import marked from "marked";
 // Color
 import Color from "../../constants/Color";
 
 type Props = {};
 
+const modules = {
+  toolbar: [
+    [{ header: [1, 2, false] }],
+    ["bold", "italic", "underline", "strike", "blockquote", "code-block"],
+    [{ list: "ordered" }, { list: "bullet" }]
+  ]
+};
+
+const formats = [
+  "header",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "blockquote",
+  "list",
+  "bullet",
+  "indent",
+  "link",
+  "image",
+  "code-block"
+];
+
 const BaseTextarea: FC<Props> = () => {
   const [value, setValue] = useState("");
   const dispatch = useDispatch();
+  console.log(value);
   return (
-    <Textarea
+    <ReactQuill
       value={value}
-      onChange={e => handleOnChange(e, setValue, dispatch)}
+      onChange={v => {
+        setValue(v);
+      }}
+      theme="snow"
+      formats={formats}
+      modules={modules}
     />
   );
 };
 
-const Textarea = styled.textarea`
+const Textarea = styled(ReactQuill)`
   display: block;
   width: 100%;
-  height: 100%;
   background: #fff;
   border: 1px solid ${Color.Black[900]};
   box-shadow: none;
