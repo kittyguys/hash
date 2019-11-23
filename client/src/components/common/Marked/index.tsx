@@ -14,30 +14,11 @@ const Marked: React.FC<Props> = ({ className, data }) => {
         dangerouslySetInnerHTML={{ __html: marked(data) }}
         className={className}
       ></Contents>
-      <br></br>
-      <p>{marked(markdown)}</p>
     </>
   );
 };
 
 export default Marked;
-
-const markdown =
-  "# heading\n" +
-  "## list\n" +
-  "- list1\n" +
-  "- list2\n\n" +
-  "## code\n" +
-  "```js\n" +
-  "let x = 1;\n" +
-  "```\n" +
-  "## table\n" +
-  "| col1 | col2 |\n" +
-  "---|---\n" +
-  "abc|123\n" +
-  "xyz|456";
-
-console.log(marked(markdown));
 
 const Contents = styled.div`
   width: 100px;
