@@ -9,16 +9,40 @@ type Props = {
 
 const Marked: React.FC<Props> = ({ className, data }) => {
   return (
-    <Contents
-      dangerouslySetInnerHTML={{ __html: marked(data) }}
-      className={className}
-    ></Contents>
+    <>
+      <Contents
+        dangerouslySetInnerHTML={{ __html: marked(data) }}
+        className={className}
+      ></Contents>
+      <br></br>
+      <p>{marked(markdown)}</p>
+    </>
   );
 };
 
 export default Marked;
 
+const markdown =
+  "# heading\n" +
+  "## list\n" +
+  "- list1\n" +
+  "- list2\n\n" +
+  "## code\n" +
+  "```js\n" +
+  "let x = 1;\n" +
+  "```\n" +
+  "## table\n" +
+  "| col1 | col2 |\n" +
+  "---|---\n" +
+  "abc|123\n" +
+  "xyz|456";
+
+console.log(marked(markdown));
+
 const Contents = styled.div`
+  width: 100px;
+  height: 100px;
+
   /* codeタグ */
   code {
     background-color: rgba(27, 31, 35, 0.05);
@@ -86,5 +110,33 @@ const Contents = styled.div`
       background: #ddd;
       content: "";
     }
+  }
+
+  strong {
+    font-weight: bold;
+  }
+
+  i {
+    font-style: italic;
+  }
+
+  /* 数字入りList */
+  ol {
+    counter-reset: item;
+    list-style-type: none;
+    padding-left: 0;
+  }
+  ol ol {
+    padding-left: 1em;
+  }
+  ol li {
+    text-indent: -1.3em;
+    padding-left: 1.3em;
+  }
+  ol li:before {
+    counter-increment: item;
+    content: counter(item) ".";
+    padding-right: 0.5em;
+    font-weight: bold;
   }
 `;
