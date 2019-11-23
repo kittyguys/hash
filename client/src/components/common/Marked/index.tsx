@@ -27,4 +27,64 @@ const Contents = styled.div`
     margin: 0;
     padding: 0.2em 0.4em;
   }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: normal;
+    color: #111;
+    line-height: 1em;
+  }
+
+  h4,
+  h5,
+  h6 {
+    font-weight: bold;
+  }
+
+  h1 {
+    font-size: 2.5em;
+  }
+
+  h2 {
+    font-size: 2em;
+  }
+
+  h3 {
+    font-size: 1.5em;
+  }
+
+  h4 {
+    font-size: 1.2em;
+  }
+
+  h5 {
+    font-size: 1em;
+  }
+
+  h6 {
+    font-size: 0.9em;
+  }
+
+  em {
+    font-weight: bold;
+  }
+
+  blockquote {
+    position: relative;
+    padding-left: 16px;
+    :before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      display: block;
+      width: 4px;
+      border-radius: 8px;
+      background: #ddd;
+      content: "";
+    }
+  }
 `;
