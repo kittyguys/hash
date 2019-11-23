@@ -15,6 +15,7 @@ import BaseMainInputForm, {
 } from "../../src/components/common/Form/MainInput";
 import Header from "../../src/components/common/Header";
 import StockList from "../../src/components/common/StockList";
+import Textarea from "../../src/components/pages/stock/Textarea";
 
 type Props = {};
 
@@ -195,19 +196,6 @@ const MainInputForm = styled(BaseMainInputForm)`
   position: fixed;
   bottom: 0;
   box-sizing: content-box;
-`;
-
-const TeatArea = styled.textarea`
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: #fff;
-  border: 1px solid ${Color.Black};
-  box-shadow: none;
-  border-radius: 4px;
-  resize: none;
-  padding: 8px 12px;
-  outline: none;
 `;
 
 const SubmitButton = styled.button`
