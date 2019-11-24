@@ -48,6 +48,10 @@ export default class MyDocument extends Document {
               href="https://fonts.googleapis.com/css?family=Lobster&display=swap"
               rel="stylesheet"
             />
+            <link
+              rel="stylesheet"
+              href="//cdn.quilljs.com/1.2.6/quill.snow.css"
+            />
           </Head>
           <body>
             <Main />

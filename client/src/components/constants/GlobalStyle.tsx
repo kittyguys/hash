@@ -121,6 +121,17 @@ Twitter: @rich_clark
   a, button, input[type="submit"] {
     cursor: pointer;
   }
+  .quill {
+    width: 100%;
+    height: 100%;
+  }
+  .ql-toolbar {
+    background-color: #eee;
+    border-radius: 4px 4px 0 0;
+  }
+  .ql-container {
+    border-radius: 0 0 4px 4px;
+  }
 `;
 
 export default GlobalStyle;
