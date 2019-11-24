@@ -1,21 +1,29 @@
-import { FC } from "react";
-import { useState } from "react";
+import { Component } from "react";
 import { Dispatch } from "redux";
-import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import ReactQuill from "react-quill";
-import marked from "marked";
+import ReactQuill, { Quill } from "react-quill";
 // Color
 import Color from "../../constants/Color";
 
-type Props = {};
+// QuillEditorでMarkdownを使えるようにするモジュール
+const MarkdownShortcuts = require("quill-markdown-shortcuts");
+Quill.register("modules/markdownShortcuts", MarkdownShortcuts);
 
 const modules = {
   toolbar: [
-    [{ header: [1, 2, false] }],
-    ["bold", "italic", "underline", "strike", "blockquote", "code-block"],
-    [{ list: "ordered" }, { list: "bullet" }]
-  ]
+    [
+      { header: [1, 2, 3, 4, 5, 6] },
+      "bold",
+      "italic",
+      "underline",
+      "strike",
+      "blockquote",
+      "code-block",
+      { list: "ordered" },
+      { list: "bullet" }
+    ]
+  ],
+  markdownShortcuts: {}
 };
 
 const formats = [
@@ -33,22 +41,28 @@ const formats = [
   "code-block"
 ];
 
-const BaseTextarea: FC<Props> = () => {
-  const [value, setValue] = useState("");
-  const dispatch = useDispatch();
-  console.log(value);
-  return (
-    <ReactQuill
-      value={value}
-      onChange={v => {
-        setValue(v);
-      }}
-      theme="snow"
-      formats={formats}
-      modules={modules}
-    />
-  );
-};
+class Editor extends Component<any, { html: string }> {
+  constructor(props: any) {
+    super(props);
+    this.state = { html: "" };
+  }
+
+  handleChange = (html: string) => {
+    this.setState({ html });
+  };
+
+  render() {
+    return (
+      <>
+        <ReactQuill
+          onChange={this.handleChange}
+          modules={modules}
+          formats={formats}
+        />
+      </>
+    );
+  }
+}
 
 const Textarea = styled(ReactQuill)`
   display: block;
@@ -87,4 +101,4 @@ const handleOnKeyDown = (
   return;
 };
 
-export default BaseTextarea;
+export default Editor;

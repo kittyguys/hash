@@ -22,6 +22,7 @@ const MainInputForm: React.FC<Props> = ({
 
 const InputForm = styled.form`
   display: block;
+  background-color: #fff;
 `;
 
 export default MainInputForm;

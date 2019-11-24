@@ -30,6 +30,7 @@
     "next-redux-wrapper": "^4.0.1",
     "npm": "^6.11.1",
     "query-string": "^6.8.3",
+    "quill-markdown-shortcuts": "0.0.10",
     "react": "^16.9.0",
     "react-beautiful-dnd": "^12.0.0",
     "react-dom": "^16.9.0",

@@ -17,8 +17,8 @@ import BaseMainInputForm, {
 import Header from "../../src/components/common/Header";
 import StockList from "../../src/components/common/StockList";
 
-const Textarea = dynamic(
-  () => import("../../src/components/pages/stock/Textarea"),
+const Editor = dynamic(
+  () => import("../../src/components/pages/stock/Editor"),
   {
     ssr: false
   }
@@ -174,8 +174,16 @@ const Stock: React.FC<Props> = ({}) => {
       </StockWrap>
 
       <MainInputForm handleSubmit={e => e.preventDefault}>
-        <Textarea />
-        {/* <SubmitButton>送信</SubmitButton> */}
+        <Editor />
+        <SubmitButtonWrap>
+          <SubmitButton
+            onClick={e => {
+              e.preventDefault();
+            }}
+          >
+            送信
+          </SubmitButton>
+        </SubmitButtonWrap>
       </MainInputForm>
     </>
   );
@@ -200,14 +208,18 @@ const Container = styled.div`
 `;
 
 const MainInputForm = styled(BaseMainInputForm)`
-  // display: flex;
-  width: calc(100% - 40px);
-  // height: 3em;
+  display: flex;
+  width: calc(100% - 48px);
+  /* height: 3em; */
   font-size: 1.4rem;
-  padding: 20px 20px;
-  //position: fixed;
-  // bottom: 0;
+  position: fixed;
+  bottom: 0;
   box-sizing: content-box;
+  padding: 0 24px 24px;
+`;
+
+const SubmitButtonWrap = styled.div`
+  display: flex;
 `;
 
 const SubmitButton = styled.button`
@@ -215,9 +227,13 @@ const SubmitButton = styled.button`
   color: #fff;
   border: none;
   border-radius: 4px;
-  margin-left: 4px;
   white-space: nowrap;
-  padding: 0 24px;
+  width: 64px;
+  height: 85px;
+  font-size: 1.6rem;
+  align-self: flex-end;
+  margin-left: 4px;
+  outline: none;
 `;
 
 export default Stock;
