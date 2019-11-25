@@ -35,7 +35,7 @@ const LogoWrapper = styled.div<LogoWrapperType>`
 
 const Text = styled.span`
   font-family: "Lobster", cursive;
-  color: ${Color.Brand};
+  color: ${Color.Brand.default};
 `;
 
 export default Logo;

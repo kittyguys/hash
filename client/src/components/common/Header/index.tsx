@@ -119,13 +119,13 @@ const HeaderWrapper = styled.div<{ page: string }>`
   align-items: center;
   width: 100%;
   height: 84px;
-  border-bottom: ${({ page }) =>
-    !(page === "common") ? `1px solid #FFFFFF` : `1px solid #DDDDDD`};
   position: fixed;
   top: 0;
   left: 0;
   z-index: 9999;
   background-color: ${Color.White};
+  box-shadow: ${({ page }) =>
+    !(page === "common") ? "none" : "0 1px 2px rgba(0, 0, 0, 0.16)"};
 `;
 
 const MainInputForm = styled(BaseMainInputForm)`
