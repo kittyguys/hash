@@ -1,20 +1,9 @@
 # HASH
 
-### DB
-HomebrewでMySQLをインストールした場合  
-`mysql.server start`
+### Configurationn
 
-### Client
-```
-cd client
-npm i
-npm run dev
-```
+- set env files
 
-### Server 
-必要なパッケージをインストール  
-`go get xxx`
-```
-cd api
-go run main.go
-```
+### Run
+
+`docker-compose up -d`
