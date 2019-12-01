@@ -147,20 +147,20 @@ const Stock: React.FC<Props> = ({}) => {
       <Header page="common" />
       <StockWrap>
         <DragDropContext onDragEnd={onDragEnd}>
-          <Container>
-            {stockLists.stocks.map(stock => `${stock.id}, `)}
+          <GroupedContainer>
+            <GroupeName>グループ名が入ります</GroupeName>
             <Droppable droppableId="droppable">
               {provided => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
-                  <StockList stocks={stockLists.stocks} />
+                  <StockList stocks={stockLists.stocks} grouped />
                   {provided.placeholder}
                 </div>
               )}
             </Droppable>
-          </Container>
+          </GroupedContainer>
 
           <Container>
-            {stockLists.groupedStocks.map(stock => `${stock.id}, `)}
+            <Title>Your Stocks</Title>
             <Droppable droppableId="droppable2">
               {provided => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
@@ -192,19 +192,36 @@ const Stock: React.FC<Props> = ({}) => {
 const StockWrap = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 0 auto;
-  padding: 100px 0;
-  max-width: 720px;
+  max-width: 1024px;
 `;
 
 const Container = styled.div`
-  width: 340px;
-  > * {
-    width: 100%;
-    height: 100%;
-    background-color: ${Color.HoverGray};
-    padding: 20px;
+  width: calc(100% - 256px);
+  padding: 24px 0;
+  background-color: ${Color.BlueWhite};
+  overflow: visible;
+  > div {
+    height: calc(100vh - 272px);
+    padding: 0 24px;
+    margin-top: 6px;
+    overflow: auto;
   }
+`;
+
+const GroupeName = styled.h2`
+  color: ${Color.White};
+  font-weight: bold;
+  font-size: 2rem;
+  margin: 0 24px;
+`;
+
+const GroupedContainer = styled(Container)`
+  width: 256px;
+  background-color: ${Color.Brand[500]};
+`;
+
+const Title = styled(GroupeName)`
+  color: ${Color.Brand.default};
 `;
 
 const MainInputForm = styled(BaseMainInputForm)`
@@ -223,7 +240,7 @@ const SubmitButtonWrap = styled.div`
 `;
 
 const SubmitButton = styled.button`
-  background-color: ${Color.Brand};
+  background-color: ${Color.Brand.default};
   color: #fff;
   border: none;
   border-radius: 4px;

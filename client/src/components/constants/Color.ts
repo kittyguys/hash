@@ -25,12 +25,26 @@ const Color = {
     800: "#888",
     900: "#999"
   },
-  Brand: "#4285F4",
+  Brand: {
+    default: "#4285F4",
+    50: "#002497",
+    100: "#003eb1",
+    200: "#1158cb",
+    300: "#2b72e5",
+    400: "#4285F4",
+    500: "#5fa6ff",
+    600: "#79c0ff",
+    700: "#93daff",
+    800: "#adf4ff",
+    900: "#c7ffff"
+  },
+  BrandSub: "#76B9FF",
   Default: "#333",
   WeakBlack: "#858585",
   Gray: "#c6c6c6",
   HoverGray: "#f5f5f5",
   White: "#fff",
+  BlueWhite: "#FAFDFF",
   Link: "#7294b8",
   ButtonHover: "#444",
   ButtonDisabled: "e6e6e6"

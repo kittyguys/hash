@@ -10,43 +10,61 @@ type Props = {
     id: string;
     content: string;
   };
+  grouped?: boolean;
   index: number;
 };
 
-const StockCassette: React.FC<Props> = ({ className, stock, index }: Props) => (
+const StockCassette: React.FC<Props> = ({
+  className,
+  stock,
+  grouped,
+  index
+}: Props) => (
   <Draggable draggableId={stock.id} index={index}>
     {(provided, snapshot) => {
       return (
         <Wrapper
-          className={className}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          snapshot={snapshot}
         >
-          <ContentHead>
-            <DateText>Nov 8</DateText>
-            <TimeText>12:00 AM</TimeText>
-          </ContentHead>
-          <Content>
-            <Text>{stock.content}</Text>
-          </Content>
+          <Box className={className} snapshot={snapshot} grouped={grouped}>
+            <ContentHead>
+              <DateText>Nov 8</DateText>
+              <TimeText>12:00 AM</TimeText>
+            </ContentHead>
+            <Content>
+              <Text>{stock.content}</Text>
+            </Content>
+          </Box>
         </Wrapper>
       );
     }}
   </Draggable>
 );
 
-const Wrapper = styled.div<{ snapshot?: { isDragging: boolean } }>`
+type BoxProps = {
+  snapshot?: { isDragging: boolean };
+  grouped: boolean;
+};
+
+const Wrapper = styled.div`
+  width: 208px !important;
+  padding: 6px 0;
+`;
+
+const Box = styled.div<BoxProps>`
   padding: 8px 12px 12px 12px;
   border-radius: 8px;
-  margin-bottom: 12px;
-  box-shadow: ${({ snapshot }) =>
-    snapshot.isDragging
+  box-shadow: ${({ snapshot: { isDragging } }) =>
+    isDragging
       ? "0 3px 9px 0 rgba(0, 0, 0, 0.15)"
       : "0 1px 3px 0 rgba(0, 0, 0, 0.15)"};
-  background-color: ${({ snapshot }) =>
-    snapshot.isDragging ? Color.HoverGray : "#fff"};
+  background-color: ${({ snapshot: { isDragging } }) =>
+    isDragging ? Color.HoverGray : "#fff"};
+  width: ${({ snapshot: { isDragging }, grouped }) =>
+    isDragging || grouped ? "208px!important" : "720px!important"};
+  transition: 0.3s width;
   &:hover {
     background-color: ${Color.HoverGray};
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.13);
