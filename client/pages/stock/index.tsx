@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
-import * as React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import {
@@ -10,15 +9,16 @@ import {
   DraggableLocation,
   resetServerContext
 } from "react-beautiful-dnd";
-import Color from "../../src/components/constants/Color";
+
 import BaseMainInputForm, {
-  MainInput as BaseMainInput
-} from "../../src/components/common/Form/MainInput";
-import Header from "../../src/components/common/Header";
-import StockList from "../../src/components/common/StockList";
+  MainInput
+} from "@src/components/common/Form/MainInput";
+import Header from "@src/components/common/Header";
+import Color from "@src/components/constants/Color";
+import StockList from "@src/components/common/StockList";
 
 const Editor = dynamic(
-  () => import("../../src/components/pages/stock/Editor"),
+  () => import("@src/components/pages/stock/Editor"),
   {
     ssr: false
   }
@@ -117,7 +117,7 @@ const Stock: React.FC<Props> = ({}) => {
         source.index,
         destination.index
       );
-      let state: { [index: string]: Stock[] } = {};
+      const state: { [index: string]: Stock[] } = {};
       state[id2List[source.droppableId]] = stocks;
       setStockLists({
         ...stockLists,
