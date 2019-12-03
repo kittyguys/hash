@@ -1,14 +1,6 @@
-import express from "express";
-import bodyParser from "body-parser";
+import Server from "./configs/app";
 
-const app = express();
+const server = new Server();
 
-app.use(bodyParser.json());
-
-app.get("/", (req, res) => {
-  res.send("Hello world");
-});
-
-app.listen(3000, () => {
-  console.log(`app is listening on http://localhost:3000`);
-});
+server.init();
+server.start();
