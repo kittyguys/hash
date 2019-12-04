@@ -4,9 +4,9 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { withFormik, Form, Field, FormikProps } from "formik";
 // Components
-import BaseLogo from "../common/Logo";
+import BaseLogo from "@src/common/components/common/Logo";
 // Actions
-import { signinAsync } from "../../redux/auth/action";
+import { signinAsync } from "@src/redux/auth/action";
 
 type FormValues = {
   signinID: string;

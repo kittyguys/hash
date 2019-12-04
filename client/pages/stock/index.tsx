@@ -12,13 +12,13 @@ import {
 
 import BaseMainInputForm, {
   MainInput
-} from "@src/components/common/Form/MainInput";
-import Header from "@src/components/common/Header";
-import Color from "@src/components/constants/Color";
-import StockList from "@src/components/common/StockList";
+} from "@src/common/components/common/Form/MainInput";
+import Header from "@src/common/components/common/Header";
+import Color from "@src/common/components/constants/Color";
+import StockList from "@src/common/components/common/StockList";
 
 const Editor = dynamic(
-  () => import("@src/components/pages/stock/Editor"),
+  () => import("@src/common/components/pages/stock/Editor"),
   {
     ssr: false
   }
@@ -240,17 +240,20 @@ const SubmitButtonWrap = styled.div`
 `;
 
 const SubmitButton = styled.button`
-  background-color: ${Color.Brand.default};
-  color: #fff;
-  border: none;
+  color: ${Color.Brand.default};
+  border: 1px solid ${Color.Brand.default};
   border-radius: 4px;
   white-space: nowrap;
   width: 64px;
-  height: 85px;
+  height: 43px;
   font-size: 1.6rem;
   align-self: flex-end;
   margin-left: 4px;
   outline: none;
+  &:hover {
+    color: #fff;
+    background-color: ${Color.Brand.default};
+  }
 `;
 
 export default Stock;

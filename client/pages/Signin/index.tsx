@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import styled from "styled-components";
 
-import SigninFormFormik from "../../src/components/Signin/SigninFormFormik";
+import SigninFormFormik from "@src/common/components/Signin/SigninFormFormik";
 
 const Signin: NextPage = () => {
   return (

@@ -5,9 +5,9 @@ import styled from "styled-components";
 import { withFormik, Form, Field, FormikProps } from "formik";
 import * as Yup from "yup";
 // Components
-import BaseLogo from "../common/Logo";
+import BaseLogo from "@src/common/components/common/Logo";
 // Actions
-import { signupAsync } from "../../redux/auth/action";
+import { signup } from "@src/redux/auth/action";
 
 type FormValues = {
   userName: string;
@@ -88,6 +88,7 @@ const InnerForm = ({ values, errors, touched }: FormikProps<FormValues>) => {
 const Wrapper = styled.div`
   width: 360px;
   border: 1px solid #dbdbdb;
+  border-radius: 8px;
   padding: 30px 30px;
 `;
 
@@ -99,7 +100,7 @@ const Logo = styled(BaseLogo)`
 const Title = styled.div`
   display: inline-block;
   font-size: 18px;
-  font-weigth: bold;
+  font-weight: bold;
   margin-top: 12px;
 `;
 
@@ -203,18 +204,18 @@ const SignupFormFormik = withFormik({
   }),
   handleSubmit: (values: FormValues, { props }: any) => {
     const { signup } = props;
-    const userData: any = {
+    const signupParams: any = {
       userName: values.userName,
       email: values.email,
       password: values.password
     };
-    signup(userData);
-    Router.push("/");
+    signup(signupParams);
+    // Router.push("/");
   }
 })(InnerForm);
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
-  return bindActionCreators({ signup: signupAsync }, dispatch);
+  return bindActionCreators({ signup }, dispatch);
 };
 
 export default connect(

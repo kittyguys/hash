@@ -57,7 +57,4 @@ const Input = styled.input`
   border-radius: 24px;
   border: 1px solid #dfe1e5;
   outline: none;
-  :focus {
-    border: 1px solid #38a1f3;
-  }
 `;

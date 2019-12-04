@@ -1,3 +1,4 @@
+import authRoutes from "./auth";
 import userRoutes from "./users";
 
 export const initRouter = server => {
@@ -6,5 +7,6 @@ export const initRouter = server => {
     return next();
   });
 
+  server.use("/api", authRoutes);
   server.use("/api", userRoutes);
 };

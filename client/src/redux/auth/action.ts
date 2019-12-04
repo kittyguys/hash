@@ -1,17 +1,17 @@
 import { AnyAction } from "redux";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import axios from "axios";
-import Cookies from "js-cookie";
+import Cookies from "js-cookie"
 
-export const SIGNUP_REQUEST = "SIGNUP_REQUEST";
-export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
-export const SIGNUP_FAIL = "SIGNUP_FAIL";
+import {signupParams} from "../../../types"
 
-export const SIGNIN_REQUEST = "SIGNIN_REQUEST";
-export const SIGNIN_SUCCESS = "SIGNIN_SUCCESS";
-export const SIGNIN_FAIL = "SIGNIN_FAIL";
-
-export const SIGNOUT = "SIGNOUT";
+export const SIGNUP_REQUEST = "auth/signup/REQUEST";
+export const SIGNUP_SUCCESS = "auth/signup/SUCCESS";
+export const SIGNUP_FAIL = "auth/signup/FAIL";
+export const SIGNIN_REQUEST = "auth/signin/REQUEST";
+export const SIGNIN_SUCCESS = "auth/signin/SUCCESS";
+export const SIGNIN_FAIL = "auth/signin/FAIL";
+export const SIGNOUT = "auth/signout/REQUEST";
 
 export const signupRequest = () => ({
   type: SIGNUP_REQUEST
@@ -42,19 +42,22 @@ export const signinFail = () => ({
   payload: { status: false }
 });
 
-export const signout = () => ({
+export const signoutRequest = () => ({
   type: SIGNOUT,
   payload: { status: false }
 });
 
-export const signupAsync = (
-  params: any
+export const signup = (
+  params: signupParams
 ): ThunkAction<void, {}, undefined, AnyAction> => {
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+  return async (
+    dispatch: ThunkDispatch<{}, {}, AnyAction>
+  ): Promise<void> => {
     dispatch(signupRequest());
     axios
-      .post("http://localhost:8080/signup", params)
+      .post("http://localhost:8080/api/auth/signup", params)
       .then(res => {
+        console.log(res)
         Cookies.set("jwt", res.data.token);
         dispatch(signupSuccess());
       })
@@ -64,7 +67,7 @@ export const signupAsync = (
   };
 };
 
-export const signinAsync = (
+export const signin = (
   params: any
 ): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {

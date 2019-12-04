@@ -1,13 +1,14 @@
 import express from "express";
 import bodyParser from "body-parser";
+import cors from "cors";
 
-import mysql from "./mysql";
+import conn from "./mysql";
 import { initRouter } from "../routes";
 
 export default class Server {
   constructor() {
     this.server = express();
-    this.server.set("port", 3000);
+    this.server.set("port", 8080);
     this.server.set("hostname", "localhost");
   }
 
@@ -25,12 +26,14 @@ export default class Server {
       })
     );
 
-    mysql.connect(function(err) {
+    this.server.use(cors());
+
+    conn.connect(function(err) {
       if (err) {
         console.error("error connecting: " + err.stack);
         return;
       }
-      console.log("connected as id " + mysql.threadId);
+      console.log("connected as id " + conn.threadId);
     });
 
     // Set up routes

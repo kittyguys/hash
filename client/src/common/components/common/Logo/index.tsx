@@ -19,7 +19,7 @@ const Logo: React.FC<Props> = ({
       centering={centering}
       onClick={() => (!!handleClick ? handleClick() : null)}
     >
-      <Text>#hash</Text>
+      <Text>#Hxsh</Text>
     </LogoWrapper>
   );
 };
@@ -32,10 +32,9 @@ const LogoWrapper = styled.div<LogoWrapperType>`
   cursor: pointer;
   text-align: ${({ centering }) => (centering ? "center" : "")};
 `;
-
 const Text = styled.span`
   font-family: "Lobster", cursive;
-  color: ${Color.Brand.default};
+  color: ${Color.Black.default};
 `;
 
 export default Logo;

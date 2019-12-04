@@ -1,13 +1,10 @@
-import NextApp, { AppContext } from "next/app";
-import { NextPageContext } from "next";
+import NextApp from "next/app";
 import { Provider } from "react-redux";
 import withRedux from "next-redux-wrapper";
 import Cookies from "js-cookie";
-import cookies from "next-cookies";
-// Redux - Store
-import { configureStore } from "../src/redux/store";
-// Normalize CSS
-import GlobalStyle from "../src/components/constants/GlobalStyle";
+// from src
+import { configureStore } from "@src/app/store";
+import GlobalStyle from "@src/common/components/constants/GlobalStyle";
 
 interface Props {
   Component: React.Component;

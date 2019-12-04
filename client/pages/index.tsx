@@ -5,40 +5,35 @@ import { IoIosSearch } from "react-icons/io";
 import cookies from "next-cookies";
 import BaseMainInputForm, {
   MainInput as BaseMainInput
-} from "../src/components/common/Form/MainInput";
-import BaseLogo from "../src/components/common/Logo";
-import Header from "../src/components/common/Header";
-import { homeInputChange } from "../src/redux/HomeInput/action";
+} from "@src/common/components/common/Form/MainInput";
+import BaseLogo from "@src/common/components/common/Logo";
+import Header from "@src/common/components/common/Header";
 import Router from "next/router";
 
-const Home: NextPage = ({ store }: any) => {
+const Home: NextPage = () => {
   const dispatch = useDispatch();
-  const homeInput = useSelector((state: any) => state.homeInput.search);
+  // const homeInput = useSelector((state: any) => state.homeInput.search);
 
-  const homeSearch = (e: any) => {
-    e.preventDefault();
-    dispatch(homeInputChange(""));
-    Router.push(`/users/${homeInput}`);
-  };
+  // const homeSearch = (e: any) => {
+  //   e.preventDefault();
+  //   dispatch(homeInputChange(""));
+  //   Router.push(`/users/${homeInput}`);
+  // };
 
-  const inputChange = (inputValue: string) => {
-    dispatch(homeInputChange(inputValue));
-  };
+  // const inputChange = (inputValue: string) => {
+  //   dispatch(homeInputChange(inputValue));
+  // };
 
   return (
     <>
       <Header page={"home"} />
       <MainLayout>
         <Logo centering={true} />
-        <MainInputForm handleSubmit={e => homeSearch(e)}>
+        <MainInputForm handleSubmit={e => {}}>
           <MainInputLabel htmlFor="mainInput">
-            <IoIosSearch size="20px" color="#9AA0A6" />
+            <SearchIcon size="20px" color="#9AA0A6" />
           </MainInputLabel>
-          <MainInput
-            id="mainInput"
-            inputValue={homeInput}
-            handleChange={inputValue => inputChange(inputValue)}
-          />
+          <MainInput id="mainInput" inputValue={""} handleChange={v => {}} />
         </MainInputForm>
       </MainLayout>
     </>
@@ -57,26 +52,19 @@ Home.getInitialProps = async (ctx: any) => {
   return { store: ctx.store };
 };
 
-const LoadingWrapper = styled.div`
-  height: 100vh;
-  position: relative;
-`;
-
-const LoadingBox = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-
 const MainLayout = styled.div`
   width: 92%;
   max-width: 582px;
-  margin: 20% auto 0;
+  margin: 0 auto;
+  padding-top: 84px;
 `;
 
 const Logo = styled(BaseLogo)`
-  font-size: 48px;
+  font-size: 56px;
+`;
+
+const SearchIcon = styled(IoIosSearch)`
+  cursor: pointer;
 `;
 
 const MainInputForm = styled(BaseMainInputForm)`

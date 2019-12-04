@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import styled from "styled-components";
-import BaseAvatar from "../src/components/common/Avatar";
-import BaseUserName from "../src/components/common/UserName";
+import BaseAvatar from "@src/common/components/common/Avatar";
+import BaseUserName from "@src/common/components/common/UserName";
 
 const User: NextPage = props => {
   return <></>;

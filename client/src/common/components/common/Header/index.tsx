@@ -16,7 +16,7 @@ import BaseNormalButton from "../Button/NormalButton";
 import BaseUserName from "../UserName";
 import { useSelector, useDispatch } from "react-redux";
 import Color from "../../constants/Color";
-import { signout } from "../../../redux/auth/action";
+import { signoutRequest } from "@src/redux/auth/action";
 
 type Props = {
   page?: string;
@@ -33,7 +33,7 @@ interface NextAppContext extends AppContext {
 
 const Header: NextPage<Props> = ({ page }) => {
   const dispatch = useDispatch();
-  const myData = useSelector((state: any) => state.myData);
+  // const myData = useSelector((state: any) => state.myData);
   const isSignin = useSelector((state: any) => state.auth.isSignin);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -45,7 +45,7 @@ const Header: NextPage<Props> = ({ page }) => {
   };
   const signOut = () => {
     Cookies.remove("jwt");
-    dispatch(signout());
+    dispatch(signoutRequest());
     Router.push("/");
   };
 
@@ -54,9 +54,8 @@ const Header: NextPage<Props> = ({ page }) => {
   const headerModal = (
     <ModalWrapper>
       <ModalLayout1>
-        <Avatar1 imageSrc={myData.avatar} />
         <NameLayout>
-          <UserName userName={myData.userName} />
+          <UserName userName={"test_user_1"} />
         </NameLayout>
       </ModalLayout1>
       <ModalLayout2>

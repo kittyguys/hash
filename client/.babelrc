@@ -9,7 +9,8 @@
           "."
         ],
         "alias": {
-          "@src": "./src"
+          "@src": "./src",
+          "@types": "./types"
         }
       }
     ]

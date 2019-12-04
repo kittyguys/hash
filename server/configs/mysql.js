@@ -1,7 +1,10 @@
-import mysql from "mysql";
+import mysql from "mysql2";
 
-export default mysql.createConnection({
+const connection =  mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "password"
+  password: "password",
+  database: 'hashdb'
 });
+
+export default connection;
