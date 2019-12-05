@@ -44,10 +44,7 @@ export default class MyDocument extends Document {
               content="width=device-width, initial-scale=1.0"
             />
             <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
-            <link
-              href="https://fonts.googleapis.com/css?family=Lobster&display=swap"
-              rel="stylesheet"
-            />
+            <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet"/>
             <link
               rel="stylesheet"
               href="//cdn.quilljs.com/1.2.6/quill.snow.css"
