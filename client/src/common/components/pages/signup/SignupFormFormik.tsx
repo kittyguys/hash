@@ -205,7 +205,7 @@ const SignupFormFormik = withFormik({
   handleSubmit: (values: FormValues, { props }: any) => {
     const { signup } = props;
     const signupParams: any = {
-      userName: values.userName,
+      user_name: values.userName,
       email: values.email,
       password: values.password
     };

@@ -9,4 +9,12 @@ export const initRouter = server => {
 
   server.use("/api", authRoutes);
   server.use("/api", userRoutes);
+  // error handling
+  server.use((err, req, res, next) => {
+    const { statusCode, message } = err;
+    res.json({
+      error: err.message
+    });
+  });
 };
+  
