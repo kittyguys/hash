@@ -1,53 +1,46 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
+import logger from "../middlewares/logger"
 
-import conn from "./mysql";
+import conn from "../configs/mysql";
 import { initRouter } from "../routes";
 
 export default class Server {
   constructor() {
     this.server = express();
-    this.server.set("port", 8080);
-    this.server.set("hostname", "localhost");
   }
 
   init() {
-    // set all the server things
-    // this.server.set("env", config.env);
-    // this.server.set("port", config.port);
-    // this.server.set("hostname", config.hostname);
+    this.server.set("host", process.env.HOST);
+    this.server.set("port", process.env.PORT);
 
-    // add middleware to parse the json
     this.server.use(bodyParser.json());
     this.server.use(
       bodyParser.urlencoded({
         extended: false
       })
     );
-
     this.server.use(cors());
 
     conn.connect(function(err) {
       if (err) {
-        console.error("error connecting: " + err.stack);
+        logger.error("error connecting: " + err.stack);
         return;
       }
-      console.log("connected as id " + conn.threadId);
+      logger.info("connected as id " + conn.threadId);
     });
 
-    // Set up routes
+    // Initialize routes
     initRouter(this.server);
   }
 
   start() {
-    const hostname = this.server.get("hostname");
+    const host = this.server.get("host");
     const port = this.server.get("port");
 
     this.server.listen(port, function() {
-      console.log(
-        "Express server listening on - http://" + hostname + ":" + port
-      );
+      logger.info("Express server listening on - http://" + host + ":" + port);
     });
   }
 }

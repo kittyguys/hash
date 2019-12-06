@@ -13,10 +13,8 @@ export const signup = (req, res, next) => {
         if (err) {
           console.log("error: ", err);
         } else {
-          const token = jwt.sign(query, "fklesjrflksdfuigjkhtruijkghrt");
-          console.log(token);
-          console.log(jwt.verify(token, "fklesjrflksdfuigjkhtruijkghrt"))
-          return res.json({ data });
+          const token = jwt.sign(query, process.env.JWT_SECRET_KEY);
+          return res.json({ token });
         }
       });
     });
