@@ -1,38 +1,49 @@
-import * as React from "react";
-import { Fragment, useState } from "react";
-import { useSelector } from "react-redux";
+import dynamic from "next/dynamic";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import {
   DragDropContext,
   Droppable,
   DropResult,
-  ResponderProvided
+  DraggableLocation,
+  resetServerContext
 } from "react-beautiful-dnd";
-import Color from "../../src/components/constants/Color";
+
 import BaseMainInputForm, {
-  MainInput as BaseMainInput
-} from "../../src/components/common/Form/MainInput";
-import Header from "../../src/components/common/Header";
-import Loading from "../../src/components/common/Loading";
-import StockList from "../../src/components/common/StockList";
+  MainInput
+} from "@src/common/components/common/Form/MainInput";
+import Header from "@src/common/components/common/Header";
+import Color from "@src/common/components/constants/Color";
+import StockList from "@src/common/components/common/StockList";
+
+const Editor = dynamic(
+  () => import("@src/common/components/pages/stock/Editor"),
+  {
+    ssr: false
+  }
+);
 
 type Props = {};
 
+type Stock = { id: string; content: string };
+
 // TODO 型定義を types ファイルにまとめたい
-type Stocks = { id: string; content: string }[];
+type StockLists = {
+  [stocks: string]: Stock[];
+};
 
 // TODO Redux データの配列を map する予定
-const initial = Array.from({ length: 10 }, (v, k) => k).map(k => {
-  const custom = {
+const initialStockLists: StockLists = {
+  stocks: Array.from({ length: 10 }, (v, k) => k).map(k => ({
     id: `id-${k}`,
     content: `Stock ${k}`
-  };
-
-  return custom;
-});
+  })),
+  groupedStocks: []
+};
 
 type Reorder = (
-  list: Stocks,
+  list: Stock[],
   startIndex: number,
   endIndex: number
 ) => {
@@ -48,93 +59,201 @@ const reorder: Reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-type OnDragEnd = (result: DropResult, provided: ResponderProvided) => void;
+/**
+ * Moves an item from one list to another list.
+ */
+const move = (
+  source: Stock[],
+  destination: Stock[],
+  droppableSource: DraggableLocation,
+  droppableDestination: DraggableLocation
+) => {
+  const sourceClone = Array.from(source);
+  const destClone = Array.from(destination);
+  const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+  destClone.splice(droppableDestination.index, 0, removed);
+
+  const result: { [index: string]: Stock[] } = {};
+  result[droppableSource.droppableId] = sourceClone;
+  result[droppableDestination.droppableId] = destClone;
+
+  return result;
+};
 
 const Stock: React.FC<Props> = ({}) => {
+  // SSR の場合にこの関数を使用する必要がある
+  resetServerContext();
+
   const myData = useSelector((state: any) => state.myData);
-  const [stocks, setStocks] = useState(initial);
+  const [stockLists, setStockLists] = useState(initialStockLists);
+  const dispatch = useDispatch();
 
-  const onDragEnd: OnDragEnd = result => {
-    if (!result.destination) {
-      return;
-    }
-
-    if (result.destination.index === result.source.index) {
-      return;
-    }
-
-    const stocksArr = reorder(
-      stocks,
-      result.source.index,
-      result.destination.index
-    );
-
-    setStocks(stocksArr);
+  /**
+   * A semi-generic way to handle multiple lists. Matches
+   * the IDs of the droppable container to the names of the
+   * source arrays stored in the state.
+   */
+  const id2List: {
+    [index: string]: string;
+  } = {
+    droppable: "stocks",
+    droppable2: "groupedStocks"
   };
 
+  const getList = (id: string) => stockLists[id2List[id]];
+
+  const onDragEnd = (result: DropResult) => {
+    const { source, destination } = result;
+
+    // dropped outside the list
+    if (!destination) {
+      return;
+    }
+
+    if (source.droppableId === destination.droppableId) {
+      const stocks = reorder(
+        getList(source.droppableId),
+        source.index,
+        destination.index
+      );
+      const state: { [index: string]: Stock[] } = {};
+      state[id2List[source.droppableId]] = stocks;
+      setStockLists({
+        ...stockLists,
+        ...state
+      });
+    } else {
+      const result = move(
+        getList(source.droppableId),
+        getList(destination.droppableId),
+        source,
+        destination
+      );
+
+      setStockLists({
+        stocks: result.droppable,
+        groupedStocks: result.droppable2
+      });
+    }
+  };
+
+  useEffect(() => {
+    dispatch({ type: "SET_STOCK_LIST", payload: { stocks: stockLists } });
+  }, [stockLists]);
+
   return (
-    <Fragment>
-      <>
-        <Header page="common" />
-        <StockWrap>
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="list">
+    <>
+      <Header page="common" />
+      <StockWrap>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <GroupedContainer>
+            <GroupeName>グループ名が入ります</GroupeName>
+            <Droppable droppableId="droppable">
               {provided => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
-                  <StockList stocks={stocks} />
+                  <StockList stocks={stockLists.stocks} grouped />
                   {provided.placeholder}
                 </div>
               )}
             </Droppable>
-          </DragDropContext>
-        </StockWrap>
+          </GroupedContainer>
 
-        <MainInputForm handleSubmit={e => e.preventDefault}>
-          <TeatArea />
-          <SubmitButton>送信</SubmitButton>
-        </MainInputForm>
-      </>
-    </Fragment>
+          <Container>
+            <Title>Your Stocks</Title>
+            <Droppable droppableId="droppable2">
+              {provided => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  <StockList stocks={stockLists.groupedStocks} />
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </Container>
+        </DragDropContext>
+      </StockWrap>
+
+      <MainInputForm handleSubmit={e => e.preventDefault}>
+        <Editor />
+        <SubmitButtonWrap>
+          <SubmitButton
+            onClick={e => {
+              e.preventDefault();
+            }}
+          >
+            送信
+          </SubmitButton>
+        </SubmitButtonWrap>
+      </MainInputForm>
+    </>
   );
 };
 
 const StockWrap = styled.div`
-  max-width: 720px;
-  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  max-width: 1024px;
+`;
+
+const Container = styled.div`
+  width: calc(100% - 256px);
+  padding: 24px 0;
+  background-color: ${Color.BlueWhite};
+  overflow: visible;
+  > div {
+    height: calc(100vh - 272px);
+    padding: 0 24px;
+    margin-top: 6px;
+    overflow: auto;
+  }
+`;
+
+const GroupeName = styled.h2`
+  color: ${Color.White};
+  font-weight: bold;
+  font-size: 2rem;
+  margin: 0 24px;
+`;
+
+const GroupedContainer = styled(Container)`
+  width: 256px;
+  background-color: ${Color.Brand[500]};
+`;
+
+const Title = styled(GroupeName)`
+  color: ${Color.Brand.default};
 `;
 
 const MainInputForm = styled(BaseMainInputForm)`
   display: flex;
-  width: calc(100% - 40px);
-  height: 3em;
+  width: calc(100% - 48px);
+  /* height: 3em; */
   font-size: 1.4rem;
-  padding: 20px 20px;
   position: fixed;
   bottom: 0;
   box-sizing: content-box;
+  padding: 0 24px 24px;
 `;
 
-const TeatArea = styled.textarea`
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: #fff;
-  border: 1px solid ${Color.Black};
-  box-shadow: none;
-  border-radius: 4px;
-  resize: none;
-  padding: 8px 12px;
-  outline: none;
+const SubmitButtonWrap = styled.div`
+  display: flex;
 `;
 
 const SubmitButton = styled.button`
-  background-color: ${Color.Brand};
-  color: #fff;
-  border: none;
+  color: ${Color.Brand.default};
+  border: 1px solid ${Color.Brand.default};
   border-radius: 4px;
-  margin-left: 4px;
   white-space: nowrap;
-  padding: 0 24px;
+  width: 64px;
+  height: 43px;
+  font-size: 1.6rem;
+  align-self: flex-end;
+  margin-left: 4px;
+  outline: none;
+  &:hover {
+    color: #fff;
+    background-color: ${Color.Brand.default};
+  }
 `;
 
 export default Stock;

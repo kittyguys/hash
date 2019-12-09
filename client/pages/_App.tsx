@@ -1,13 +1,14 @@
-import NextApp, { AppContext } from "next/app";
-import { NextPageContext } from "next";
+import NextApp from "next/app";
 import { Provider } from "react-redux";
 import withRedux from "next-redux-wrapper";
 import Cookies from "js-cookie";
-import cookies from "next-cookies";
-// Redux - Store
-import { configureStore } from "../src/redux/store";
-// Normalize CSS
-import GlobalStyle from "../src/components/constants/GlobalStyle";
+
+import { configureStore } from "@src/app/store";
+import GlobalStyle from "@src/common/components/constants/GlobalStyle";
+// utils
+import jwt_decode from "jwt-decode";
+// actions
+import { updateProfileSuccess } from "@src/redux/profile/action";
 
 interface Props {
   Component: React.Component;
@@ -19,8 +20,10 @@ class MyApp extends NextApp<Props> {
   componentDidMount() {
     const { store } = this.props;
     const isSignin = store.getState().auth.isSignin;
-    if (isSignin || Cookies.get("jwt")) {
-      store.dispatch({ type: "SET_SIGNIN_STATUS", payload: { status: true } });
+    const token = Cookies.get("jwt");
+    if (isSignin || token) {
+      const profile = jwt_decode(token);
+      store.dispatch(updateProfileSuccess(profile));
     }
   }
 

@@ -19,7 +19,16 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "baseUrl": ".",
+    "paths": {
+      "@src*": [
+        "./src*"
+      ],
+      "@types*": [
+        "./types*"
+      ],
+    }
   },
   "exclude": [
     "node_modules"

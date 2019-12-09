@@ -1,3 +1,5 @@
+import produce from "immer";
+
 type State = {
   isSignin: boolean | string;
 };
@@ -11,60 +13,34 @@ const initialState: any = {
   isSignin: false
 };
 
-const authReducer = (state: State = initialState, action: Action) => {
+const auth = produce((state = initialState, action: Action) => {
   switch (action.type) {
-    case "SET_SIGNIN_STATUS": {
-      const { status } = action.payload;
-      return {
-        ...state,
-        isSignin: status
-      };
+    case "auth/signup/SUCCESS": {
+      state.isSignin = true;
+      return state;
     }
-    case "SIGNUP_SUCCESS": {
-      const { status } = action.payload;
-      return {
-        ...state,
-        isSignin: status
-      };
+    case "auth/signup/FAIL": {
+      state.isSignin = false;
+      return state;
     }
-    case "SIGNUP_FAIL": {
-      const { status } = action.payload;
-      return {
-        ...state,
-        isSignin: status
-      };
+    case "auth/signin/REQUEST": {
+      return state;
     }
-    case "SIGNIN_REQUEST": {
-      const { status } = action.payload;
-      return {
-        ...state,
-        isSignin: status
-      };
+    case "auth/signin/SUCCESS": {
+      state.isSignin = true;
+      return state;
     }
-    case "SIGNIN_SUCCESS": {
-      const { status } = action.payload;
-      return {
-        ...state,
-        isSignin: status
-      };
+    case "auth/signin/FAIL": {
+      state.isSignin = false;
+      return state;
     }
-    case "SIGNIN_FAIL": {
-      const { status } = action.payload;
-      return {
-        ...state,
-        isSignin: status
-      };
-    }
-    case "SIGNOUT": {
-      const { status } = action.payload;
-      return {
-        ...state,
-        isSignin: status
-      };
+    case "auth/signout/REQUEST": {
+      state.isSignin = false;
+      return state;
     }
     default:
       return state;
   }
-};
+});
 
-export default authReducer;
+export default auth;

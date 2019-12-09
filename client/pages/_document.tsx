@@ -1,4 +1,3 @@
-import * as React from "react";
 import Document, {
   DocumentContext,
   Html,
@@ -6,6 +5,7 @@ import Document, {
   Main,
   NextScript
 } from "next/document";
+import * as React from "react";
 import { ServerStyleSheet } from "styled-components";
 
 export default class MyDocument extends Document {
@@ -44,9 +44,10 @@ export default class MyDocument extends Document {
               content="width=device-width, initial-scale=1.0"
             />
             <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
+            <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet"/>
             <link
-              href="https://fonts.googleapis.com/css?family=Lobster&display=swap"
               rel="stylesheet"
+              href="//cdn.quilljs.com/1.2.6/quill.snow.css"
             />
           </Head>
           <body>

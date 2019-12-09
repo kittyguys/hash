@@ -3,23 +3,26 @@ import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-export const SIGNUP_REQUEST = "SIGNUP_REQUEST";
-export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
-export const SIGNUP_FAIL = "SIGNUP_FAIL";
+import jwt_decode from "jwt-decode";
 
-export const SIGNIN_REQUEST = "SIGNIN_REQUEST";
-export const SIGNIN_SUCCESS = "SIGNIN_SUCCESS";
-export const SIGNIN_FAIL = "SIGNIN_FAIL";
+import { signupParams } from "../../../types";
 
-export const SIGNOUT = "SIGNOUT";
+import { updateProfileSuccess } from "@src/redux/profile/action";
+
+export const SIGNUP = "auth/signup/REQUEST";
+export const SIGNUP_SUCCESS = "auth/signup/SUCCESS";
+export const SIGNUP_FAIL = "auth/signup/FAIL";
+export const SIGNIN = "auth/signin/REQUEST";
+export const SIGNIN_SUCCESS = "auth/signin/SUCCESS";
+export const SIGNIN_FAIL = "auth/signin/FAIL";
+export const SIGNOUT = "auth/signout/REQUEST";
 
 export const signupRequest = () => ({
-  type: SIGNUP_REQUEST
+  type: SIGNUP
 });
 
 export const signupSuccess = () => ({
-  type: SIGNUP_SUCCESS,
-  payload: { status: true }
+  type: SIGNUP_SUCCESS
 });
 
 export const signupFail = () => ({
@@ -28,52 +31,52 @@ export const signupFail = () => ({
 });
 
 export const signinRequest = () => ({
-  type: SIGNIN_REQUEST,
-  payload: { status: "busy" }
+  type: SIGNIN
 });
 
 export const signinSuccess = () => ({
-  type: SIGNIN_SUCCESS,
-  payload: { status: true }
+  type: SIGNIN_SUCCESS
 });
 
 export const signinFail = () => ({
-  type: SIGNIN_FAIL,
-  payload: { status: false }
+  type: SIGNIN_FAIL
 });
 
 export const signout = () => ({
-  type: SIGNOUT,
-  payload: { status: false }
+  type: SIGNOUT
 });
 
-export const signupAsync = (
-  params: any
+export const signup = (
+  params: signupParams
 ): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     dispatch(signupRequest());
     axios
-      .post("http://localhost:8080/signup", params)
+      .post("http://localhost:8080/api/auth/signup", params)
       .then(res => {
+        const profile = jwt_decode(res.data.token);
         Cookies.set("jwt", res.data.token);
         dispatch(signupSuccess());
       })
       .catch(err => {
+        console.log(err);
         dispatch(signupFail());
       });
   };
 };
 
-export const signinAsync = (
+export const signin = (
   params: any
 ): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     dispatch(signinRequest());
     axios
-      .post("http://localhost:8080/signin", params)
+      .post("http://localhost:8080/api/auth/signin", params)
       .then(res => {
+        const profile = jwt_decode(res.data.token);
         Cookies.set("jwt", res.data.token);
         dispatch(signinSuccess());
+        dispatch(updateProfileSuccess(profile));
       })
       .catch(err => {
         dispatch(signinFail());

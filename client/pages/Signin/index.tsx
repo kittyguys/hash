@@ -1,9 +1,20 @@
 import { NextPage } from "next";
+import Router from "next/router";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 
-import SigninFormFormik from "../../src/components/Signin/SigninFormFormik";
+import SigninFormFormik from "@src/common/components/pages/signin/SigninFormFormik";
 
 const Signin: NextPage = () => {
+  const isSignin = useSelector((state: any) => state.auth.isSignin);
+
+  useEffect(() => {
+    if (isSignin) {
+      Router.push("/");
+    }
+  }, [isSignin]);
+
   return (
     <Layout>
       <SigninFormFormik />
