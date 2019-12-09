@@ -1,24 +1,20 @@
-export const MYDATA_CHANGE_SUCCESS = "MYDATA_CHANGE_SUCCESS";
-export const MYDATA_CHANGE_FAILED = "MYDATA_CHANGE_FAILED";
-export const MYDATA_CHANGE_START = "MYDATA_CHANGE_START";
-export const MYDATA_CHANGE_TAGS = "MYDATA_CHANGE_TAGS";
+export const UPDATE_PROFILE_REQUEST = "profile/update/REQUEST";
+export const UPDATE_PROFILE_SUCCESS = "profile/update/SUCCESS";
+export const UPDATE_PROFILE_FAIL = "profile/update/FAIL";
 
-export const myDataChangeSuccess = (myData: any) => ({
-  type: MYDATA_CHANGE_SUCCESS,
-  payload: myData
+export const updateProfileRequest = () => ({
+  type: UPDATE_PROFILE_REQUEST
 });
 
-export const myDataChangeFailed = () => ({
-  type: MYDATA_CHANGE_FAILED
-});
+export const updateProfileSuccess = (data: any) => {
+  const profile = {
+    userName: data.user_name,
+    displayName: data.display_name,
+    email: data.email
+  };
+  return { type: UPDATE_PROFILE_SUCCESS, payload: { profile } };
+};
 
-export const myDataChangeStart = () => ({
-  type: MYDATA_CHANGE_START
-});
-
-export const myDataChangeTags = ({ tags }: any) => ({
-  type: MYDATA_CHANGE_TAGS,
-  payload: {
-    tags
-  }
+export const updateProfileFail = () => ({
+  type: UPDATE_PROFILE_FAIL
 });

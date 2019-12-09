@@ -9,6 +9,11 @@ import BaseMainInputForm, {
 import BaseLogo from "@src/common/components/common/Logo";
 import Header from "@src/common/components/common/Header";
 import Router from "next/router";
+// utils
+import jwt_decode from "jwt-decode";
+// actions
+import { signinSuccess } from "@src/redux/auth/action";
+import { updateProfileSuccess } from "@src/redux/profile/action";
 
 const Home: NextPage = () => {
   const dispatch = useDispatch();
@@ -44,10 +49,9 @@ Home.getInitialProps = async (ctx: any) => {
   const allCookies = cookies(ctx);
   const token = allCookies.jwt;
   if (typeof token === "string") {
-    ctx.store.dispatch({
-      type: "SET_SIGNIN_STATUS",
-      payload: { status: true }
-    });
+    const profile = jwt_decode(token);
+    ctx.store.dispatch(signinSuccess());
+    ctx.store.dispatch(updateProfileSuccess(profile));
   }
   return { store: ctx.store };
 };
@@ -94,6 +98,10 @@ const MainInput = styled(BaseMainInput)`
   border-radius: 24px;
   z-index: 3;
   :hover {
+    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
+    border-color: rgba(223, 225, 229, 0);
+  }
+  :focus {
     box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
     border-color: rgba(223, 225, 229, 0);
   }

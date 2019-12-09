@@ -16,7 +16,7 @@ import BaseNormalButton from "../Button/NormalButton";
 import BaseUserName from "../UserName";
 import { useSelector, useDispatch } from "react-redux";
 import Color from "../../constants/Color";
-import { signoutRequest } from "@src/redux/auth/action";
+import { signout } from "@src/redux/auth/action";
 
 type Props = {
   page?: string;
@@ -45,7 +45,7 @@ const Header: NextPage<Props> = ({ page }) => {
   };
   const signOut = () => {
     Cookies.remove("jwt");
-    dispatch(signoutRequest());
+    dispatch(signout());
     Router.push("/");
   };
 

@@ -1,4 +1,3 @@
-import Router from "next/router";
 import { bindActionCreators, Dispatch } from "redux";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -6,7 +5,7 @@ import { withFormik, Form, Field, FormikProps } from "formik";
 // Components
 import BaseLogo from "@src/common/components/common/Logo";
 // Actions
-import { signinAsync } from "@src/redux/auth/action";
+import { signin } from "@src/redux/auth/action";
 
 type FormValues = {
   signinID: string;
@@ -63,7 +62,7 @@ const Logo = styled(BaseLogo)`
 const Title = styled.div`
   display: inline-block;
   font-size: 18px;
-  font-weigth: bold;
+  font-weight: bold;
   margin-top: 12px;
 `;
 
@@ -154,12 +153,11 @@ const SigninFormFormik = withFormik({
       password: values.password
     };
     signin(signinData);
-    Router.push("/");
   }
 })(InnerForm);
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
-  return bindActionCreators({ signin: signinAsync }, dispatch);
+  return bindActionCreators({ signin: signin }, dispatch);
 };
 
 export default connect(
