@@ -12,14 +12,13 @@ const Avatar: React.FC<Props> = ({ imageSrc, handleClick, className }) => {
     <Image
       className={className}
       imageSrc={imageSrc}
-      onClick={() => handleClick()}
     />
   );
 };
 
 const Image = styled.div<{ imageSrc?: string }>`
   background: ${({ imageSrc }) =>
-      imageSrc ? `url(${imageSrc})` : `url(/static/assets/images/hash.jpg)`}
+    imageSrc ? `url(${imageSrc})` : `url(/static/assets/images/hash.jpg)`}
     center/cover no-repeat;
   border-radius: 50%;
   overflow: hidden;

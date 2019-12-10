@@ -1,10 +1,9 @@
+import Router from "next/router"
 import { bindActionCreators, Dispatch } from "redux";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { withFormik, Form, Field, FormikProps } from "formik";
-// Components	
 import BaseLogo from "@src/common/components/shared/Logo";
-// Actions	
 import { signin } from "@src/features/auth/operations";
 
 type FormValues = {
@@ -41,7 +40,7 @@ const InnerForm = ({ values }: FormikProps<FormValues>) => {
           <Span>or</Span>
         </Border>
         <FormBlock>
-          <SubmitButton type="submit" value="アカウント作成はこちら" />
+          <Button onClick={() => Router.push("/signup")}>アカウント作成はこちら</Button>
         </FormBlock>
       </Form>
     </Wrapper>
@@ -50,8 +49,9 @@ const InnerForm = ({ values }: FormikProps<FormValues>) => {
 
 const Wrapper = styled.div`	
   width: 360px;	
-  border: 1px solid #dbdbdb;	
-  padding: 30px 30px;	
+  border: 1px solid #dbdbdb;
+  border-radius: 10px;	
+  padding: 32px 32px;	
 `;
 
 const Logo = styled(BaseLogo)`	
@@ -86,6 +86,23 @@ const SubmitButton = styled.input`
     opacity: 0.7;	
     cursor: pointer;	
   }	
+`;
+
+const Button = styled.button`
+  display: block;
+  background-color: #4285f4;
+  color: #fff;
+  width: 100%;
+  height: 38px;
+  margin: 12px auto 0;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  font-size: 1.6rem;
+  &:hover {
+      opacity: 0.7;
+    cursor: pointer;
+  }
 `;
 
 const InputStyle = styled(Field)`	

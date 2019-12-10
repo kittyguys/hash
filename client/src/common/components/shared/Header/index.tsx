@@ -15,11 +15,12 @@ import BaseLogo from "../Logo";
 import BaseNormalButton from "../Button/NormalButton";
 import BaseUserName from "../UserName";
 import { useSelector, useDispatch } from "react-redux";
+import UserModal from "@src/common/components/shared/Modals"
 import { signout } from "@src/features//auth/actions";
-import Color from "@src/common/constants/Color";
+import Color from "@src/common/constants/color";
 
 type Props = {
-  page?: string;
+  route?: string;
 };
 
 interface NextContext extends NextPageContext {
@@ -31,7 +32,7 @@ interface NextAppContext extends AppContext {
   ctx: NextContext;
 }
 
-const Header: NextPage<Props> = ({ page }) => {
+const Header: NextPage<Props> = ({ route }) => {
   const dispatch = useDispatch();
   // const myData = useSelector((state: any) => state.myData);
   const isSignin = useSelector((state: any) => state.auth.isSignin);
@@ -48,23 +49,17 @@ const Header: NextPage<Props> = ({ page }) => {
     dispatch(signout());
     Router.push("/");
   };
+  const hand = () => {
+    console.log(isModalOpen)
+    if (isModalOpen) {
+      setIsModalOpen(false)
+    } else {
+      setIsModalOpen(true)
+    }
 
+    console.log(isModalOpen)
+  };
   let linkContents: JSX.Element;
-
-  const headerModal = (
-    <ModalWrapper>
-      <ModalLayout1>
-        <NameLayout>
-          <UserName userName={"test_user_1"} />
-        </NameLayout>
-      </ModalLayout1>
-      <ModalLayout2>
-        <NormalButton1 content="マイページ" handleClick={() => toMypage()} />
-        <NormalButton2 content="Sign out" handleClick={() => signOut()} />
-      </ModalLayout2>
-      <CloseButton onClick={() => setIsModalOpen(false)}>×</CloseButton>
-    </ModalWrapper>
-  );
 
   if (isSignin === true) {
     linkContents = (
@@ -72,29 +67,26 @@ const Header: NextPage<Props> = ({ page }) => {
         <Link key="stock" href="/stock" as="stock">
           <NormalLink>Stock</NormalLink>
         </Link>
+        <span onClick={() => setIsModalOpen(!isModalOpen)}><Avatar1 /></span>
         <StyledLink onClick={() => signOut()}>ログアウト</StyledLink>
       </>
     );
   } else {
-    if (isSignin === "busy") {
-      linkContents = <></>;
-    } else {
-      linkContents = (
-        <NotLoginLink>
-          <Link key="signup" href="/signup" as="signup">
-            <NormalLink>アカウントを作る</NormalLink>
-          </Link>
-          <Link key="signin" href="/signin" as="signin">
-            <StyledLink>ログイン</StyledLink>
-          </Link>
-        </NotLoginLink>
-      );
-    }
+    linkContents = (
+      <NotLoginLink>
+        <Link key="signup" href="/signup" as="signup">
+          <NormalLink>アカウントを作る</NormalLink>
+        </Link>
+        <Link key="signin" href="/signin" as="signin">
+          <StyledLink>ログイン</StyledLink>
+        </Link>
+      </NotLoginLink>
+    );
   }
 
   return (
-    <HeaderWrapper page={page}>
-      {page === "common" && (
+    <HeaderWrapper route={route}>
+      {route !== "/" && (
         <>
           <Logo key="logo" handleClick={() => toHome()} />
           <MainInputForm>
@@ -107,13 +99,16 @@ const Header: NextPage<Props> = ({ page }) => {
       )}
       <LinkWrapper>
         {linkContents}
-        {isModalOpen && headerModal}
       </LinkWrapper>
+      {isModalOpen && (
+        <UserModal />
+      )
+      }
     </HeaderWrapper>
   );
 };
 
-const HeaderWrapper = styled.div<{ page: string }>`
+const HeaderWrapper = styled.div<{ route: string }>`
   display: flex;
   align-items: center;
   width: 100%;
@@ -123,8 +118,8 @@ const HeaderWrapper = styled.div<{ page: string }>`
   left: 0;
   z-index: 9999;
   background-color: ${Color.White};
-  box-shadow: ${({ page }) =>
-    !(page === "common") ? "none" : "0 1px 2px rgba(0, 0, 0, 0.16)"};
+  box-shadow: ${({ route }) =>
+    !(route === "common") ? "none" : "0 1px 2px rgba(0, 0, 0, 0.16)"};
 `;
 
 const MainInputForm = styled(BaseMainInputForm)`
@@ -224,8 +219,8 @@ const ModalLayout1 = styled.div`
 `;
 
 const Avatar1 = styled(BaseAvatar)`
-  width: 50px;
-  height: 50px;
+  width: 32px;
+  height: 32px;
   @media (max-width: 768px) {
     width: 40px;
     height: 40px;

@@ -1,3 +1,4 @@
+import Router from "next/router";
 import { AnyAction } from "redux";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import axios from "axios";
@@ -18,10 +19,12 @@ export const signup = (
         const profile = jwt_decode(res.data.token);
         Cookies.set("jwt", res.data.token);
         dispatch(signupSuccess());
+        Router.push("/")
       })
       .catch(err => {
         console.log(err);
         dispatch(signupFail());
+        Router.push("/")
       });
   };
 };

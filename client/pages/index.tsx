@@ -29,7 +29,7 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Header page={"home"} />
+      <Header route={"/"} />
       <MainLayout>
         <Logo centering={true} />
         <MainInputForm handleSubmit={e => { }}>
