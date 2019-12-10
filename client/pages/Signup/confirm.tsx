@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 
-import SignupFormConfirm from "../../src/components/Signup/SignupFormConfirm";
+import SignupFormConfirm from "@src/common/components/pages/signup/comfirm";
 
 const SignupConfirm = () => {
   const profile = useSelector((state: any) => state.signup.profile);

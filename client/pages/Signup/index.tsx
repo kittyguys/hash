@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import styled from "styled-components";
 // Components
-import SignupFormFormik from "@src/common/components/pages/signup/SignupFormFormik";
+import SignupFormFormik from "@src/common/components/pages/signup";
 
 const Signup: NextPage = () => {
   return (
