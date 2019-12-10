@@ -5,7 +5,7 @@ import { withFormik, Form, Field, FormikProps } from "formik";
 // Components	
 import BaseLogo from "@src/common/components/common/Logo";
 // Actions	
-import { signin } from "@src/redux/auth/action";
+import { signin } from "@src/redux/auth";
 
 type FormValues = {
   signinID: string;

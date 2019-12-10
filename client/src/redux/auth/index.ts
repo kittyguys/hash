@@ -2,12 +2,11 @@ import { AnyAction } from "redux";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import axios from "axios";
 import Cookies from "js-cookie";
-
+import produce from "immer";
 import jwt_decode from "jwt-decode";
-
-import { signupParams } from "../../../types";
-
+import { signupParams, AuthAction } from "../../../types";
 import { updateProfileSuccess } from "@src/redux/profile/action";
+import { InitialAuthState } from "@src/common/components/constants/InitialState"
 
 export const SIGNUP = "auth/signup/REQUEST";
 export const SIGNUP_SUCCESS = "auth/signup/SUCCESS";
@@ -83,3 +82,35 @@ export const signin = (
       });
   };
 };
+
+const auth = produce((state = InitialAuthState, action: AuthAction) => {
+  switch (action.type) {
+    case "auth/signup/SUCCESS": {
+      state.isSignin = true;
+      return state;
+    }
+    case "auth/signup/FAIL": {
+      state.isSignin = false;
+      return state;
+    }
+    case "auth/signin/REQUEST": {
+      return state;
+    }
+    case "auth/signin/SUCCESS": {
+      state.isSignin = true;
+      return state;
+    }
+    case "auth/signin/FAIL": {
+      state.isSignin = false;
+      return state;
+    }
+    case "auth/signout/REQUEST": {
+      state.isSignin = false;
+      return state;
+    }
+    default:
+      return state;
+  }
+});
+
+export default auth;

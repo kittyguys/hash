@@ -7,7 +7,7 @@ import * as Yup from "yup";
 // Components	
 import BaseLogo from "@src/common/components/common/Logo";
 // Actions	
-import { signup } from "@src/redux/auth/action";
+import { signup } from "@src/redux/auth";
 
 type FormValues = {
   userName: string;
