@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
-import Color from "../../constants/Color";
 import { Draggable } from "react-beautiful-dnd";
+import Color from "@src/common/constants/color";
 
 type Props = {
   className?: string;
@@ -20,28 +20,28 @@ const StockCassette: React.FC<Props> = ({
   grouped,
   index
 }: Props) => (
-  <Draggable draggableId={stock.id} index={index}>
-    {(provided, snapshot) => {
-      return (
-        <Wrapper
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          <Box className={className} snapshot={snapshot} grouped={grouped}>
-            <ContentHead>
-              <DateText>Nov 8</DateText>
-              <TimeText>12:00 AM</TimeText>
-            </ContentHead>
-            <Content>
-              <Text>{stock.content}</Text>
-            </Content>
-          </Box>
-        </Wrapper>
-      );
-    }}
-  </Draggable>
-);
+    <Draggable draggableId={stock.id} index={index}>
+      {(provided, snapshot) => {
+        return (
+          <Wrapper
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          >
+            <Box className={className} snapshot={snapshot} grouped={grouped}>
+              <ContentHead>
+                <DateText>Nov 8</DateText>
+                <TimeText>12:00 AM</TimeText>
+              </ContentHead>
+              <Content>
+                <Text>{stock.content}</Text>
+              </Content>
+            </Box>
+          </Wrapper>
+        );
+      }}
+    </Draggable>
+  );
 
 type BoxProps = {
   snapshot?: { isDragging: boolean };

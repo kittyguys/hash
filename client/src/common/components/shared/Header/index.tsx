@@ -10,13 +10,13 @@ import BaseAvatar from "../Avatar";
 import { IoIosSearch } from "react-icons/io";
 import BaseMainInputForm, {
   MainInput as BaseMainInput
-} from "../../common/Form/MainInput";
+} from "@src/common/components/shared/Form/MainInput";
 import BaseLogo from "../Logo";
 import BaseNormalButton from "../Button/NormalButton";
 import BaseUserName from "../UserName";
 import { useSelector, useDispatch } from "react-redux";
-import Color from "../../constants/Color";
-import { signout } from "@src/redux/auth/action";
+import { signout } from "@src/features//auth/actions";
+import Color from "@src/common/constants/Color";
 
 type Props = {
   page?: string;

@@ -12,10 +12,10 @@ import {
 
 import BaseMainInputForm, {
   MainInput
-} from "@src/common/components/common/Form/MainInput";
-import Header from "@src/common/components/common/Header";
-import Color from "@src/common/components/constants/Color";
-import StockList from "@src/common/components/common/StockList";
+} from "@src/common/components/shared/Form/MainInput";
+import Header from "@src/common/components/shared/Header";
+import StockList from "@src/common/components/shared/StockList";
+import Color from "@src/common/constants/color";
 
 const Editor = dynamic(
   () => import("@src/common/components/pages/stock/Editor"),
@@ -81,7 +81,7 @@ const move = (
   return result;
 };
 
-const Stock: React.FC<Props> = ({}) => {
+const Stock: React.FC<Props> = ({ }) => {
   // SSR の場合にこの関数を使用する必要がある
   resetServerContext();
 

@@ -1,19 +1,17 @@
 import { NextPage } from "next";
+import Router from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { IoIosSearch } from "react-icons/io";
 import cookies from "next-cookies";
+import jwt_decode from "jwt-decode";
 import BaseMainInputForm, {
   MainInput as BaseMainInput
-} from "@src/common/components/common/Form/MainInput";
-import BaseLogo from "@src/common/components/common/Logo";
-import Header from "@src/common/components/common/Header";
-import Router from "next/router";
-// utils
-import jwt_decode from "jwt-decode";
-// actions
-import { signinSuccess } from "@src/redux/auth/action";
-import { updateProfileSuccess } from "@src/redux/profile/action";
+} from "@src/common/components/shared/Form/MainInput";
+import BaseLogo from "@src/common/components/shared/Logo";
+import Header from "@src/common/components/shared/Header";
+import { signinSuccess } from "@src/features/auth/actions";
+import { updateProfileSuccess } from "@src/features/profile/actions";
 
 const Home: NextPage = () => {
   const dispatch = useDispatch();
@@ -34,11 +32,11 @@ const Home: NextPage = () => {
       <Header page={"home"} />
       <MainLayout>
         <Logo centering={true} />
-        <MainInputForm handleSubmit={e => {}}>
+        <MainInputForm handleSubmit={e => { }}>
           <MainInputLabel htmlFor="mainInput">
             <SearchIcon size="20px" color="#9AA0A6" />
           </MainInputLabel>
-          <MainInput id="mainInput" inputValue={""} handleChange={v => {}} />
+          <MainInput id="mainInput" inputValue={""} handleChange={v => { }} />
         </MainInputForm>
       </MainLayout>
     </>

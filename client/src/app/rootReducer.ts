@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
 
-import auth from "@src/redux/auth";
-import stock from "@src/redux/stock/reducer";
-import profile from "@src/redux/profile/reducer";
+import auth from "@src/features/auth";
+import stock from "@src/features/stock";
+import profile from "@src/features/profile";
 
 export default combineReducers({
   auth,

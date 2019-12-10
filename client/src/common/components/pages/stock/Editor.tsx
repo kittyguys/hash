@@ -2,8 +2,7 @@ import { Component } from "react";
 import { Dispatch } from "redux";
 import styled from "styled-components";
 import ReactQuill, { Quill } from "react-quill";
-// Color
-import Color from "../../constants/Color";
+import Color from "@src/common/constants/color";
 
 // QuillEditorでMarkdownを使えるようにするモジュール
 const MarkdownShortcuts = require("quill-markdown-shortcuts");

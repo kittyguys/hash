@@ -2,13 +2,10 @@ import NextApp from "next/app";
 import { Provider } from "react-redux";
 import withRedux from "next-redux-wrapper";
 import Cookies from "js-cookie";
-
-import { configureStore } from "@src/app/store";
-import GlobalStyle from "@src/common/components/constants/GlobalStyle";
-// utils
 import jwt_decode from "jwt-decode";
-// actions
-import { updateProfileSuccess } from "@src/redux/profile/action";
+import { configureStore } from "@src/app/store";
+import { updateProfileSuccess } from "@src/features/profile/actions";
+import GlobalStyle from "@src/common/components/constants/GlobalStyle";
 
 interface Props {
   Component: React.Component;

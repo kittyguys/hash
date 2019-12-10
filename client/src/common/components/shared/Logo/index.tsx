@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import Color from "../../constants/Color";
+import Color from "@src/common/constants/color";
 
 type Props = {
   className?: string;

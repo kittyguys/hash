@@ -5,9 +5,9 @@ import styled from "styled-components";
 import { withFormik, Form, Field, FormikProps } from "formik";
 import * as Yup from "yup";
 // Components	
-import BaseLogo from "@src/common/components/common/Logo";
+import BaseLogo from "@src/common/components/shared/Logo";
 // Actions	
-import { signup } from "@src/redux/auth";
+import { signup } from "@src/features/auth/operations";
 
 type FormValues = {
   userName: string;

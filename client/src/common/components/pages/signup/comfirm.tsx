@@ -3,8 +3,8 @@ import * as React from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-import BaseLogo from "@src/common/components/common/Logo";
-import BaseNormalButton from "@src/common/components/common/Button/NormalButton";
+import BaseLogo from "@src/common/components/shared/Logo";
+import BaseNormalButton from "@src/common/components/shared/Button/NormalButton";
 
 type Props = {
   profile: any;
