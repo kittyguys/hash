@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 
-import SigninFormFormik from "@src/common/components/pages/signin/SigninFormFormik";
+import SigninFormFormik from "@src/common/components/pages/signin";
 
 const Signin: NextPage = () => {
   const isSignin = useSelector((state: any) => state.auth.isSignin);
