@@ -52,28 +52,14 @@ class Editor extends Component<any, { html: string }> {
 
   render() {
     return (
-      <>
-        <ReactQuill
-          onChange={this.handleChange}
-          modules={modules}
-          formats={formats}
-        />
-      </>
+      <ReactQuill
+        onChange={this.handleChange}
+        modules={modules}
+        formats={formats}
+      />
     );
   }
 }
-
-const Textarea = styled(ReactQuill)`
-  display: block;
-  width: 100%;
-  background: #fff;
-  border: 1px solid ${Color.Black[900]};
-  box-shadow: none;
-  border-radius: 4px;
-  resize: none;
-  padding: 8px 12px;
-  outline: none;
-`;
 
 const handleOnChange = (e: any, updater: any, dispatcher: Dispatch) => {
   const value = e.target.value;

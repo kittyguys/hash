@@ -6,24 +6,35 @@ import Cookies from "js-cookie";
 import { signout } from "@src/features//auth/actions";
 import BaseAvatar from "../Avatar";
 
-type Props = {
-};
+type Props = {};
 
 const UserModal: FC<Props> = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const handleClick = (e: any) => {
-    e.stopPropagation()
-  }
+    e.stopPropagation();
+  };
   const handleSignout = () => {
     Cookies.remove("jwt");
     dispatch(signout());
   };
+  const handleRoute = () => {
+    Router.push("/settings/profile");
+  };
   return (
-    <Modal onClick={(e) => { handleClick(e) }}>
+    <Modal
+      onClick={e => {
+        handleClick(e);
+      }}
+    >
       <Avatar />
       <UserName>山田　貴之</UserName>
       <Email>your@example.com</Email>
-      <Signout><Button onClick={handleSignout}>ログアウト</Button></Signout>
+      <Block>
+        <ProfileButton onClick={handleRoute}>プロフィール</ProfileButton>
+      </Block>
+      <Block>
+        <Button onClick={handleSignout}>ログアウト</Button>
+      </Block>
     </Modal>
   );
 };
@@ -59,10 +70,27 @@ const Email = styled.div`
   text-align: center;
 `;
 
-const Signout = styled.div`
+const Block = styled.div`
   font-size: 2rem;
   margin: 0 auto;
   text-align: center;
+`;
+
+const ProfileButton = styled.button`
+  display: block;
+  background-color: #6b52ae;
+  color: #fff;
+  width: 100%;
+  height: 38px;
+  margin: 12px auto 0;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  font-size: 1.6rem;
+  &:hover {
+    opacity: 0.7;
+    cursor: pointer;
+  }
 `;
 
 const Button = styled.button`
@@ -77,7 +105,7 @@ const Button = styled.button`
   border-radius: 4px;
   font-size: 1.6rem;
   &:hover {
-      opacity: 0.7;
+    opacity: 0.7;
     cursor: pointer;
   }
 `;

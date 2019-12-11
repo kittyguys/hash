@@ -1,5 +1,6 @@
+import { NextPage } from "next";
 import dynamic from "next/dynamic";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import {
@@ -9,7 +10,10 @@ import {
   DraggableLocation,
   resetServerContext
 } from "react-beautiful-dnd";
-
+import cookies from "next-cookies";
+import jwt_decode from "jwt-decode";
+import { signinSuccess } from "@src/features/auth/actions";
+import { updateProfileSuccess } from "@src/features/profile/actions";
 import BaseMainInputForm, {
   MainInput
 } from "@src/common/components/shared/Form/MainInput";
@@ -81,7 +85,7 @@ const move = (
   return result;
 };
 
-const Stock: React.FC<Props> = ({ }) => {
+const Stock: NextPage<Props> = ({}) => {
   // SSR の場合にこの関数を使用する必要がある
   resetServerContext();
 
@@ -189,10 +193,22 @@ const Stock: React.FC<Props> = ({ }) => {
   );
 };
 
+Stock.getInitialProps = async (ctx: any) => {
+  const allCookies = cookies(ctx);
+  const token = allCookies.jwt;
+  if (typeof token === "string") {
+    const profile = jwt_decode(token);
+    ctx.store.dispatch(signinSuccess());
+    ctx.store.dispatch(updateProfileSuccess(profile));
+  }
+  return { store: ctx.store };
+};
+
 const StockWrap = styled.div`
   display: flex;
   justify-content: space-between;
   max-width: 1024px;
+  padding: 84px 24px 0;
 `;
 
 const Container = styled.div`

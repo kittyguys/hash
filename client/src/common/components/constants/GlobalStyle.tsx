@@ -1,4 +1,3 @@
-import * as React from "react";
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
@@ -114,7 +113,7 @@ Twitter: @rich_clark
 /* // Reset CSS */
 
   html, body {
-    font-family: 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ W3', 'Hiragino Sans', '游ゴシック体', YuGothic, '游ゴシック Medium', 'Yu Gothic Medium', '游ゴシック', 'Yu Gothic', 'メイリオ', 'ＭＳ Ｐゴシック', sans-serif;
+    font-family: 'Lato', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ W3', 'Hiragino Sans', '游ゴシック体', YuGothic, '游ゴシック Medium', 'Yu Gothic Medium', '游ゴシック', 'Yu Gothic', 'メイリオ', 'ＭＳ Ｐゴシック', sans-serif;
     font-size: 62.5%;
     line-height: 1.5;
   }
@@ -131,6 +130,11 @@ Twitter: @rich_clark
   }
   .ql-container {
     border-radius: 0 0 4px 4px;
+  }
+  .ql-editor {
+    p {
+      font-size: 1.6rem;
+    }
   }
 `;
 

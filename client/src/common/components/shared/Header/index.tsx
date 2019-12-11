@@ -13,7 +13,7 @@ import BaseLogo from "../Logo";
 import BaseNormalButton from "../Button/NormalButton";
 import BaseUserName from "../UserName";
 import { useSelector } from "react-redux";
-import { UserModal } from "@src/common/components/shared/Modals"
+import { UserModal } from "@src/common/components/shared/Modals";
 import Color from "@src/common/constants/color";
 
 type Props = {
@@ -37,7 +37,7 @@ const Header: NextPage<Props> = ({ route }) => {
   };
 
   const onButtonClick = () => {
-    setIsModalOpen(!isModalOpen)
+    setIsModalOpen(!isModalOpen);
   };
 
   let linkContents: JSX.Element;
@@ -48,9 +48,7 @@ const Header: NextPage<Props> = ({ route }) => {
         <Link key="stock" href="/stock" as="stock">
           <NormalLink>Stock</NormalLink>
         </Link>
-        <Icon
-          onClick={onButtonClick}
-        >
+        <Icon onClick={onButtonClick}>
           <Avatar1 />
         </Icon>
       </>
@@ -81,13 +79,10 @@ const Header: NextPage<Props> = ({ route }) => {
           </MainInputForm>
         </>
       )}
-      <LinkWrapper>
-        {linkContents}
-      </LinkWrapper>
+      <LinkWrapper>{linkContents}</LinkWrapper>
       {isModalOpen && (
         <UserModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
-      )
-      }
+      )}
     </HeaderWrapper>
   );
 };
@@ -157,7 +152,7 @@ const NotLoginLink = styled.div`
 `;
 
 const NormalLink = styled.a`
-  font-size: 1.3rem;
+  font-size: 1.6rem;
   font-weight: bold;
   white-space: nowrap;
   padding: 0 16px;
