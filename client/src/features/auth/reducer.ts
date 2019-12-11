@@ -1,19 +1,11 @@
 import produce from "immer";
+import { AuthState, AuthAction } from "./types";
 
-type State = {
-  isSignin: boolean | string;
-};
-
-type Action = {
-  type: string;
-  payload: { status: boolean | string };
-};
-
-const initialState: any = {
+const InitialState: AuthState = {
   isSignin: false
 };
 
-const auth = produce((state = initialState, action: Action) => {
+const auth = produce((state = InitialState, action: AuthAction) => {
   switch (action.type) {
     case "auth/signup/SUCCESS": {
       state.isSignin = true;

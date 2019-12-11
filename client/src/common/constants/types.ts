@@ -3,3 +3,7 @@ interface MyWindow extends Window {
 }
 declare const window: MyWindow;
 export default window;
+
+export type domain = {
+  domain: string;
+};

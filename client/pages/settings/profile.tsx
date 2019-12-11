@@ -2,9 +2,14 @@ import { NextPage } from "next";
 import styled from "styled-components";
 import BaseAvatar from "@src/common/components/shared/Avatar";
 import BaseUserName from "@src/common/components/shared/UserName";
+import Header from "@src/common/components/shared/Header";
 
 const User: NextPage = props => {
-  return <></>;
+  return (
+    <>
+      <Header />
+    </>
+  );
 };
 
 const MypageWrapper = styled.div`

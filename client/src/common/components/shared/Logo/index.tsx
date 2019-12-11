@@ -1,6 +1,7 @@
+import Router from "next/router";
 import * as React from "react";
 import styled from "styled-components";
-import Color from "../../constants/Color";
+import Color from "@src/common/constants/color";
 
 type Props = {
   className?: string;
@@ -17,7 +18,7 @@ const Logo: React.FC<Props> = ({
     <LogoWrapper
       className={className}
       centering={centering}
-      onClick={() => (!!handleClick ? handleClick() : null)}
+      onClick={() => Router.push("/")}
     >
       <Text>Hachet</Text>
     </LogoWrapper>

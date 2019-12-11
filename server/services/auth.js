@@ -35,6 +35,7 @@ export const signin = (req, res, next) => {
       "SELECT * FROM users WHERE user_name = ? LIMIT 1",
       [signinID],
       (err, users) => {
+        console.log(users)
         if (err) {
           console.log("error: ", err);
         } else {
