@@ -144,7 +144,7 @@ const Stock: React.FC<Props> = ({ }) => {
 
   return (
     <>
-      <Header page="common" />
+      <Header route="common" />
       <StockWrap>
         <DragDropContext onDragEnd={onDragEnd}>
           <GroupedContainer>

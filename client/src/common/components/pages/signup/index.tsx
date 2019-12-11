@@ -35,6 +35,7 @@ const SignupForm = () => {
   const { register, handleSubmit, errors } = useForm({ validationSchema: schema });
   const dispatch = useDispatch();
   const onSubmit = (data: any) => {
+    delete data.password_confirm
     dispatch(signup(data))
   };
   return (

@@ -18,7 +18,7 @@ const Avatar: React.FC<Props> = ({ imageSrc, handleClick, className }) => {
 
 const Image = styled.div<{ imageSrc?: string }>`
   background: ${({ imageSrc }) =>
-    imageSrc ? `url(${imageSrc})` : `url(/static/assets/images/hash.jpg)`}
+    imageSrc ? `url(${imageSrc})` : `url(/static/assets/images/spiro.svg)`}
     center/cover no-repeat;
   border-radius: 50%;
   overflow: hidden;

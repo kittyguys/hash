@@ -1,11 +1,9 @@
-import NextApp, { AppContext } from "next/app";
+import { AppContext } from "next/app";
 import { NextPageContext, NextPage } from "next";
-import * as React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import Router from "next/router";
-import Cookies from "js-cookie";
 import BaseAvatar from "../Avatar";
 import { IoIosSearch } from "react-icons/io";
 import BaseMainInputForm, {
@@ -14,9 +12,8 @@ import BaseMainInputForm, {
 import BaseLogo from "../Logo";
 import BaseNormalButton from "../Button/NormalButton";
 import BaseUserName from "../UserName";
-import { useSelector, useDispatch } from "react-redux";
-import UserModal from "@src/common/components/shared/Modals"
-import { signout } from "@src/features//auth/actions";
+import { useSelector } from "react-redux";
+import { UserModal } from "@src/common/components/shared/Modals"
 import Color from "@src/common/constants/color";
 
 type Props = {
@@ -33,32 +30,16 @@ interface NextAppContext extends AppContext {
 }
 
 const Header: NextPage<Props> = ({ route }) => {
-  const dispatch = useDispatch();
-  // const myData = useSelector((state: any) => state.myData);
   const isSignin = useSelector((state: any) => state.auth.isSignin);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const toMypage = () => {
-    Router.push("/mypage");
-  };
   const toHome = () => {
     Router.push("/");
   };
-  const signOut = () => {
-    Cookies.remove("jwt");
-    dispatch(signout());
-    Router.push("/");
-  };
-  const hand = () => {
-    console.log(isModalOpen)
-    if (isModalOpen) {
-      setIsModalOpen(false)
-    } else {
-      setIsModalOpen(true)
-    }
 
-    console.log(isModalOpen)
+  const onButtonClick = () => {
+    setIsModalOpen(!isModalOpen)
   };
+
   let linkContents: JSX.Element;
 
   if (isSignin === true) {
@@ -67,8 +48,11 @@ const Header: NextPage<Props> = ({ route }) => {
         <Link key="stock" href="/stock" as="stock">
           <NormalLink>Stock</NormalLink>
         </Link>
-        <span onClick={() => setIsModalOpen(!isModalOpen)}><Avatar1 /></span>
-        <StyledLink onClick={() => signOut()}>ログアウト</StyledLink>
+        <Icon
+          onClick={onButtonClick}
+        >
+          <Avatar1 />
+        </Icon>
       </>
     );
   } else {
@@ -101,7 +85,7 @@ const Header: NextPage<Props> = ({ route }) => {
         {linkContents}
       </LinkWrapper>
       {isModalOpen && (
-        <UserModal />
+        <UserModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
       )
       }
     </HeaderWrapper>
@@ -176,6 +160,7 @@ const NormalLink = styled.a`
   font-size: 1.3rem;
   font-weight: bold;
   white-space: nowrap;
+  padding: 0 16px;
   &:hover {
     text-decoration: underline;
   }
@@ -198,45 +183,12 @@ const StyledLink = styled.a`
   }
 `;
 
-const ModalWrapper = styled.div`
-  width: 250px;
-  background-color: #fff;
-  border: 1px solid #dbdbdb;
-  border-radius: 3px;
-  position: absolute;
-  top: 0;
-  margin: 20px -14px;
-  padding: 14px 10px;
-  @media (max-width: 768px) {
-    margin: 8px 0px;
-    padding: 8px 8px;
-  }
-`;
-
-const ModalLayout1 = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 const Avatar1 = styled(BaseAvatar)`
   width: 32px;
   height: 32px;
   @media (max-width: 768px) {
     width: 40px;
     height: 40px;
-  }
-`;
-
-const Avatar2 = styled(BaseAvatar)`
-  width: 35px;
-  height: 35px;
-  border: 3px solid #fff;
-  @media (max-width: 768px) {
-    width: 60px;
-    height: 60px;
-  }
-  &:hover {
-    border-color: #bbb;
   }
 `;
 
@@ -248,59 +200,9 @@ const Logo = styled(BaseLogo)`
   }
 `;
 
-const NormalButton1 = styled(BaseNormalButton)`
-  border: 1px solid #4285f4;
-  font-weight: bold;
-  outline: none;
-  font-size: 1.3rem;
-  width: 100px;
-  height: 30px;
-  background-color: #4285f4;
-  @media (max-width: 768px) {
-    font-size: 14px;
-    width: 84px;
-    height: 24px;
-  }
-`;
-
-const NormalButton2 = styled(BaseNormalButton)`
-  font-size: 16px;
-  width: 100px;
-  height: 30px;
-  background-color: #4285f4;
-  @media (max-width: 768px) {
-    font-size: 14px;
-    width: 84px;
-    height: 24px;
-  }
-`;
-
-const ModalLayout2 = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  margin-top: 12px;
-  @media (max-width: 768px) {
-    margin-top: 8px;
-  }
-`;
-
-const NameLayout = styled.div`
-  margin-left: 10px;
-`;
-
-const UserName = styled(BaseUserName)`
-  font-size: 26px;
-  @media (max-width: 768px) {
-    font-size: 20px;
-  }
-`;
-
-const CloseButton = styled.div`
-  position: absolute;
-  top: -8px;
-  right: 8px;
-  font-size: 28px;
-  cursor: pointer;
+const Icon = styled.button`
+  border: 0;
+  outline: 0;
 `;
 
 export default Header;
