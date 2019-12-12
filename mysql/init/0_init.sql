@@ -2,7 +2,7 @@ CREATE DATABASE
 IF NOT EXISTS hash;
 
 CREATE TABLE
-IF NOT EXISTS hash.users
+IF NOT EXISTS hachet.users
 (
   id int PRIMARY KEY AUTO_INCREMENT,
   user_name varchar(64) NOT NULL,
