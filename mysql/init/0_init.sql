@@ -61,7 +61,7 @@ IF NOT EXISTS hash.search_value
 );
 
 CREATE TABLE
-IF NOT EXISTS hash.notes
+IF NOT EXISTS hachet.stocks
 (
   id int PRIMARY KEY AUTO_INCREMENT,
   user_id int,
