@@ -13,12 +13,20 @@ export const signup = (req, res, next) => {
         display_name: req.body.user_name,
         password: hash
       };
-      sql.query("insert into users set ?", query, (err, data) => {
+      sql.query("insert into users set ?", query, (err, result) => {
         if (err) {
-          console.log("error: ", err);
+          throw err
         } else {
-          const token = jwt.sign(query, process.env.JWT_SECRET_KEY);
-          return res.json({ token });
+          if (result) {
+            const user = {
+              id: users[0].id,
+              user_name: users[0].user_name,
+              display_name: users[0].display_name,
+              email: users[0].email
+            };
+            const token = jwt.sign(user, process.env.JWT_SECRET_KEY);
+            return res.json({ token });
+          }
         }
       });
     });
@@ -37,7 +45,7 @@ export const signin = (req, res, next) => {
       (err, users) => {
         console.log(users)
         if (err) {
-          console.log("error: ", err);
+          throw err
         } else {
           bcrypt.compare(password, users[0].password, (err, result) => {
             if (err) {
@@ -45,6 +53,7 @@ export const signin = (req, res, next) => {
             }
             if (result) {
               const user = {
+                id: users[0].id,
                 user_name: users[0].user_name,
                 display_name: users[0].display_name,
                 email: users[0].email
