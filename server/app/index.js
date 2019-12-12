@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import logger from "../middlewares/logger"
+import logger from "../utils/logger"
 
 import conn from "../configs/mysql";
 import { initRouter } from "../routes";
@@ -23,7 +23,7 @@ export default class Server {
     );
     this.server.use(cors());
 
-    conn.connect(function(err) {
+    conn.connect(function (err) {
       if (err) {
         logger.error("error connecting: " + err.stack);
         return;
@@ -39,7 +39,7 @@ export default class Server {
     const host = this.server.get("host");
     const port = this.server.get("port");
 
-    this.server.listen(port, function() {
+    this.server.listen(port, function () {
       logger.info("Express server listening on - http://" + host + ":" + port);
     });
   }

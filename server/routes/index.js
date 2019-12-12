@@ -1,14 +1,13 @@
 import authRoutes from "./auth";
 import userRoutes from "./users";
+import { verifyToken } from "../middlewares/auth";
 import { errorHandler, logErrors } from "../middlewares/error";
 
 export const initRouter = server => {
-  server.use("*", (req, res, next) => {
-    console.log("Request was made to: " + req.originalUrl);
-    return next();
-  });
-
+  // white list
   server.use("/api", authRoutes);
+  // routing
+  server.use("*", verifyToken);
   server.use("/api", userRoutes);
   // error handling
   server.use(logErrors);
