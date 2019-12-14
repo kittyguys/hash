@@ -4,13 +4,12 @@ import Header from "@src/common/components/shared/Header";
 import { SideBar, ProfileEditor } from "@src/common/components/pages/settings";
 
 const Profile: NextPage = () => {
-  const saveProfile = () => { };
   return (
     <Wrapper>
       <Header />
       <Main>
         <SideBar />
-        <ProfileEditor saveProfile={saveProfile} />
+        <ProfileEditor />
       </Main>
     </Wrapper>
   );

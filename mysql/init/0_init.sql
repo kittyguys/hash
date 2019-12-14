@@ -2,13 +2,14 @@ CREATE DATABASE
 IF NOT EXISTS hash;
 
 CREATE TABLE
-IF NOT EXISTS hash.users
+IF NOT EXISTS hachet.users
 (
   id int PRIMARY KEY AUTO_INCREMENT,
   user_name varchar(64) NOT NULL,
   display_name varchar(64) NOT NULL,
   email varchar(64) NOT NULL,
   password varchar(255) NOT NULL,
+  profile_image_url varchar(255),
   is_active tinyint(1) DEFAULT 1,
   is_staff tinyint(1) DEFAULT 0,
   created_at datetime  DEFAULT current_timestamp,
