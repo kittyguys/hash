@@ -8,7 +8,7 @@ export type AuthAction = {
 };
 
 export type signupParams = {
-  userName: string;
+  user_name: string;
   email: string;
   password: string;
 };

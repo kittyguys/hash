@@ -6,6 +6,6 @@ export const errorHandler = (err, req, res, next) => {
 };
 
 export const logErrors = (err, req, res, next) => {
-  logger.error(err);
+  logger.error(err.message);
   next(err);
 };

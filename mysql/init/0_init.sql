@@ -9,6 +9,7 @@ IF NOT EXISTS hachet.users
   display_name varchar(64) NOT NULL,
   email varchar(64) NOT NULL,
   password varchar(255) NOT NULL,
+  profile_image_url varchar(255),
   is_active tinyint(1) DEFAULT 1,
   is_staff tinyint(1) DEFAULT 0,
   created_at datetime  DEFAULT current_timestamp,

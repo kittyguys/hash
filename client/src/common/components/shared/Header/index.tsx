@@ -1,17 +1,14 @@
-import { AppContext } from "next/app";
-import { NextPageContext, NextPage } from "next";
+import { NextPage } from "next";
 import { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import Router from "next/router";
-import BaseAvatar from "../Avatar";
 import { IoIosSearch } from "react-icons/io";
 import BaseMainInputForm, {
   MainInput as BaseMainInput
 } from "@src/common/components/shared/StockInput";
+import BaseAvatar from "../Avatar";
 import BaseLogo from "../Logo";
-import BaseNormalButton from "../Button/NormalButton";
-import BaseUserName from "../UserName";
 import { useSelector } from "react-redux";
 import { UserModal } from "@src/common/components/shared/Modals";
 import Color from "@src/common/constants/color";
@@ -19,15 +16,6 @@ import Color from "@src/common/constants/color";
 type Props = {
   route?: string;
 };
-
-interface NextContext extends NextPageContext {
-  store: any;
-  isServer: boolean;
-}
-
-interface NextAppContext extends AppContext {
-  ctx: NextContext;
-}
 
 const Header: NextPage<Props> = ({ route }) => {
   const isSignin = useSelector((state: any) => state.auth.isSignin);
@@ -41,7 +29,6 @@ const Header: NextPage<Props> = ({ route }) => {
   };
 
   let linkContents: JSX.Element;
-
   if (isSignin === true) {
     linkContents = (
       <>
@@ -49,7 +36,7 @@ const Header: NextPage<Props> = ({ route }) => {
           <NormalLink>Stock</NormalLink>
         </Link>
         <Icon onClick={onButtonClick}>
-          <Avatar1 />
+          <Avatar />
         </Icon>
       </>
     );
@@ -177,26 +164,18 @@ const StyledLink = styled.a`
   }
 `;
 
-const Avatar1 = styled(BaseAvatar)`
-  width: 32px;
-  height: 32px;
-  @media (max-width: 768px) {
-    width: 40px;
-    height: 40px;
-  }
+const Icon = styled.button`
+  border: 0;
+  outline: 0;
+`;
+
+const Avatar = styled(BaseAvatar)`
+  width: 28px;
 `;
 
 const Logo = styled(BaseLogo)`
   margin-left: 20px;
   font-size: 40px;
-  @media (max-width: 768px) {
-    font-size: 30px;
-  }
-`;
-
-const Icon = styled.button`
-  border: 0;
-  outline: 0;
 `;
 
 export default Header;
