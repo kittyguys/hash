@@ -18,12 +18,9 @@ import Header from "@src/common/components/shared/Header";
 import Color from "@src/common/constants/color";
 import StockNote from "@src/common/components/pages/stock/StockNote";
 
-const Editor = dynamic(
-  () => import("@src/common/components/pages/stock/Editor"),
-  {
-    ssr: false
-  }
-);
+const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
+  ssr: false
+});
 
 type Props = {};
 
