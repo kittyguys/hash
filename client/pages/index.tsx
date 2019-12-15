@@ -7,7 +7,7 @@ import cookies from "next-cookies";
 import jwt_decode from "jwt-decode";
 import BaseMainInputForm, {
   MainInput as BaseMainInput
-} from "@src/common/components/shared/Form/MainInput";
+} from "@src/common/components/shared/StockInput";
 import BaseLogo from "@src/common/components/shared/Logo";
 import Header from "@src/common/components/shared/Header";
 import { signinSuccess } from "@src/features/auth/actions";
@@ -32,11 +32,11 @@ const Home: NextPage = () => {
       <Header route={"/"} />
       <MainLayout>
         <Logo centering={true} />
-        <MainInputForm handleSubmit={e => { }}>
+        <MainInputForm handleSubmit={e => {}}>
           <MainInputLabel htmlFor="mainInput">
             <SearchIcon size="20px" color="#9AA0A6" />
           </MainInputLabel>
-          <MainInput id="mainInput" inputValue={""} handleChange={v => { }} />
+          <MainInput id="mainInput" inputValue={""} handleChange={v => {}} />
         </MainInputForm>
       </MainLayout>
     </>

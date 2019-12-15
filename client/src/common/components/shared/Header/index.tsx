@@ -8,7 +8,7 @@ import BaseAvatar from "../Avatar";
 import { IoIosSearch } from "react-icons/io";
 import BaseMainInputForm, {
   MainInput as BaseMainInput
-} from "@src/common/components/shared/Form/MainInput";
+} from "@src/common/components/shared/StockInput";
 import BaseLogo from "../Logo";
 import BaseNormalButton from "../Button/NormalButton";
 import BaseUserName from "../UserName";
@@ -88,13 +88,12 @@ const Header: NextPage<Props> = ({ route }) => {
 };
 
 const HeaderWrapper = styled.div<{ route: string }>`
+  grid-area: Header;
   display: flex;
   align-items: center;
   width: 100%;
   height: 84px;
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: relative;
   z-index: 9999;
   background-color: ${Color.White};
   box-shadow: ${({ route }) =>

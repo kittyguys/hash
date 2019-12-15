@@ -9,12 +9,12 @@ type Action = {
 
 type initialStockLists = {
   stocks: [];
-  groupedStocks: [];
+  noteStocks: [];
 };
 
 const stockList: initialStockLists = {
   stocks: [],
-  groupedStocks: []
+  noteStocks: []
 };
 
 const initialState: any = {

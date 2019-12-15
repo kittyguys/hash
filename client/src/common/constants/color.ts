@@ -47,6 +47,23 @@ const Color = {
   BlueWhite: "#FAFDFF",
   Link: "#7294b8",
   ButtonHover: "#444",
-  ButtonDisabled: "e6e6e6"
+  ButtonDisabled: "e6e6e6",
+  toRGB: (colorCodeHex: string): string => {
+    const hex = colorCodeHex.replace("#", "");
+    const hexLength = hex.length;
+    if (hexLength === 6 || hexLength === 3) {
+      const splitLength = hexLength / 3;
+      const [rHex, gHex, bHex] = [
+        hex.substr(splitLength * 0, splitLength),
+        hex.substr(splitLength * 1, splitLength),
+        hex.substr(splitLength * 2, splitLength)
+      ];
+      return [parseInt(rHex, 16), parseInt(gHex, 16), parseInt(bHex, 16)].join(
+        ","
+      );
+    } else {
+      return "";
+    }
+  }
 } as const;
 export default Color;
