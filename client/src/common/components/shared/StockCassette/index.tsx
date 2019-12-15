@@ -10,46 +10,45 @@ type Props = {
     id: string;
     content: string;
   };
-  grouped?: boolean;
+  note?: boolean;
   index: number;
 };
 
 const StockCassette: React.FC<Props> = ({
   className,
   stock,
-  grouped,
+  note,
   index
 }: Props) => (
-    <Draggable draggableId={stock.id} index={index}>
-      {(provided, snapshot) => {
-        return (
-          <Wrapper
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-          >
-            <Box className={className} snapshot={snapshot} grouped={grouped}>
-              <ContentHead>
-                <DateText>Nov 8</DateText>
-                <TimeText>12:00 AM</TimeText>
-              </ContentHead>
-              <Content>
-                <Text>{stock.content}</Text>
-              </Content>
-            </Box>
-          </Wrapper>
-        );
-      }}
-    </Draggable>
-  );
+  <Draggable draggableId={stock.id} index={index}>
+    {(provided, snapshot) => {
+      return (
+        <Wrapper
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          <Box className={className} snapshot={snapshot} note={note}>
+            <ContentHead>
+              <DateText>Nov 8</DateText>
+              <TimeText>12:00 AM</TimeText>
+            </ContentHead>
+            <Content>
+              <Text>{stock.content}</Text>
+            </Content>
+          </Box>
+        </Wrapper>
+      );
+    }}
+  </Draggable>
+);
 
 type BoxProps = {
   snapshot?: { isDragging: boolean };
-  grouped: boolean;
+  note: boolean;
 };
 
 const Wrapper = styled.div`
-  width: 208px !important;
   padding: 6px 0;
 `;
 
@@ -62,8 +61,6 @@ const Box = styled.div<BoxProps>`
       : "0 1px 3px 0 rgba(0, 0, 0, 0.15)"};
   background-color: ${({ snapshot: { isDragging } }) =>
     isDragging ? Color.HoverGray : "#fff"};
-  width: ${({ snapshot: { isDragging }, grouped }) =>
-    isDragging || grouped ? "208px!important" : "720px!important"};
   transition: 0.3s width;
   &:hover {
     background-color: ${Color.HoverGray};
