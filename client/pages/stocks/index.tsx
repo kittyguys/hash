@@ -1,11 +1,10 @@
 import { NextPage } from "next";
 import dynamic from "next/dynamic";
 import { useState, useEffect, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import {
   DragDropContext,
-  Droppable,
   DropResult,
   DraggableLocation,
   resetServerContext
@@ -14,11 +13,8 @@ import cookies from "next-cookies";
 import jwt_decode from "jwt-decode";
 import { signinSuccess } from "@src/features/auth/actions";
 import { updateProfileSuccess } from "@src/features/profile/actions";
-import BaseMainInputForm, {
-  MainInput
-} from "@src/common/components/shared/Form/MainInput";
+import BaseMainInputForm from "@src/common/components/shared/StockInput";
 import Header from "@src/common/components/shared/Header";
-import StockList from "@src/common/components/shared/StockList";
 import Color from "@src/common/constants/color";
 import StockGroupe from "@src/common/components/pages/stock/StockGroupe";
 
