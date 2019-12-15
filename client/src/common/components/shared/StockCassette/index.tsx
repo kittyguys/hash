@@ -10,14 +10,14 @@ type Props = {
     id: string;
     content: string;
   };
-  grouped?: boolean;
+  note?: boolean;
   index: number;
 };
 
 const StockCassette: React.FC<Props> = ({
   className,
   stock,
-  grouped,
+  note,
   index
 }: Props) => (
   <Draggable draggableId={stock.id} index={index}>
@@ -28,7 +28,7 @@ const StockCassette: React.FC<Props> = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <Box className={className} snapshot={snapshot} grouped={grouped}>
+          <Box className={className} snapshot={snapshot} note={note}>
             <ContentHead>
               <DateText>Nov 8</DateText>
               <TimeText>12:00 AM</TimeText>
@@ -45,7 +45,7 @@ const StockCassette: React.FC<Props> = ({
 
 type BoxProps = {
   snapshot?: { isDragging: boolean };
-  grouped: boolean;
+  note: boolean;
 };
 
 const Wrapper = styled.div`

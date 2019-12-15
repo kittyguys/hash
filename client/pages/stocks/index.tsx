@@ -16,7 +16,7 @@ import { updateProfileSuccess } from "@src/features/profile/actions";
 import BaseMainInputForm from "@src/common/components/shared/StockInput";
 import Header from "@src/common/components/shared/Header";
 import Color from "@src/common/constants/color";
-import StockGroupe from "@src/common/components/pages/stock/StockGroupe";
+import StockNote from "@src/common/components/pages/stock/StockNote";
 
 const Editor = dynamic(
   () => import("@src/common/components/pages/stock/Editor"),
@@ -40,7 +40,7 @@ const initialStockLists: StockLists = {
     id: `id-${k}`,
     content: `Stock ${k}`
   })),
-  groupedStocks: []
+  noteStocks: []
 };
 
 type Reorder = (
@@ -98,7 +98,7 @@ const Stock: NextPage<Props> = ({}) => {
     [index: string]: string;
   } = {
     droppable: "stocks",
-    droppable2: "groupedStocks"
+    droppable2: "noteStocks"
   };
 
   const getList = (id: string) => stockLists[id2List[id]];
@@ -133,7 +133,7 @@ const Stock: NextPage<Props> = ({}) => {
 
       setStockLists({
         stocks: result.droppable,
-        groupedStocks: result.droppable2
+        noteStocks: result.droppable2
       });
     }
   };
@@ -155,20 +155,20 @@ const Stock: NextPage<Props> = ({}) => {
     <StockWrap>
       <Header route="common" />
       <DragDropContext onDragEnd={onDragEnd}>
-        <GroupedContainer mainInputWrapHeight={mainInputWrapHeight}>
-          <StockGroupe
-            groupName="グループ名が入ります"
-            groupeID="droppable"
+        <NoteContainer mainInputWrapHeight={mainInputWrapHeight}>
+          <StockNote
+            noteName="グループ名が入ります"
+            noteID="droppable"
             stocks={stockLists.stocks}
-            grouped
+            note
           />
-        </GroupedContainer>
+        </NoteContainer>
 
         <Container mainInputWrapHeight={mainInputWrapHeight}>
-          <StockGroupe
-            groupName="Your Stocks"
-            groupeID="droppable2"
-            stocks={stockLists.groupedStocks}
+          <StockNote
+            noteName="Your Stocks"
+            noteID="droppable2"
+            stocks={stockLists.noteStocks}
           />
         </Container>
       </DragDropContext>
@@ -208,7 +208,7 @@ const StockWrap = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-template-areas:
     "Header Header"
-    "GroupedStockContainer StockContainer"
+    "NoteStockContainer StockContainer"
     "MainInputForm MainInputForm";
   height: 100vh;
 `;
@@ -239,8 +239,8 @@ const Container = styled.div<{ mainInputWrapHeight: number }>`
   }
 `;
 
-const GroupedContainer = styled(Container)`
-  grid-area: GroupedStockContainer;
+const NoteContainer = styled(Container)`
+  grid-area: NoteStockContainer;
   background-color: ${Color.Brand[500]};
 `;
 

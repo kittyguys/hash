@@ -7,19 +7,19 @@ type Stock = { id: string; content: string };
 
 type Props = {
   stocks: Stock[];
-  grouped?: boolean;
+  note?: boolean;
   className?: string;
 };
 
 // TODO(orita)文字列は後にprops渡しに変更
-const StockList = React.memo(({ stocks, grouped, className }: Props) => (
+const StockList = React.memo(({ stocks, note, className }: Props) => (
   <List className={className}>
     {stocks.map((stock: Stock, index: number) => (
       <StockCassette
         stock={stock}
         index={index}
         key={stock.id}
-        grouped={grouped}
+        note={note}
       />
     ))}
   </List>

@@ -5,25 +5,20 @@ import Color from "@src/common/constants/color";
 
 type Props = {
   stocks: Stock[];
-  groupName: string;
-  groupeID: string;
-  grouped?: boolean;
+  noteName: string;
+  noteID: string;
+  note?: boolean;
 };
 
 type Stock = { id: string; content: string };
 
-const StockGroupe: React.FC<Props> = ({
-  stocks,
-  groupName,
-  groupeID,
-  grouped
-}) => (
+const StockNote: React.FC<Props> = ({ stocks, noteName, noteID, note }) => (
   <>
-    <GroupeName>{groupName}</GroupeName>
-    <Droppable droppableId={groupeID}>
+    <NoteName>{noteName}</NoteName>
+    <Droppable droppableId={noteID}>
       {provided => (
         <div ref={provided.innerRef} {...provided.droppableProps}>
-          <StockList stocks={stocks} grouped={grouped} />
+          <StockList stocks={stocks} note={note} />
           {provided.placeholder}
         </div>
       )}
@@ -31,11 +26,11 @@ const StockGroupe: React.FC<Props> = ({
   </>
 );
 
-const GroupeName = styled.h2`
+const NoteName = styled.h2`
   color: ${Color.White};
   font-weight: bold;
   font-size: 2rem;
   margin: 0 24px;
 `;
 
-export default StockGroupe;
+export default StockNote;

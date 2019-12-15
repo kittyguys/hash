@@ -19,7 +19,7 @@ Twitter: @rich_clark
   fieldset, form, label, legend,
   table, caption, tbody, tfoot, thead, tr, th, td,
   article, aside, canvas, details, figcaption, figure,
-  footer, header, hgroup, menu, nav, section, summary,
+  footer, header, hnote, menu, nav, section, summary,
   time, mark, audio, video {
     margin:0;
     padding:0;
@@ -35,7 +35,7 @@ Twitter: @rich_clark
   }
 
   article,aside,details,figcaption,figure,
-  footer,header,hgroup,menu,nav,section {
+  footer,header,hnote,menu,nav,section {
     display:block;
   }
 
