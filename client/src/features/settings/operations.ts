@@ -24,7 +24,6 @@ export const updateProfile = (
         }
       })
       .then(res => {
-        console.log(res);
         dispatch(updateProfileSuccess());
         Router.push("/");
       })

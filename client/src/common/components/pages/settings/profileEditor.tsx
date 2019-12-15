@@ -10,7 +10,6 @@ const ProfileEditor = () => {
   const [imgURL, setimgURL] = useState(null);
   const { register, handleSubmit, errors } = useForm();
   const onSubmit = (data: any) => {
-    console.log(data);
     dispatch(updateProfile(data));
   };
   const changeAvatar = (e: any) => {
