@@ -116,6 +116,7 @@ Twitter: @rich_clark
     font-family: 'Lato', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ W3', 'Hiragino Sans', '游ゴシック体', YuGothic, '游ゴシック Medium', 'Yu Gothic Medium', '游ゴシック', 'Yu Gothic', 'メイリオ', 'ＭＳ Ｐゴシック', sans-serif;
     font-size: 62.5%;
     line-height: 1.5;
+    overscroll-behavior: none;
   }
   a, button, input[type="submit"] {
     cursor: pointer;
@@ -130,8 +131,12 @@ Twitter: @rich_clark
   }
   .ql-container {
     border-radius: 0 0 4px 4px;
+    padding: 12px 16px;
   }
   .ql-editor {
+    background: none;
+    padding: 0;
+    max-height: 24rem;
     p {
       font-size: 1.6rem;
     }

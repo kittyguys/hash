@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import dynamic from "next/dynamic";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import {
@@ -20,6 +20,7 @@ import BaseMainInputForm, {
 import Header from "@src/common/components/shared/Header";
 import StockList from "@src/common/components/shared/StockList";
 import Color from "@src/common/constants/color";
+import StockGroupe from "@src/common/components/pages/stock/StockGroupe";
 
 const Editor = dynamic(
   () => import("@src/common/components/pages/stock/Editor"),
@@ -89,7 +90,6 @@ const Stock: NextPage<Props> = ({}) => {
   // SSR の場合にこの関数を使用する必要がある
   resetServerContext();
 
-  const myData = useSelector((state: any) => state.myData);
   const [stockLists, setStockLists] = useState(initialStockLists);
   const dispatch = useDispatch();
 
@@ -146,50 +146,52 @@ const Stock: NextPage<Props> = ({}) => {
     dispatch({ type: "SET_STOCK_LIST", payload: { stocks: stockLists } });
   }, [stockLists]);
 
+  const [mainInputWrapHeight, setMainInputWrapHeight] = useState(121);
+  const mainInputWrap = useRef(null);
+
+  const heightAdjust = () => {
+    if (mainInputWrap.current.clientHeight !== null) {
+      setMainInputWrapHeight(mainInputWrap.current.clientHeight);
+    }
+  };
+
   return (
-    <>
+    <StockWrap>
       <Header route="common" />
-      <StockWrap>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <GroupedContainer>
-            <GroupeName>グループ名が入ります</GroupeName>
-            <Droppable droppableId="droppable">
-              {provided => (
-                <div ref={provided.innerRef} {...provided.droppableProps}>
-                  <StockList stocks={stockLists.stocks} grouped />
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </GroupedContainer>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <GroupedContainer mainInputWrapHeight={mainInputWrapHeight}>
+          <StockGroupe
+            groupName="グループ名が入ります"
+            groupeID="droppable"
+            stocks={stockLists.stocks}
+            grouped
+          />
+        </GroupedContainer>
 
-          <Container>
-            <Title>Your Stocks</Title>
-            <Droppable droppableId="droppable2">
-              {provided => (
-                <div ref={provided.innerRef} {...provided.droppableProps}>
-                  <StockList stocks={stockLists.groupedStocks} />
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </Container>
-        </DragDropContext>
-      </StockWrap>
+        <Container mainInputWrapHeight={mainInputWrapHeight}>
+          <StockGroupe
+            groupName="Your Stocks"
+            groupeID="droppable2"
+            stocks={stockLists.groupedStocks}
+          />
+        </Container>
+      </DragDropContext>
 
-      <MainInputForm handleSubmit={e => e.preventDefault}>
-        <Editor />
-        <SubmitButtonWrap>
-          <SubmitButton
-            onClick={e => {
-              e.preventDefault();
-            }}
-          >
-            送信
-          </SubmitButton>
-        </SubmitButtonWrap>
-      </MainInputForm>
-    </>
+      <MainInputWrap ref={mainInputWrap}>
+        <MainInputForm handleSubmit={e => e.preventDefault}>
+          <Editor onChangeCallback={heightAdjust} />
+          <SubmitButtonWrap>
+            <SubmitButton
+              onClick={e => {
+                e.preventDefault();
+              }}
+            >
+              送信
+            </SubmitButton>
+          </SubmitButtonWrap>
+        </MainInputForm>
+      </MainInputWrap>
+    </StockWrap>
   );
 };
 
@@ -205,50 +207,56 @@ Stock.getInitialProps = async (ctx: any) => {
 };
 
 const StockWrap = styled.div`
-  display: flex;
-  justify-content: space-between;
-  max-width: 1024px;
-  padding: 84px 24px 0;
+  display: grid;
+  grid-template-rows: 84px 1fr auto;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "Header Header"
+    "GroupedStockContainer StockContainer"
+    "MainInputForm MainInputForm";
+  height: 100vh;
 `;
 
-const Container = styled.div`
-  width: calc(100% - 256px);
+const Container = styled.div<{ mainInputWrapHeight: number }>`
+  grid-area: StockContainer;
   padding: 24px 0;
   background-color: ${Color.BlueWhite};
-  overflow: visible;
   > div {
-    height: calc(100vh - 272px);
+    height: ${({ mainInputWrapHeight }) =>
+      `calc(100vh - ${mainInputWrapHeight}px - 84px - 84px)`};
     padding: 0 24px;
     margin-top: 6px;
     overflow: auto;
+    position: relative;
+    ::before,
+    ::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 12px;
+      /* background: ${"linear-gradient(to bottom, rgba(" +
+        Color.toRGB(Color.BlueWhite) +
+        ", 0.5)" +
+        "rgba(255, 255, 255, 0)"}; */
+    }
   }
 `;
 
-const GroupeName = styled.h2`
-  color: ${Color.White};
-  font-weight: bold;
-  font-size: 2rem;
-  margin: 0 24px;
-`;
-
 const GroupedContainer = styled(Container)`
-  width: 256px;
+  grid-area: GroupedStockContainer;
   background-color: ${Color.Brand[500]};
 `;
 
-const Title = styled(GroupeName)`
-  color: ${Color.Brand.default};
+const MainInputWrap = styled.div`
+  grid-area: MainInputForm;
 `;
 
 const MainInputForm = styled(BaseMainInputForm)`
   display: flex;
-  width: calc(100% - 48px);
-  /* height: 3em; */
   font-size: 1.4rem;
-  position: fixed;
-  bottom: 0;
-  box-sizing: content-box;
-  padding: 0 24px 24px;
+  padding: 16px 24px;
+  box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.16);
 `;
 
 const SubmitButtonWrap = styled.div`
@@ -256,19 +264,25 @@ const SubmitButtonWrap = styled.div`
 `;
 
 const SubmitButton = styled.button`
-  color: ${Color.Brand.default};
-  border: 1px solid ${Color.Brand.default};
+  color: #fff;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24);
+  background-color: ${Color.Brand.default};
   border-radius: 4px;
   white-space: nowrap;
   width: 64px;
-  height: 43px;
+  height: 44px;
   font-size: 1.6rem;
   align-self: flex-end;
   margin-left: 4px;
   outline: none;
+  transition: 0.3s ease;
   &:hover {
-    color: #fff;
-    background-color: ${Color.Brand.default};
+    background-color: ${Color.Brand[300]};
+  }
+  &:active {
+    box-shadow: none;
+    background-color: ${Color.Brand[200]};
   }
 `;
 
