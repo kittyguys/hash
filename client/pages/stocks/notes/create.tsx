@@ -79,7 +79,7 @@ const move = (
   return result;
 };
 
-const Stock: NextPage<Props> = () => {
+const Stock: NextPage<Props> = ({ }) => {
   // SSR の場合にこの関数を使用する必要がある
   resetServerContext();
 
@@ -152,16 +152,16 @@ const Stock: NextPage<Props> = () => {
     <StockWrap>
       <Header route="/stock" />
       <DragDropContext onDragEnd={onDragEnd}>
-        {isNoteOpen && <NoteContainer isNoteOpen mainInputWrapHeight={mainInputWrapHeight}>
+        <NoteContainer mainInputWrapHeight={mainInputWrapHeight}>
           <StockNote
             noteName="Your Group Name"
             noteID="droppable"
             stocks={stockLists.stocks}
             note
           />
-        </NoteContainer>}
+        </NoteContainer>
 
-        <Container isNoteOpen={isNoteOpen} mainInputWrapHeight={mainInputWrapHeight}>
+        <Container mainInputWrapHeight={mainInputWrapHeight}>
           <StockNote
             noteName="Your Stocks"
             noteID="droppable2"
@@ -210,11 +210,12 @@ const StockWrap = styled.div`
   height: 100vh;
 `;
 
-const Container = styled.div<{ mainInputWrapHeight: number, isNoteOpen: boolean }>`
+const Container = styled.div<{ mainInputWrapHeight: number }>`
   /* grid-area: */
-  grid-column: ${({ isNoteOpen }) => isNoteOpen ? "2" : "1 / span 2"};
+  grid-area: "StockContainer";
   padding: 24px 0;
   background-color: ${Color.BlueWhite};
+  transition-duration: 1000;
   > div {
     height: ${({ mainInputWrapHeight }) =>
     `calc(100vh - ${mainInputWrapHeight}px - 84px - 84px)`};
@@ -238,7 +239,7 @@ const Container = styled.div<{ mainInputWrapHeight: number, isNoteOpen: boolean 
 `;
 
 const NoteContainer = styled(Container)`
-  grid-column: 1;
+  grid-area: "NoteStockContainer";
   background-color: ${Color.Brand[500]};
 `;
 

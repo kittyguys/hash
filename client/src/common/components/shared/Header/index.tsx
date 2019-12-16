@@ -10,6 +10,7 @@ import BaseMainInputForm, {
 import BaseAvatar from "../Avatar";
 import BaseLogo from "../Logo";
 import { useSelector } from "react-redux";
+import Nav from "./_nav"
 import { UserModal } from "@src/common/components/shared/Modals";
 import Color from "@src/common/constants/color";
 
@@ -32,9 +33,7 @@ const Header: NextPage<Props> = ({ route }) => {
   if (isSignin === true) {
     linkContents = (
       <>
-        <Link key="stock" href="/stock" as="stock">
-          <NormalLink>Stock</NormalLink>
-        </Link>
+        <Nav route={route} />
         <Icon onClick={onButtonClick}>
           <Avatar />
         </Icon>
@@ -88,8 +87,8 @@ const HeaderWrapper = styled.div<{ route: string }>`
 `;
 
 const MainInputForm = styled(BaseMainInputForm)`
-  width: 582px;
-  height: 44px;
+  width: 400px;
+  height: 36px;
   margin-left: 48px;
   position: relative;
 `;
@@ -175,7 +174,7 @@ const Avatar = styled(BaseAvatar)`
 
 const Logo = styled(BaseLogo)`
   margin-left: 20px;
-  font-size: 40px;
+  font-size: 32px;
 `;
 
 export default Header;

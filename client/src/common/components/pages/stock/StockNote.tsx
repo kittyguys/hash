@@ -27,7 +27,7 @@ const StockNote: React.FC<Props> = ({ stocks, noteName, noteID, note }) => (
 );
 
 const NoteName = styled.h2`
-  color: ${Color.White};
+  color: #555555;
   font-weight: bold;
   font-size: 2rem;
   margin: 0 24px;
