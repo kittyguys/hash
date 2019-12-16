@@ -1,28 +1,18 @@
-type State = {
-  stockValue: string;
-};
-
-type Action = {
-  type: string;
-  payload: { value: string; stocks: initialStockLists };
-};
-
-type initialStockLists = {
-  stocks: [];
-  noteStocks: [];
-};
+import produce from "immer";
+import { State, Action, initialStockLists } from "./types"
 
 const stockList: initialStockLists = {
   stocks: [],
   noteStocks: []
 };
 
-const initialState: any = {
+const initialState: State = {
+  isNoteEditing: false,
   stockValue: "",
-  stockList: stockList
+  stockList: stockList,
 };
 
-const stockReducer = (state: State = initialState, action: Action) => {
+const stock = produce((state = initialState, action: Action) => {
   switch (action.type) {
     case "SET_STOCK_VALUE": {
       const { value } = action.payload;
@@ -39,9 +29,13 @@ const stockReducer = (state: State = initialState, action: Action) => {
         stockList: stocks
       };
     }
+    case "stock/toggleNoteComponent": {
+      state.isNoteEditing = !state.isNoteEditing
+      return state
+    }
     default:
       return state;
   }
-};
+});
 
-export default stockReducer;
+export default stock;
