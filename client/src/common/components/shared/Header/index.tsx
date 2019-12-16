@@ -87,8 +87,8 @@ const HeaderWrapper = styled.div<{ route: string }>`
 `;
 
 const MainInputForm = styled(BaseMainInputForm)`
-  width: 582px;
-  height: 44px;
+  width: 400px;
+  height: 36px;
   margin-left: 48px;
   position: relative;
 `;
@@ -174,7 +174,7 @@ const Avatar = styled(BaseAvatar)`
 
 const Logo = styled(BaseLogo)`
   margin-left: 20px;
-  font-size: 40px;
+  font-size: 32px;
 `;
 
 export default Header;

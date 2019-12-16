@@ -10,13 +10,15 @@ type Props = {
 
 const Nav: FC<Props> = ({ route }) => {
   const dispatch = useDispatch();
-  const handleToggleNote = () => {
+  const handleToggleNote = () => { // TOOD: 切り替えを廃止する場合は削除
     dispatch(toggleNote())
   }
   switch (route) {
     case "/stock": {
       return (
-        <NormalLink onClick={handleToggleNote}>ノート</NormalLink>
+        <Link key="stocks" href="/stocks/notes/create">
+          <NormalLink>ノートを作成</NormalLink>
+        </Link>
       )
     }
     default: {
