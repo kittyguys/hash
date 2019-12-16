@@ -42,18 +42,19 @@ const formats = [
 
 type Props = {
   onChangeCallback?: () => void;
+  value: string;
+  setValue: (value: string) => any
 };
 
-const Editor: React.FC<Props> = ({ onChangeCallback }) => {
+const Editor: React.FC<Props> = ({ onChangeCallback, value, setValue }) => {
   const [html, setHtml] = useState("");
 
   const handleChange = (value: string) => {
-    setHtml(value);
-    onChangeCallback();
+    setValue(value)
   };
   return (
     <ReactQuill
-      value={html}
+      value={value}
       onChange={handleChange}
       modules={modules}
       formats={formats}
