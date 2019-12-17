@@ -1,8 +1,5 @@
-import React, { useCallback, useState } from "react";
-import { Dispatch } from "redux";
-import styled from "styled-components";
+import React from "react";
 import ReactQuill, { Quill } from "react-quill";
-import Color from "@src/common/constants/color";
 
 // QuillEditorでMarkdownを使えるようにするモジュール
 const MarkdownShortcuts = require("quill-markdown-shortcuts");
@@ -47,10 +44,9 @@ type Props = {
 };
 
 const Editor: React.FC<Props> = ({ onChangeCallback, value, setValue }) => {
-  const [html, setHtml] = useState("");
-
   const handleChange = (value: string) => {
     setValue(value)
+    onChangeCallback()
   };
   return (
     <ReactQuill
@@ -60,31 +56,6 @@ const Editor: React.FC<Props> = ({ onChangeCallback, value, setValue }) => {
       formats={formats}
     />
   );
-};
-
-const handleOnChange = (e: any, updater: any, dispatcher: Dispatch) => {
-  const value = e.target.value;
-  let tags = value.split(" ");
-  if (tags[0].length === 0) {
-    tags = [];
-  }
-  updater(tags);
-  dispatcher({ type: "SET_STOCK_VALUE", payload: { value } });
-  return;
-};
-
-const handleOnKeyDown = (
-  e: any,
-  handleSetBox: any,
-  tags: any,
-  box: any,
-  setName: any
-) => {
-  if (e.key === "Enter") {
-    handleSetBox([...box, tags]);
-    setName("");
-  }
-  return;
 };
 
 export default Editor;

@@ -218,7 +218,6 @@ const StockWrap = styled.div`
 `;
 
 const Container = styled.div<{ mainInputWrapHeight: number, isNoteOpen: boolean }>`
-  /* grid-area: */
   grid-column: ${({ isNoteOpen }) => isNoteOpen ? "2" : "1 / span 2"};
   padding: 24px 0;
   background-color: ${Color.BlueWhite};
