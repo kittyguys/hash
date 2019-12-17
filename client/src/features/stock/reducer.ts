@@ -1,36 +1,36 @@
 import produce from "immer";
-import { State, Action, initialStockLists } from "./types"
-
-const stockList: initialStockLists = {
-  stocks: [],
-  noteStocks: []
-};
+import { State, Action } from "./types"
 
 const initialState: State = {
   isNoteEditing: false,
-  stockValue: "",
-  stockList: stockList,
+  stocks: [],
+  notes: []
 };
 
-const stock = produce((state = initialState, action: Action) => {
+const stocks = produce((state = initialState, action: Action) => {
   switch (action.type) {
-    case "SET_STOCK_VALUE": {
-      const { value } = action.payload;
-      return {
-        ...state,
-        stockValue: value
-      };
-    }
-    case "SET_STOCK_LIST": {
-      const { value, stocks } = action.payload;
-      return {
-        ...state,
-        stockValue: value,
-        stockList: stocks
-      };
-    }
-    case "stock/toggleNoteComponent": {
+    case "stocks/toggleNoteComponent": {
       state.isNoteEditing = !state.isNoteEditing
+      return state
+    }
+    case "stocks/get/REQUEST": {
+      return state
+    }
+    case "stocks/get/SUCCESS": {
+      state.stocks = action.payload.stocks
+      return state
+    }
+    case "stocks/get/FAIL": {
+      return state
+    }
+    case "stocks/post/REQUEST": {
+      return state
+    }
+    case "stocks/post/SUCCESS": {
+      state.stocks.push(action.payload.stock)
+      return state
+    }
+    case "stocks/post/FAIL": {
       return state
     }
     default:
@@ -38,4 +38,4 @@ const stock = produce((state = initialState, action: Action) => {
   }
 });
 
-export default stock;
+export default stocks;

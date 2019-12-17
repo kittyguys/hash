@@ -1,13 +1,13 @@
 import sql from "../configs/mysql";
 
-export const getStock = (req, res, next) => {
+export const getStocks = (req, res, next) => {
   try {
     const { id } = req.user;
     sql.query("select * from stocks where user_id = ?", id, (err, data) => {
       if (err) {
         console.log("error: ", err);
       } else {
-        return res.json({ data });
+        return res.json({ stocks: data });
       }
     });
   } catch (err) {
@@ -18,15 +18,20 @@ export const getStock = (req, res, next) => {
 export const createStock = (req, res, next) => {
   try {
     const { id } = req.user;
+    const { content } = req.body
     const query = {
       user_id: id,
-      content: "this is a testing text"
+      content
     };
     sql.query("insert into stocks set ?", query, (err, data) => {
       if (err) {
         console.log("error: ", err);
       } else {
-        return res.json({ data });
+        const stock = {
+          id: data.insertId,
+          content: query.content
+        }
+        return res.json({ stock });
       }
     });
   } catch (err) {

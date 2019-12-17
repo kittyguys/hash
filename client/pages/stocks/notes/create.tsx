@@ -84,6 +84,7 @@ const Stock: NextPage<Props> = ({ }) => {
   resetServerContext();
 
   const [stockLists, setStockLists] = useState(initialStockLists);
+  const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
   const isNoteOpen = useSelector((state: any) => state.stock.isNoteEditing);
   /**
@@ -172,7 +173,7 @@ const Stock: NextPage<Props> = ({ }) => {
 
       <MainInputWrap ref={mainInputWrap}>
         <MainInputForm handleSubmit={e => e.preventDefault}>
-          <Editor onChangeCallback={heightAdjust} />
+          <Editor onChangeCallback={heightAdjust} value={inputValue} setValue={setInputValue} />
           <SubmitButtonWrap>
             <SubmitButton
               onClick={e => {

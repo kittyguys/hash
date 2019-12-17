@@ -17,6 +17,7 @@ import BaseMainInputForm from "@src/common/components/shared/StockInput";
 import Header from "@src/common/components/shared/Header";
 import Color from "@src/common/constants/color";
 import StockNote from "@src/common/components/pages/stock/StockNote";
+import { getStocks, addStock } from "@src/features/stock/operations"
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
@@ -87,6 +88,8 @@ const Stock: NextPage<Props> = () => {
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
   const isNoteOpen = useSelector((state: any) => state.stock.isNoteEditing);
+  const initialStocks = useSelector((state: any) => state.stock.stocks);
+  const stocks = initialStocks.map((v: any) => ({ id: "" + v.id, content: v.content }))
   /**
    * A semi-generic way to handle multiple lists. Matches
    * the IDs of the droppable container to the names of the
@@ -137,7 +140,7 @@ const Stock: NextPage<Props> = () => {
   };
 
   useEffect(() => {
-    dispatch({ type: "SET_STOCK_LIST", payload: { stocks: stockLists } });
+    dispatch(getStocks())
   }, [stockLists]);
 
   const [mainInputWrapHeight, setMainInputWrapHeight] = useState(121);
@@ -150,8 +153,10 @@ const Stock: NextPage<Props> = () => {
   };
 
   const onSubmit = (e: any) => {
+    const data = { content: inputValue }
     e.preventDefault()
     setInputValue("")
+    dispatch(addStock(data))
   }
 
   return (
@@ -162,18 +167,19 @@ const Stock: NextPage<Props> = () => {
           <StockNote
             noteName="Your Group Name"
             noteID="droppable"
-            stocks={stockLists.stocks}
+            stocks={stocks}
             note
           />
         </NoteContainer>}
-
-        <Container isNoteOpen={isNoteOpen} mainInputWrapHeight={mainInputWrapHeight}>
-          <StockNote
-            noteName="Your Stocks"
-            noteID="droppable2"
-            stocks={stockLists.noteStocks}
-          />
-        </Container>
+        {stocks.length > 0 &&
+          <Container isNoteOpen={isNoteOpen} mainInputWrapHeight={mainInputWrapHeight}>
+            <StockNote
+              noteName="Your Stocks"
+              noteID="droppable2"
+              stocks={stocks}
+            />
+          </Container>
+        }
       </DragDropContext>
       <MainInputWrap ref={mainInputWrap}>
         <MainInputForm handleSubmit={(e) => onSubmit(e)}>

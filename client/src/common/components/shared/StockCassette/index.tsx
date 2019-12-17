@@ -20,28 +20,28 @@ const StockCassette: React.FC<Props> = ({
   note,
   index
 }: Props) => (
-  <Draggable draggableId={stock.id} index={index}>
-    {(provided, snapshot) => {
-      return (
-        <Wrapper
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          <Box className={className} snapshot={snapshot} note={note}>
-            <ContentHead>
-              <DateText>Nov 8</DateText>
-              <TimeText>12:00 AM</TimeText>
-            </ContentHead>
-            <Content>
-              <Text>{stock.content}</Text>
-            </Content>
-          </Box>
-        </Wrapper>
-      );
-    }}
-  </Draggable>
-);
+    <Draggable draggableId={stock.id} index={index}>
+      {(provided, snapshot) => {
+        return (
+          <Wrapper
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          >
+            <Box className={className} snapshot={snapshot} note={note}>
+              <ContentHead>
+                <DateText>Nov 8</DateText>
+                <TimeText>12:00 AM</TimeText>
+              </ContentHead>
+              <Content>
+                <Text dangerouslySetInnerHTML={{ __html: stock.content }} />
+              </Content>
+            </Box>
+          </Wrapper>
+        );
+      }}
+    </Draggable>
+  );
 
 type BoxProps = {
   snapshot?: { isDragging: boolean };
