@@ -7,4 +7,14 @@ const connection = mysql.createConnection({
   database: "hachet"
 });
 
+export const pool = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: "password",
+  database: 'hachet',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+});
+
 export default connection;

@@ -17,6 +17,36 @@ IF NOT EXISTS hachet.users
 );
 
 CREATE TABLE
+IF NOT EXISTS hachet.stocks
+(
+  id int PRIMARY KEY AUTO_INCREMENT,
+  user_id int,
+  content varchar(2550) NOT NULL,
+  sequence int,
+  created_at datetime  default current_timestamp,
+  updated_at timestamp default current_timestamp on update current_timestamp
+);
+
+CREATE TABLE
+IF NOT EXISTS hachet.sequece
+(
+  id int PRIMARY KEY AUTO_INCREMENT,
+  stock_id int,
+  created_at datetime  default current_timestamp,
+  updated_at timestamp default current_timestamp on update current_timestamp
+);
+
+CREATE TABLE
+IF NOT EXISTS hachet.notes
+(
+  id int PRIMARY KEY AUTO_INCREMENT,
+  stock_id int,
+  title string,
+  created_at datetime  default current_timestamp,
+  updated_at timestamp default current_timestamp on update current_timestamp
+);
+
+CREATE TABLE
 IF NOT EXISTS hash.user_tags
 (
   tag_master_id int NOT NULL,
@@ -57,16 +87,6 @@ IF NOT EXISTS hash.search_value
 (
   id int PRIMARY KEY AUTO_INCREMENT,
   value varchar(255) NOT NULL,
-  created_at datetime  default current_timestamp,
-  updated_at timestamp default current_timestamp on update current_timestamp
-);
-
-CREATE TABLE
-IF NOT EXISTS hachet.stocks
-(
-  id int PRIMARY KEY AUTO_INCREMENT,
-  user_id int,
-  content varchar(2550) NOT NULL,
   created_at datetime  default current_timestamp,
   updated_at timestamp default current_timestamp on update current_timestamp
 );

@@ -31,6 +31,7 @@ export const addStock = (
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
     dispatch(addStockRequest());
+    console.log(new Date())
     axios
       .post("http://localhost:8080/api/stocks", data, {
         headers: {
