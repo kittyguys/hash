@@ -1,4 +1,4 @@
-import sql from "../configs/mysql";
+import sql, { pool } from "../configs/mysql";
 
 export const getStocks = (req, res, next) => {
   try {
@@ -15,7 +15,9 @@ export const getStocks = (req, res, next) => {
   }
 };
 
-export const createStock = (req, res, next) => {
+export const createStock = async (req, res, next) => {
+  const connection = await pool.getConnection();
+  await connection.beginTransaction();
   try {
     const { id } = req.user;
     const { content } = req.body
@@ -23,31 +25,19 @@ export const createStock = (req, res, next) => {
       user_id: id,
       content
     };
-    sql.query("INSERT INTO stocks (user_id, content, sequence) SELECT (user_id, content, COUNT(*)) FROM stocks WHERE user_id=1", query, (err, data) => {
-      if (err) {
-        console.log("error: ", err);
-      } else {
-        return res.json({ stocks: data });
-      }
-    });
-    // sql.query("INSET INTO stocks SET ?", query, (err, data) => {
-    //   if (err) {
-    //     console.log("error: ", err);
-    //   } else {
-    //     const stock = {
-    //       id: data.insertId,
-    //       content: query.content
-    //     }
-    //     sql.query("UPDATE stocks SET sequence = ? WHERE id = ?", [data.insertId, data.insertId], (err, data) => {
-    //       if (err) {
-    //         console.log("error: ", err);
-    //       } else {
-    //         return res.json({ stock });
-    //       }
-    //     });
-    //   }
-    // });
+    const stock = {
+      id: null,
+      content: query.content
+    }
+    const rows = await connection.query("INSERT INTO stocks SET ?", query);
+    const updatedStock = await connection.query("UPDATE stocks SET sequence = ? WHERE id = ?", [rows[0].insertId, rows[0].insertId]);
+    await connection.commit();
+    stock.id = updatedStock.insertId;
+    return res.json({ stock });
   } catch (err) {
+    await connection.rollback();
     next(err);
+  } finally {
+    connection.release();
   }
 };

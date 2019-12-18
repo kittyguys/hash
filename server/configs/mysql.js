@@ -1,4 +1,5 @@
 import mysql from "mysql2";
+import mysqlPromise from "mysql2/promise";
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -7,7 +8,7 @@ const connection = mysql.createConnection({
   database: "hachet"
 });
 
-export const pool = mysql.createPool({
+export const pool = mysqlPromise.createPool({
   host: 'localhost',
   user: 'root',
   password: "password",
