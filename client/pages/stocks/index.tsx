@@ -17,6 +17,7 @@ import BaseMainInputForm from "@src/common/components/shared/StockInput";
 import Header from "@src/common/components/shared/Header";
 import Color from "@src/common/constants/color";
 import StockNote from "@src/common/components/pages/stock/StockNote";
+import { reorderStocks } from "@src/features/stock/actions"
 import { getStocks, addStock } from "@src/features/stock/operations"
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
@@ -76,7 +77,6 @@ const move = (
   const result: { [index: string]: Stock[] } = {};
   result[droppableSource.droppableId] = sourceClone;
   result[droppableDestination.droppableId] = destClone;
-
   return result;
 };
 
@@ -88,8 +88,8 @@ const Stock: NextPage<Props> = () => {
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
   const isNoteOpen = useSelector((state: any) => state.stock.isNoteEditing);
-  const initialStocks = useSelector((state: any) => state.stock.stocks);
-  const stocks = initialStocks.map((v: any) => ({ id: "" + v.id, content: v.content }))
+  const initialStocks = useSelector((state: any) => state.stock.stocks)
+  const [stocks, setStocks] = useState(initialStocks.map((v: any) => ({ id: "" + v.id, content: v.content })));
   /**
    * A semi-generic way to handle multiple lists. Matches
    * the IDs of the droppable container to the names of the
@@ -105,6 +105,7 @@ const Stock: NextPage<Props> = () => {
   const getList = (id: string) => stockLists[id2List[id]];
 
   const onDragEnd = (result: DropResult) => {
+
     const { source, destination } = result;
 
     // dropped outside the list
@@ -114,7 +115,7 @@ const Stock: NextPage<Props> = () => {
 
     if (source.droppableId === destination.droppableId) {
       const stocks = reorder(
-        getList(source.droppableId),
+        initialStocks,
         source.index,
         destination.index
       );
@@ -124,6 +125,7 @@ const Stock: NextPage<Props> = () => {
         ...stockLists,
         ...state
       });
+      dispatch(reorderStocks(stocks))
     } else {
       const result = move(
         getList(source.droppableId),
@@ -140,8 +142,15 @@ const Stock: NextPage<Props> = () => {
   };
 
   useEffect(() => {
+    if (initialStocks.length > 0) {
+      setStocks(initialStocks.map((v: any) => ({ id: "" + v.id, content: v.content })))
+    }
+    console.log(stocks)
+  }, [initialStocks]);
+
+  useEffect(() => {
     dispatch(getStocks())
-  }, [stockLists]);
+  }, []);
 
   const [mainInputWrapHeight, setMainInputWrapHeight] = useState(121);
   const mainInputWrap = useRef(null);

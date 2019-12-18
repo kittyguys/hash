@@ -13,6 +13,10 @@ const stocks = produce((state = initialState, action: Action) => {
       state.isNoteEditing = !state.isNoteEditing
       return state
     }
+    case "stocks/reorder": {
+      state.stocks = action.payload.stocks
+      return state
+    }
     case "stocks/get/REQUEST": {
       return state
     }
