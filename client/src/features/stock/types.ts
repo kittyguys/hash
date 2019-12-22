@@ -1,5 +1,6 @@
 export type State = {
   isNoteEditing: boolean;
+  isDrawerOpen: boolean;
   stocks: [],
   notes: []
 };
