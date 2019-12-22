@@ -143,7 +143,6 @@ const Stock: NextPage<Props> = () => {
         initialStocks.map((v: any) => ({ id: "" + v.id, content: v.content }))
       );
     }
-    console.log(stocks);
   }, [initialStocks]);
 
   useEffect(() => {

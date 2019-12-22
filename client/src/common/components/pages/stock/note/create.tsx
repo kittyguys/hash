@@ -87,7 +87,7 @@ const StockNoteCreate: React.FC = () => {
 
   const scrollAdjust = (heightDiff: number): void => {
     // TODO stock のスクロール位置を調整する
-    console.log(heightDiff);
+    // console.log(heightDiff);
   };
 
   const heightAdjust = () => {
