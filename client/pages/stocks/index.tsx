@@ -13,10 +13,11 @@ import cookies from "next-cookies";
 import jwt_decode from "jwt-decode";
 import { signinSuccess } from "@src/features/auth/actions";
 import { updateProfileSuccess } from "@src/features/profile/actions";
-import BaseMainInputForm from "@src/common/components/shared/StockInput";
 import Header from "@src/common/components/shared/Header";
 import Color from "@src/common/constants/color";
-import StockNote from "@src/common/components/pages/stock/StockNote";
+import StockNote from "@src/common/components/shared/StockNote";
+import { reorderStocks } from "@src/features/stock/actions";
+import { getStocks, addStock } from "@src/features/stock/operations";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
@@ -75,7 +76,6 @@ const move = (
   const result: { [index: string]: Stock[] } = {};
   result[droppableSource.droppableId] = sourceClone;
   result[droppableDestination.droppableId] = destClone;
-
   return result;
 };
 
@@ -84,8 +84,13 @@ const Stock: NextPage<Props> = () => {
   resetServerContext();
 
   const [stockLists, setStockLists] = useState(initialStockLists);
+  const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
   const isNoteOpen = useSelector((state: any) => state.stock.isNoteEditing);
+  const initialStocks = useSelector((state: any) => state.stock.stocks);
+  const [stocks, setStocks] = useState(
+    initialStocks.map((v: any) => ({ id: "" + v.id, content: v.content }))
+  );
   /**
    * A semi-generic way to handle multiple lists. Matches
    * the IDs of the droppable container to the names of the
@@ -109,17 +114,14 @@ const Stock: NextPage<Props> = () => {
     }
 
     if (source.droppableId === destination.droppableId) {
-      const stocks = reorder(
-        getList(source.droppableId),
-        source.index,
-        destination.index
-      );
+      const stocks = reorder(initialStocks, source.index, destination.index);
       const state: { [index: string]: Stock[] } = {};
       state[id2List[source.droppableId]] = stocks;
       setStockLists({
         ...stockLists,
         ...state
       });
+      dispatch(reorderStocks(stocks));
     } else {
       const result = move(
         getList(source.droppableId),
@@ -136,55 +138,72 @@ const Stock: NextPage<Props> = () => {
   };
 
   useEffect(() => {
-    dispatch({ type: "SET_STOCK_LIST", payload: { stocks: stockLists } });
-  }, [stockLists]);
+    if (initialStocks.length > 0) {
+      setStocks(
+        initialStocks.map((v: any) => ({ id: "" + v.id, content: v.content }))
+      );
+    }
+  }, [initialStocks]);
 
-  const [mainInputWrapHeight, setMainInputWrapHeight] = useState(121);
-  const mainInputWrap = useRef(null);
+  useEffect(() => {
+    dispatch(getStocks());
+  }, []);
+
+  const [editorWrapHeight, setMainInputWrapHeight] = useState(121);
+  const editorWrap = useRef(null);
 
   const heightAdjust = () => {
-    if (mainInputWrap.current.clientHeight !== null) {
-      setMainInputWrapHeight(mainInputWrap.current.clientHeight);
+    if (editorWrap.current.clientHeight !== null) {
+      setMainInputWrapHeight(editorWrap.current.clientHeight);
     }
   };
 
+  const onSubmit = (e: any) => {
+    const data = { content: inputValue };
+    e.preventDefault();
+    setInputValue("");
+    dispatch(addStock(data));
+  };
+
   return (
-    <StockWrap>
+    <>
       <Header route="/stock" />
-      <DragDropContext onDragEnd={onDragEnd}>
-        {isNoteOpen && <NoteContainer isNoteOpen mainInputWrapHeight={mainInputWrapHeight}>
-          <StockNote
-            noteName="Your Group Name"
-            noteID="droppable"
-            stocks={stockLists.stocks}
-            note
-          />
-        </NoteContainer>}
-
-        <Container isNoteOpen={isNoteOpen} mainInputWrapHeight={mainInputWrapHeight}>
-          <StockNote
-            noteName="Your Stocks"
-            noteID="droppable2"
-            stocks={stockLists.noteStocks}
-          />
-        </Container>
-      </DragDropContext>
-
-      <MainInputWrap ref={mainInputWrap}>
-        <MainInputForm handleSubmit={e => e.preventDefault}>
-          <Editor onChangeCallback={heightAdjust} />
-          <SubmitButtonWrap>
-            <SubmitButton
-              onClick={e => {
-                e.preventDefault();
-              }}
+      <StockWrap>
+        <DragDropContext onDragEnd={onDragEnd}>
+          {isNoteOpen && (
+            <NoteContainer isNoteOpen editorWrapHeight={editorWrapHeight}>
+              <StockNote
+                noteName="Your Group Name"
+                noteID="droppable"
+                stocks={stocks}
+                note
+              />
+            </NoteContainer>
+          )}
+          {stocks.length > 0 && (
+            <Container
+              isNoteOpen={isNoteOpen}
+              editorWrapHeight={editorWrapHeight}
             >
-              送信
-            </SubmitButton>
-          </SubmitButtonWrap>
-        </MainInputForm>
-      </MainInputWrap>
-    </StockWrap>
+              <StockNote
+                noteName="Your Stocks"
+                noteID="droppable2"
+                stocks={stocks}
+              />
+            </Container>
+          )}
+        </DragDropContext>
+      </StockWrap>
+      <div ref={editorWrap}>
+        <Editor
+          onClickSubmit={onSubmit}
+          handleSubmit={onSubmit}
+          onChangeCallback={heightAdjust}
+          value={inputValue}
+          setValue={setInputValue}
+        />
+      </div>
+    </>
   );
 };
 
@@ -200,84 +219,27 @@ Stock.getInitialProps = async (ctx: any) => {
 };
 
 const StockWrap = styled.div`
-  display: grid;
-  grid-template-rows: 84px 1fr auto;
-  grid-template-columns: 1fr 1fr;
-  grid-template-areas:
-    "Header Header"
-    "NoteStockContainer StockContainer"
-    "MainInputForm MainInputForm";
-  height: 100vh;
+  display: flex;
 `;
 
-const Container = styled.div<{ mainInputWrapHeight: number, isNoteOpen: boolean }>`
-  /* grid-area: */
-  grid-column: ${({ isNoteOpen }) => isNoteOpen ? "2" : "1 / span 2"};
+const Container = styled.div<{
+  editorWrapHeight: number;
+  isNoteOpen: boolean;
+}>`
+  width: ${({ isNoteOpen }) => (isNoteOpen ? "50%" : "100%")};
   padding: 24px 0;
   background-color: ${Color.BlueWhite};
-  > div {
-    height: ${({ mainInputWrapHeight }) =>
-    `calc(100vh - ${mainInputWrapHeight}px - 84px - 84px)`};
+  [data-rbd-droppable-id] {
+    height: ${({ editorWrapHeight }) =>
+      `calc(100vh - ${editorWrapHeight}px - 84px - 84px)`};
     padding: 0 24px;
     margin-top: 6px;
     overflow: auto;
-    position: relative;
-    ::before,
-    ::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      width: 100%;
-      height: 12px;
-      /* background: ${"linear-gradient(to bottom, rgba(" +
-  Color.toRGB(Color.BlueWhite) +
-  ", 0.5)" +
-  "rgba(255, 255, 255, 0)"}; */
-    }
   }
 `;
 
 const NoteContainer = styled(Container)`
-  grid-column: 1;
   background-color: ${Color.Brand[500]};
-`;
-
-const MainInputWrap = styled.div`
-  grid-area: MainInputForm;
-`;
-
-const MainInputForm = styled(BaseMainInputForm)`
-  display: flex;
-  font-size: 1.4rem;
-  padding: 16px 24px;
-  box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.16);
-`;
-
-const SubmitButtonWrap = styled.div`
-  display: flex;
-`;
-
-const SubmitButton = styled.button`
-  color: #fff;
-  border: none;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24);
-  background-color: ${Color.Brand.default};
-  border-radius: 4px;
-  white-space: nowrap;
-  width: 64px;
-  height: 44px;
-  font-size: 1.6rem;
-  align-self: flex-end;
-  margin-left: 4px;
-  outline: none;
-  transition: 0.3s ease;
-  &:hover {
-    background-color: ${Color.Brand[300]};
-  }
-  &:active {
-    box-shadow: none;
-    background-color: ${Color.Brand[200]};
-  }
 `;
 
 export default Stock;

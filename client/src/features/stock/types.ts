@@ -1,15 +1,19 @@
 export type State = {
   isNoteEditing: boolean;
-  stockValue: string;
-  stockList: initialStockLists;
+  stocks: [],
+  notes: []
 };
 
 export type Action = {
   type: string;
-  payload: { value: string; stocks: initialStockLists };
+  payload: any;
 };
 
-export type initialStockLists = {
-  stocks: [];
-  noteStocks: [];
-};
+export type FormData = {
+  content: string;
+}
+
+export type Stock = {
+  id: number,
+  content: string
+}

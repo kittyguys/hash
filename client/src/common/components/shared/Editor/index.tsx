@@ -1,8 +1,8 @@
-import React, { useCallback, useState } from "react";
-import { Dispatch } from "redux";
-import styled from "styled-components";
+import React, { RefObject } from "react";
 import ReactQuill, { Quill } from "react-quill";
+import styled from "styled-components";
 import Color from "@src/common/constants/color";
+import BaseMainInputForm from "@src/common/components/shared/StockInput";
 
 // QuillEditorでMarkdownを使えるようにするモジュール
 const MarkdownShortcuts = require("quill-markdown-shortcuts");
@@ -41,49 +41,73 @@ const formats = [
 ];
 
 type Props = {
+  onClickSubmit?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  handleSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
   onChangeCallback?: () => void;
+  value: string;
+  setValue: (value: string) => any;
 };
 
-const Editor: React.FC<Props> = ({ onChangeCallback }) => {
-  const [html, setHtml] = useState("");
-
+const Editor: React.FC<Props> = ({
+  onClickSubmit,
+  handleSubmit,
+  onChangeCallback,
+  value,
+  setValue
+}) => {
   const handleChange = (value: string) => {
-    setHtml(value);
+    setValue(value);
     onChangeCallback();
   };
   return (
-    <ReactQuill
-      value={html}
-      onChange={handleChange}
-      modules={modules}
-      formats={formats}
-    />
+    <MainInputForm handleSubmit={handleSubmit}>
+      <ReactQuill
+        value={value}
+        onChange={handleChange}
+        modules={modules}
+        formats={formats}
+      />
+      <SubmitButtonWrap>
+        <SubmitButton onClick={onClickSubmit}>送信</SubmitButton>
+      </SubmitButtonWrap>
+    </MainInputForm>
   );
 };
 
-const handleOnChange = (e: any, updater: any, dispatcher: Dispatch) => {
-  const value = e.target.value;
-  let tags = value.split(" ");
-  if (tags[0].length === 0) {
-    tags = [];
-  }
-  updater(tags);
-  dispatcher({ type: "SET_STOCK_VALUE", payload: { value } });
-  return;
-};
+const MainInputForm = styled(BaseMainInputForm)`
+  display: flex;
+  font-size: 1.4rem;
+  padding: 16px 24px;
+  box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.16);
+  position: relative;
+  z-index: 2;
+`;
 
-const handleOnKeyDown = (
-  e: any,
-  handleSetBox: any,
-  tags: any,
-  box: any,
-  setName: any
-) => {
-  if (e.key === "Enter") {
-    handleSetBox([...box, tags]);
-    setName("");
+const SubmitButtonWrap = styled.div`
+  display: flex;
+`;
+
+const SubmitButton = styled.button`
+  color: #fff;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24);
+  background-color: ${Color.Brand.default};
+  border-radius: 4px;
+  white-space: nowrap;
+  width: 64px;
+  height: 44px;
+  font-size: 1.6rem;
+  align-self: flex-end;
+  margin-left: 4px;
+  outline: none;
+  transition: 0.3s ease;
+  &:hover {
+    background-color: ${Color.Brand[300]};
   }
-  return;
-};
+  &:active {
+    box-shadow: none;
+    background-color: ${Color.Brand[200]};
+  }
+`;
 
 export default Editor;
