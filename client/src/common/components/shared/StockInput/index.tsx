@@ -5,7 +5,7 @@ import axios from "axios";
 
 type Props = {
   className?: string;
-  handleSubmit?: (e: any) => void;
+  handleSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
 const MainInputForm: React.FC<Props> = ({

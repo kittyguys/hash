@@ -49,20 +49,28 @@ const Color = {
   ButtonHover: "#444",
   ButtonDisabled: "e6e6e6",
   toRGB: (colorCodeHex: string): string => {
-    const hex = colorCodeHex.replace("#", "");
+    let hex = colorCodeHex.replace("#", "");
+    if (hex.length === 3) {
+      hex =
+        hex.slice(0, 1) +
+        hex.slice(0, 1) +
+        hex.slice(1, 2) +
+        hex.slice(1, 2) +
+        hex.slice(2, 3) +
+        hex.slice(2, 3);
+    }
     const hexLength = hex.length;
-    if (hexLength === 6 || hexLength === 3) {
-      const splitLength = hexLength / 3;
+    if (hexLength === 6) {
       const [rHex, gHex, bHex] = [
-        hex.substr(splitLength * 0, splitLength),
-        hex.substr(splitLength * 1, splitLength),
-        hex.substr(splitLength * 2, splitLength)
+        hex.substr(0, 2),
+        hex.substr(2, 2),
+        hex.substr(4, 2)
       ];
       return [parseInt(rHex, 16), parseInt(gHex, 16), parseInt(bHex, 16)].join(
-        ","
+        ", "
       );
     } else {
-      return "";
+      return "0, 0, 0";
     }
   }
 } as const;

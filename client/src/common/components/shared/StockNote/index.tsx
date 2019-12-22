@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import { Droppable } from "react-beautiful-dnd";
 import StockList from "@src/common/components/shared/StockList";
-import Color from "@src/common/constants/color";
 
 type Props = {
   stocks: Stock[];
   noteName: string;
   noteID: string;
   note?: boolean;
+  scrollAdjust?: (heightDiff: number) => void;
 };
 
 type Stock = { id: string; content: string };
