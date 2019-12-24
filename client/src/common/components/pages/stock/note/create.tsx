@@ -34,8 +34,6 @@ const StockNoteCreate: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
   const isNoteOpen = useSelector((state: any) => state.stock.isNoteEditing);
-  const isDrawerOpen = useSelector((state: any) => state.stock.isDrawerOpen);
-
 
   const id2List: {
     [index: string]: string;
@@ -124,7 +122,7 @@ const StockNoteCreate: React.FC = () => {
             />
           </NoteContainer>
         </DragDropContext>
-        {isDrawerOpen && <Drawer />}
+        <Drawer />
       </StockWrap>
       <div ref={editorWrap}>
         <Editor
@@ -143,6 +141,9 @@ const StockNoteCreate: React.FC = () => {
 
 const StockWrap = styled.div`
   display: flex;
+  position: relative;
+  max-width: 1440px;
+  overflow: hidden;
 `;
 
 const Container = styled.div<{ editorWrapHeight: number }>`
@@ -152,7 +153,7 @@ const Container = styled.div<{ editorWrapHeight: number }>`
   transition-duration: 1000;
   [data-rbd-droppable-id] {
     height: ${({ editorWrapHeight }) =>
-    `calc(100vh - ${editorWrapHeight}px - 84px - 84px)`};
+      `calc(100vh - ${editorWrapHeight}px - 84px - 84px)`};
     padding: 0 24px;
     margin-top: 6px;
     overflow: auto;
