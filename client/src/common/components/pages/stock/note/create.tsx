@@ -11,6 +11,7 @@ import { Stock, StockLists } from "@src/common/components/pages/stock/types";
 import { move, reorder } from "@src/common/components/pages/stock/funcs";
 import Color from "@src/common/constants/color";
 import StockNote from "@src/common/components/shared/StockNote";
+import Drawer from "./_drawer";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
@@ -33,6 +34,8 @@ const StockNoteCreate: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
   const isNoteOpen = useSelector((state: any) => state.stock.isNoteEditing);
+  const isDrawerOpen = useSelector((state: any) => state.stock.isDrawerOpen);
+
 
   const id2List: {
     [index: string]: string;
@@ -103,15 +106,6 @@ const StockNoteCreate: React.FC = () => {
     <>
       <StockWrap>
         <DragDropContext onDragEnd={onDragEnd}>
-          <NoteContainer editorWrapHeight={editorWrapHeight}>
-            <StockNote
-              noteName="Your Group Name"
-              noteID="droppable"
-              stocks={stockLists.stocks}
-              note
-            />
-          </NoteContainer>
-
           <Container editorWrapHeight={editorWrapHeight}>
             <StockNote
               noteName="Your Stocks"
@@ -120,7 +114,17 @@ const StockNoteCreate: React.FC = () => {
               scrollAdjust={scrollAdjust}
             />
           </Container>
+
+          <NoteContainer editorWrapHeight={editorWrapHeight}>
+            <StockNote
+              noteName="Your Group Name"
+              noteID="droppable"
+              stocks={stockLists.stocks}
+              note
+            />
+          </NoteContainer>
         </DragDropContext>
+        {isDrawerOpen && <Drawer />}
       </StockWrap>
       <div ref={editorWrap}>
         <Editor
@@ -148,7 +152,7 @@ const Container = styled.div<{ editorWrapHeight: number }>`
   transition-duration: 1000;
   [data-rbd-droppable-id] {
     height: ${({ editorWrapHeight }) =>
-      `calc(100vh - ${editorWrapHeight}px - 84px - 84px)`};
+    `calc(100vh - ${editorWrapHeight}px - 84px - 84px)`};
     padding: 0 24px;
     margin-top: 6px;
     overflow: auto;
