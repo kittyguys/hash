@@ -117,6 +117,7 @@ Twitter: @rich_clark
     font-size: 62.5%;
     line-height: 1.5;
     overscroll-behavior: none;
+    color: #555;
   }
   a, button, input[type="submit"] {
     cursor: pointer;
