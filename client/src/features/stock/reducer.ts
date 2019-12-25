@@ -3,6 +3,7 @@ import { State, Action } from "./types";
 
 const initialState: State = {
   isNoteEditing: false,
+  isDrawerOpen: false,
   stocks: [],
   notes: []
 };
@@ -12,6 +13,10 @@ const stocks = produce((state = initialState, action: Action) => {
     case "stocks/toggleNoteComponent": {
       state.isNoteEditing = !state.isNoteEditing;
       return state;
+    }
+    case "stocks/toggleDrawer": {
+      state.isDrawerOpen = !state.isDrawerOpen
+      return state
     }
     case "stocks/reorder": {
       state.stocks = action.payload.stocks;

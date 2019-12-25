@@ -10,6 +10,7 @@ export const CREATE_STOCK_FAIL = "stocks/create/FAIL";
 export const ADD_STOCK_REQUEST = "stocks/add/REQUEST";
 export const ADD_STOCK_SUCCESS = "stocks/add/SUCCESS";
 export const ADD_STOCK_FAIL = "stocks/add/FAIL";
+export const TOGGLE_DRAWER = "stocks/toggleDrawer";
 export const REORDER = "stocks/reorder";
 export const REORDER_STOCKS_REQUEST = "stocks/reorder/REQUEST";
 export const REORDER_STOCKS_SUCCESS = "stocks/reorder/SUCCESS";
@@ -17,6 +18,10 @@ export const REORDER_STOCKS_FAIL = "stocks/reorder/FAIL";
 
 export const toggleNote = () => ({
   type: TOGGLE_NOTE
+});
+
+export const toggleDrawer = () => ({
+  type: TOGGLE_DRAWER
 });
 
 export const getStocksRequest = () => ({

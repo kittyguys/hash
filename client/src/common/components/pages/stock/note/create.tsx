@@ -11,6 +11,7 @@ import { Stock, StockLists } from "@src/common/components/pages/stock/types";
 import { move, reorder } from "@src/common/components/pages/stock/funcs";
 import Color from "@src/common/constants/color";
 import StockNote from "@src/common/components/shared/StockNote";
+import Drawer from "./_drawer";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
@@ -103,15 +104,6 @@ const StockNoteCreate: React.FC = () => {
     <>
       <StockWrap>
         <DragDropContext onDragEnd={onDragEnd}>
-          <NoteContainer editorWrapHeight={editorWrapHeight}>
-            <StockNote
-              noteName="Your Group Name"
-              noteID="droppable"
-              stocks={stockLists.stocks}
-              note
-            />
-          </NoteContainer>
-
           <Container editorWrapHeight={editorWrapHeight}>
             <StockNote
               noteName="Your Stocks"
@@ -120,7 +112,17 @@ const StockNoteCreate: React.FC = () => {
               scrollAdjust={scrollAdjust}
             />
           </Container>
+
+          <NoteContainer editorWrapHeight={editorWrapHeight}>
+            <StockNote
+              noteName="Your Group Name"
+              noteID="droppable"
+              stocks={stockLists.stocks}
+              note
+            />
+          </NoteContainer>
         </DragDropContext>
+        <Drawer />
       </StockWrap>
       <div ref={editorWrap}>
         <Editor
@@ -139,6 +141,9 @@ const StockNoteCreate: React.FC = () => {
 
 const StockWrap = styled.div`
   display: flex;
+  position: relative;
+  max-width: 1440px;
+  overflow: hidden;
 `;
 
 const Container = styled.div<{ editorWrapHeight: number }>`
