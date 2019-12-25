@@ -11,6 +11,11 @@ import { Stock, StockLists } from "@src/common/components/pages/stock/types";
 import { move, reorder } from "@src/common/components/pages/stock/funcs";
 import Color from "@src/common/constants/color";
 import StockNote from "@src/common/components/shared/StockNote";
+import {
+  getStocksAsync,
+  createStockAsync,
+  reorderStocksAsync
+} from "@src/features/stock/operations";
 import Drawer from "./_drawer";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
@@ -32,8 +37,10 @@ const StockNoteCreate: React.FC = () => {
 
   const [stockLists, setStockLists] = useState(initialStockLists);
   const [inputValue, setInputValue] = useState("");
+  const [isDiffAfterDrag, setIsDiffAfterDrag] = useState(false);
   const dispatch = useDispatch();
   const isNoteOpen = useSelector((state: any) => state.stock.isNoteEditing);
+  const stocks = useSelector((state: any) => state.stock.stocks);
 
   const id2List: {
     [index: string]: string;
@@ -80,8 +87,14 @@ const StockNoteCreate: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch({ type: "SET_STOCK_LIST", payload: { stocks: stockLists } });
-  }, [stockLists]);
+    if (stocks.length < 1) {
+      dispatch(getStocksAsync());
+    }
+    if (isDiffAfterDrag) {
+      dispatch(reorderStocksAsync(stocks));
+      setIsDiffAfterDrag(false);
+    }
+  }, [isDiffAfterDrag]);
 
   const [editorWrapHeight, setEditorWrapHeight] = useState(121);
   const editorWrap = useRef(null);
@@ -108,7 +121,7 @@ const StockNoteCreate: React.FC = () => {
             <StockNote
               noteName="Your Stocks"
               noteID="droppable2"
-              stocks={stockLists.noteStocks}
+              stocks={stocks}
               scrollAdjust={scrollAdjust}
             />
           </Container>
@@ -117,7 +130,7 @@ const StockNoteCreate: React.FC = () => {
             <StockNote
               noteName="Your Group Name"
               noteID="droppable"
-              stocks={stockLists.stocks}
+              stocks={stocks}
               note
             />
           </NoteContainer>
