@@ -1,5 +1,5 @@
 import produce from "immer";
-import { State, Action } from "./types"
+import { State, Action } from "./types";
 
 const initialState: State = {
   isNoteEditing: false,
@@ -10,32 +10,42 @@ const initialState: State = {
 const stocks = produce((state = initialState, action: Action) => {
   switch (action.type) {
     case "stocks/toggleNoteComponent": {
-      state.isNoteEditing = !state.isNoteEditing
-      return state
+      state.isNoteEditing = !state.isNoteEditing;
+      return state;
     }
     case "stocks/reorder": {
-      state.stocks = action.payload.stocks
-      return state
+      state.stocks = action.payload.stocks;
+      return state;
     }
     case "stocks/get/REQUEST": {
-      return state
+      return state;
     }
     case "stocks/get/SUCCESS": {
-      state.stocks = action.payload.stocks
-      return state
+      state.stocks = action.payload.stocks;
+      return state;
     }
     case "stocks/get/FAIL": {
-      return state
+      return state;
     }
-    case "stocks/post/REQUEST": {
-      return state
+    case "stocks/create/REQUEST": {
+      return state;
     }
-    case "stocks/post/SUCCESS": {
-      state.stocks.push(action.payload.stock)
-      return state
+    case "stocks/create/SUCCESS": {
+      state.stocks.push(action.payload.stock);
+      return state;
     }
-    case "stocks/post/FAIL": {
-      return state
+    case "stocks/create/FAIL": {
+      return state;
+    }
+    case "stocks/add/REQUEST": {
+      return state;
+    }
+    case "stocks/add/SUCCESS": {
+      state.stocks.push(action.payload.stock);
+      return state;
+    }
+    case "stocks/add/FAIL": {
+      return state;
     }
     default:
       return state;
