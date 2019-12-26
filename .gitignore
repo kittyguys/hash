@@ -115,3 +115,4 @@ api/tmp/
 api/config/config.yaml
 
 env/
+server/configs/aws.js

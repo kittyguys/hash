@@ -7,10 +7,12 @@ import {
   DropResult,
   resetServerContext
 } from "react-beautiful-dnd";
+import { format } from "date-fns";
 import { Stock, StockLists } from "@src/common/components/pages/stock/types";
 import { move, reorder } from "@src/common/components/pages/stock/funcs";
 import Color from "@src/common/constants/color";
 import StockNote from "@src/common/components/shared/StockNote";
+import StockList from "@src/common/components/shared/StockList";
 import {
   getStocksAsync,
   createStockAsync,
@@ -35,6 +37,7 @@ const StockNoteCreate: React.FC = () => {
   // SSR の場合にこの関数を使用する必要がある
   resetServerContext();
 
+  const [isSignin, setIsSignin] = useState(false);
   const [stockLists, setStockLists] = useState(initialStockLists);
   const [inputValue, setInputValue] = useState("");
   const [isDiffAfterDrag, setIsDiffAfterDrag] = useState(false);
@@ -128,26 +131,51 @@ const StockNoteCreate: React.FC = () => {
 
   return (
     <>
-      <StockWrap>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Container editorWrapHeight={editorWrapHeight}>
-            <StockNote
-              noteName="Your Stocks"
-              noteID="droppable2"
-              stocks={stocks}
-              scrollAdjust={scrollAdjust}
+      {isSignin ? (
+        <>
+          <StockWrap>
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Container editorWrapHeight={editorWrapHeight}>
+                <StockNote
+                  noteName="Your Stocks"
+                  noteID="droppable2"
+                  stocks={stocks}
+                  scrollAdjust={scrollAdjust}
+                />
+              </Container>
+            </DragDropContext>
+          </StockWrap>
+          <div ref={editorWrap}>
+            <Editor
+              handleSubmit={onSubmit}
+              onChangeCallback={heightAdjust}
+              value={inputValue}
+              setValue={setInputValue}
             />
-          </Container>
-        </DragDropContext>
-      </StockWrap>
-      <div ref={editorWrap}>
-        <Editor
-          handleSubmit={onSubmit}
-          onChangeCallback={heightAdjust}
-          value={inputValue}
-          setValue={setInputValue}
-        />
-      </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Container editorWrapHeight={editorWrapHeight}>
+              <StockNote
+                noteName="Your Stocks"
+                noteID="droppable2"
+                stocks={stocks}
+                scrollAdjust={scrollAdjust}
+              />
+            </Container>
+          </DragDropContext>
+          <div ref={editorWrap}>
+            <Editor
+              handleSubmit={onSubmit}
+              onChangeCallback={heightAdjust}
+              value={inputValue}
+              setValue={setInputValue}
+            />
+          </div>
+        </>
+      )}
     </>
   );
 };
@@ -169,10 +197,6 @@ const Container = styled.div<{
     margin-top: 6px;
     overflow: auto;
   }
-`;
-
-const NoteContainer = styled(Container)`
-  background-color: ${Color.Brand[500]};
 `;
 
 export default StockNoteCreate;
