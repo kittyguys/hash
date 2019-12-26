@@ -1,4 +1,6 @@
 import sql from "../configs/mysql";
+import { s3 } from "../configs/aws";
+import fs from "fs";
 
 export const getUsers = async (req, res, next) => {
   try {
@@ -10,7 +12,40 @@ export const getUsers = async (req, res, next) => {
 
 export const updateUser = async (req, res, next) => {
   try {
-    console.log(req.body);
+    const params = {
+      Bucket: "hachet-stock-test",
+      CreateBucketConfiguration: {
+        // Set your region here
+        LocationConstraint: "ap-northeast-1"
+      }
+    };
+
+    // s3.createBucket(params, function(err, data) {
+    //   if (err) console.log(err, err.stack);
+    //   else console.log("Bucket Created Successfully", data.Location);
+    // });
+
+    const uploadFile = fileName => {
+      // Read content from the file
+      console.log(__dirname);
+      const fileContent = fs.readFileSync(__dirname + "/seattle.jpg");
+
+      // Setting up S3 upload parameters
+      const params = {
+        Bucket: "hachet-stock-test",
+        Key: "seattle.jpg", // File name you want to save as in S3
+        Body: fileContent
+      };
+
+      s3.upload(params, function(err, data) {
+        if (err) {
+          throw err;
+        }
+        console.log(`File uploaded successfully. ${data.Location}`);
+      });
+    };
+    uploadFile();
+
     const { id } = req.user;
     const { user_name, display_name, profile_image, email } = req.body;
     const columns = { user_name, display_name, profile_image_url: "", email };
@@ -22,6 +57,7 @@ export const updateUser = async (req, res, next) => {
       }
     });
   } catch (err) {
+    console.log(err.message);
     next(err.message);
   }
 };
