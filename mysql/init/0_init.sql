@@ -22,7 +22,7 @@ IF NOT EXISTS hachet.stocks
   id int PRIMARY KEY AUTO_INCREMENT,
   user_id int,
   content varchar(2550) NOT NULL,
-  sequence int,
+  stock_order int,
   created_at datetime  default current_timestamp,
   updated_at timestamp default current_timestamp on update current_timestamp
 );

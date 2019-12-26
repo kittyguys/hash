@@ -1,6 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
+import { format } from "date-fns";
 import Color from "@src/common/constants/color";
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
   stock: {
     id: string;
     content: string;
+    created_at?: Date | string;
   };
   note?: boolean;
   index: number;
@@ -20,28 +22,32 @@ const StockCassette: React.FC<Props> = ({
   note,
   index
 }: Props) => (
-    <Draggable draggableId={stock.id} index={index}>
-      {(provided, snapshot) => {
-        return (
-          <Wrapper
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-          >
-            <Box className={className} snapshot={snapshot} note={note}>
-              <ContentHead>
-                <DateText>Nov 8</DateText>
-                <TimeText>12:00 AM</TimeText>
-              </ContentHead>
-              <Content>
-                <Text dangerouslySetInnerHTML={{ __html: stock.content }} />
-              </Content>
-            </Box>
-          </Wrapper>
-        );
-      }}
-    </Draggable>
-  );
+  <Draggable draggableId={stock.id} index={index}>
+    {(provided, snapshot) => {
+      return (
+        <Wrapper
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          <Box className={className} snapshot={snapshot} note={note}>
+            <ContentHead>
+              <DateText>
+                {stock.created_at === "now"
+                  ? "now"
+                  : format(new Date(stock.created_at), "M/d hh:mma")}
+              </DateText>
+              {/* <TimeText>更新日時: {stock.updated_at}</TimeText> */}
+            </ContentHead>
+            <Content>
+              <Text dangerouslySetInnerHTML={{ __html: stock.content }} />
+            </Content>
+          </Box>
+        </Wrapper>
+      );
+    }}
+  </Draggable>
+);
 
 type BoxProps = {
   snapshot?: { isDragging: boolean };
@@ -80,7 +86,6 @@ const ContentHead = styled.div`
 const DateText = styled.span`
   flex-shrink: 0;
   font-size: 1.2rem;
-  font-weight: Bold;
 `;
 
 const TimeText = styled.span`

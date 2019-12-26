@@ -1,9 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import logger from "../utils/logger"
-
-import conn from "../configs/mysql";
 import { initRouter } from "../routes";
 
 export default class Server {
@@ -23,13 +20,15 @@ export default class Server {
     );
     this.server.use(cors());
 
-    conn.connect(function (err) {
-      if (err) {
-        logger.error("error connecting: " + err.stack);
-        return;
-      }
-      logger.info("connected as id " + conn.threadId);
-    });
+    // TODO: mongo
+    // mongoose
+    //   .connect("mongodb://localhost:27017/hachet", {
+    //     useNewUrlParser: true,
+    //     useUnifiedTopology: true,
+    //     useFindAndModify: false
+    //   })
+    //   .then(() => console.log("mongoose connected successfully"))
+    //   .catch(err => console.error(err));
 
     // Initialize routes
     initRouter(this.server);
@@ -39,8 +38,8 @@ export default class Server {
     const host = this.server.get("host");
     const port = this.server.get("port");
 
-    this.server.listen(port, function () {
-      logger.info("Express server listening on - http://" + host + ":" + port);
+    this.server.listen(port, function() {
+      console.log("Express server listening on - http://" + host + ":" + port);
     });
   }
 }

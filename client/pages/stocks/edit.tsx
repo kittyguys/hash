@@ -4,18 +4,18 @@ import jwt_decode from "jwt-decode";
 import { signinSuccess } from "@src/features/auth/actions";
 import { updateProfileSuccess } from "@src/features/profile/actions";
 import Header from "@src/common/components/shared/Header";
-import UserRoot from "@src/common/components/pages/root";
+import StockEdit from "@src/common/components/pages/stock/edit";
 
-const Root: NextPage = () => {
+const Edit: NextPage = () => {
   return (
     <>
       <Header route="/stock" />
-      <UserRoot />
+      <StockEdit />
     </>
   );
 };
 
-Root.getInitialProps = async (ctx: any) => {
+Edit.getInitialProps = async (ctx: any) => {
   const allCookies = cookies(ctx);
   const token = allCookies.jwt;
   if (typeof token === "string") {
@@ -26,4 +26,4 @@ Root.getInitialProps = async (ctx: any) => {
   return { store: ctx.store };
 };
 
-export default Root;
+export default Edit;

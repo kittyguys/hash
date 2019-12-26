@@ -17,7 +17,7 @@ import Header from "@src/common/components/shared/Header";
 import Color from "@src/common/constants/color";
 import StockNote from "@src/common/components/shared/StockNote";
 import { reorderStocks } from "@src/features/stock/actions";
-import { getStocks, addStock } from "@src/features/stock/operations";
+import { getStocksAsync, addStockAsync } from "@src/features/stock/operations";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
@@ -146,7 +146,7 @@ const Stock: NextPage<Props> = () => {
   }, [initialStocks]);
 
   useEffect(() => {
-    dispatch(getStocks());
+    dispatch(getStocksAsync());
   }, []);
 
   const [editorWrapHeight, setMainInputWrapHeight] = useState(121);
@@ -162,7 +162,7 @@ const Stock: NextPage<Props> = () => {
     const data = { content: inputValue };
     e.preventDefault();
     setInputValue("");
-    dispatch(addStock(data));
+    dispatch(addStockAsync(data));
   };
 
   return (
@@ -196,7 +196,6 @@ const Stock: NextPage<Props> = () => {
       </StockWrap>
       <div ref={editorWrap}>
         <Editor
-          onClickSubmit={onSubmit}
           handleSubmit={onSubmit}
           onChangeCallback={heightAdjust}
           value={inputValue}
