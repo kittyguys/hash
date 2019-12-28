@@ -6,7 +6,14 @@ import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 import { signupParams } from "./types";
 import { updateProfileSuccess } from "@src/features/profile/actions";
-import { signupRequest, signupSuccess, signupFail, signinRequest, signinSuccess, signinFail } from "./actions";
+import {
+  signupRequest,
+  signupSuccess,
+  signupFail,
+  signinRequest,
+  signinSuccess,
+  signinFail
+} from "./actions";
 
 export const signup = (
   params: signupParams
@@ -19,12 +26,13 @@ export const signup = (
         const profile = jwt_decode(res.data.token);
         Cookies.set("jwt", res.data.token);
         dispatch(signupSuccess());
-        Router.push("/")
+        dispatch(updateProfileSuccess(profile));
+        Router.push("/");
       })
       .catch(err => {
         console.log(err);
         dispatch(signupFail());
-        Router.push("/")
+        Router.push("/");
       });
   };
 };
