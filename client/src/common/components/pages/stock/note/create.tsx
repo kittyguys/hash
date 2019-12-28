@@ -99,17 +99,9 @@ const StockNoteCreate: React.FC = () => {
   const [editorWrapHeight, setEditorWrapHeight] = useState(121);
   const editorWrap = useRef(null);
 
-  const scrollAdjust = (heightDiff: number): void => {
-    // TODO stock のスクロール位置を調整する
-    // console.log(heightDiff);
-  };
-
   const heightAdjust = () => {
     if (editorWrap.current.clientHeight !== null) {
-      setEditorWrapHeight(editorWrapHeight => {
-        editorWrap.current.clientHeight - editorWrapHeight;
-        return editorWrap.current.clientHeight;
-      });
+      setEditorWrapHeight(editorWrap.current.clientHeight);
     }
   };
 
@@ -122,7 +114,7 @@ const StockNoteCreate: React.FC = () => {
               noteName="Your Stocks"
               noteID="droppable2"
               stocks={stocks}
-              scrollAdjust={scrollAdjust}
+              editorWrapHeight={editorWrapHeight}
             />
           </Container>
 
@@ -131,6 +123,7 @@ const StockNoteCreate: React.FC = () => {
               noteName="Your Group Name"
               noteID="droppable"
               stocks={stocks}
+              editorWrapHeight={editorWrapHeight}
               note
             />
           </NoteContainer>
@@ -164,7 +157,7 @@ const Container = styled.div<{ editorWrapHeight: number }>`
   padding: 24px 0;
   background-color: #f7f7f7;
   transition-duration: 1000;
-  [data-rbd-droppable-id] {
+  .scrollArea {
     height: ${({ editorWrapHeight }) =>
       `calc(100vh - ${editorWrapHeight}px - 84px - 84px)`};
     padding: 0 24px;
