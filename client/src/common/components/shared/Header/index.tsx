@@ -10,7 +10,7 @@ import BaseMainInputForm, {
 import BaseAvatar from "../Avatar";
 import BaseLogo from "../Logo";
 import { useSelector } from "react-redux";
-import Nav from "./_nav"
+import Nav from "./_nav";
 import { UserModal } from "@src/common/components/shared/Modals";
 import Color from "@src/common/constants/color";
 
@@ -169,7 +169,8 @@ const Icon = styled.button`
 `;
 
 const Avatar = styled(BaseAvatar)`
-  width: 28px;
+  width: 32px;
+  height: 31px;
 `;
 
 const Logo = styled(BaseLogo)`

@@ -4,12 +4,14 @@ type State = {
   userName: string;
   displayName: string;
   email: string;
+  profile_image_url: string;
 };
 
 const initialState: State = {
   userName: "",
   displayName: "",
-  email: ""
+  email: "",
+  profile_image_url: ""
 };
 
 const profile = produce((state = initialState, action: any) => {

@@ -26,7 +26,7 @@ const UserModal: FC<Props> = () => {
         handleClick(e);
       }}
     >
-      <Avatar />
+      <Avatar iconSize="96px" />
       <UserName>山田　貴之</UserName>
       <Email>your@example.com</Email>
       <Block>

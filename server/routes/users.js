@@ -4,6 +4,6 @@ import { getUsers, updateUser } from "../services/users";
 const router = Router();
 
 router.get("/users", getUsers);
-router.put("/users", updateUser);
+router.patch("/users", updateUser);
 
 export default router;

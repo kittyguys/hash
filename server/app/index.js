@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
+import fileupload from "express-fileupload";
 import { initRouter } from "../routes";
 
 export default class Server {
@@ -19,6 +20,7 @@ export default class Server {
       })
     );
     this.server.use(cors());
+    this.server.use(fileupload());
 
     // TODO: mongo
     // mongoose

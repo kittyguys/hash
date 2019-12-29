@@ -1,27 +1,43 @@
 import * as React from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { AiOutlineUser } from "react-icons/ai";
 
 type Props = {
   className?: string;
   imageSrc?: string;
   editable?: boolean;
+  iconSize?: string;
 };
 
-const Avatar: React.FC<Props> = ({ className, imageSrc, editable }) => {
-  const src = imageSrc || "/static/assets/images/spiro.svg";
+const Avatar: React.FC<Props> = ({
+  className,
+  imageSrc,
+  editable,
+  iconSize
+}) => {
+  const profile_image = useSelector(
+    (state: any) => state.profile.profile_image_url
+  );
+  const src = imageSrc || profile_image;
+  const size = iconSize || "28px";
   const overlay = editable ? (
     <Overlay>
       <Text>変更</Text>
-      <Image src={src} />
+      {src ? <Image src={src} /> : <AiOutlineUser size="120px" />}
     </Overlay>
   ) : (
-    <Image src={src} />
+    <>
+      {src ? (
+        <Image src={src} />
+      ) : (
+        <Overlay>
+          <AiOutlineUser size={size} />
+        </Overlay>
+      )}
+    </>
   );
-  return (
-    <Wrapper className={className}>
-      {overlay}
-    </Wrapper>
-  );
+  return <Wrapper className={className}>{overlay}</Wrapper>;
 };
 
 export const Wrapper = styled.div`
