@@ -7,12 +7,9 @@ import {
   DropResult,
   resetServerContext
 } from "react-beautiful-dnd";
-import { format } from "date-fns";
-import { Stock, StockLists } from "@src/common/components/pages/stock/types";
-import { move, reorder } from "@src/common/components/pages/stock/funcs";
+import { reorder } from "@src/common/components/pages/stock/funcs";
 import Color from "@src/common/constants/color";
 import StockNote from "@src/common/components/shared/StockNote";
-import StockList from "@src/common/components/shared/StockList";
 import {
   getStocksAsync,
   createStockAsync,
@@ -24,101 +21,46 @@ const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
 });
 
-// TODO Redux データの配列を map する予定
-const initialStockLists: StockLists = {
-  stocks: Array.from({ length: 10 }, (v, k) => k).map(k => ({
-    id: `id-${k}`,
-    content: `Stock ${k}`
-  })),
-  noteStocks: []
-};
-
 const StockNoteCreate: React.FC = () => {
   // SSR の場合にこの関数を使用する必要がある
   resetServerContext();
 
   const [isSignin, setIsSignin] = useState(false);
-  const [stockLists, setStockLists] = useState(initialStockLists);
   const [inputValue, setInputValue] = useState("");
-  const [isDiffAfterDrag, setIsDiffAfterDrag] = useState(false);
   const dispatch = useDispatch();
   const stocks = useSelector((state: any) => state.stock.stocks);
 
-  const id2List: {
-    [index: string]: string;
-  } = {
-    droppable: "stocks",
-    droppable2: "noteStocks"
-  };
-
-  const getList = (id: string) => stocks;
-
   const onDragEnd = (result: DropResult) => {
-    const { source, destination } = result;
-
-    // dropped outside the list
-    if (!destination) {
+    if (!result.destination) {
       return;
     }
 
-    if (source.index !== destination.index) {
-      setIsDiffAfterDrag(true);
+    if (result.destination.index === result.source.index) {
+      return;
     }
 
-    if (source.droppableId === destination.droppableId) {
-      const stocks: any = reorder(
-        getList(source.droppableId),
-        source.index,
-        destination.index
-      );
+    const reorderedStocks = reorder(
+      stocks,
+      result.source.index,
+      result.destination.index
+    );
 
-      const state: { [index: string]: Stock[] } = {};
-      state[id2List[source.droppableId]] = stocks;
-      setStockLists({
-        ...stockLists,
-        ...state
-      });
-
-      dispatch(reorderStocks(stocks));
-    } else {
-      const result = move(
-        getList(source.droppableId),
-        getList(destination.droppableId),
-        source,
-        destination
-      );
-
-      setStockLists({
-        stocks: result.droppable,
-        noteStocks: result.droppable2
-      });
-    }
+    dispatch(reorderStocks(reorderedStocks));
+    dispatch(reorderStocksAsync(reorderedStocks));
   };
 
   useEffect(() => {
     if (stocks.length < 1) {
       dispatch(getStocksAsync());
     }
-    if (isDiffAfterDrag) {
-      dispatch(reorderStocksAsync(stocks));
-      setIsDiffAfterDrag(false);
-    }
-  }, [isDiffAfterDrag]);
+  }, []);
 
   const [editorWrapHeight, setEditorWrapHeight] = useState(121);
   const editorWrap = useRef(null);
 
-  const scrollAdjust = (heightDiff: number): void => {
-    // TODO stock のスクロール位置を調整する
-    // console.log(heightDiff);
-  };
-
   const heightAdjust = () => {
     if (editorWrap.current.clientHeight !== null) {
-      setEditorWrapHeight(editorWrapHeight => {
-        editorWrap.current.clientHeight - editorWrapHeight;
-        return editorWrap.current.clientHeight;
-      });
+      setEditorWrapHeight(editorWrap.current.clientHeight);
     }
   };
 
@@ -140,7 +82,7 @@ const StockNoteCreate: React.FC = () => {
                   noteName="Your Stocks"
                   noteID="droppable2"
                   stocks={stocks}
-                  scrollAdjust={scrollAdjust}
+                  editorWrapHeight={editorWrapHeight}
                 />
               </Container>
             </DragDropContext>
@@ -162,7 +104,7 @@ const StockNoteCreate: React.FC = () => {
                 noteName="Your Stocks"
                 noteID="droppable2"
                 stocks={stocks}
-                scrollAdjust={scrollAdjust}
+                editorWrapHeight={editorWrapHeight}
               />
             </Container>
           </DragDropContext>
@@ -190,7 +132,7 @@ const Container = styled.div<{
   width: 100%;
   padding: 24px 0;
   background-color: ${Color.BlueWhite};
-  [data-rbd-droppable-id] {
+  .scrollArea {
     height: ${({ editorWrapHeight }) =>
       `calc(100vh - ${editorWrapHeight}px - 84px - 84px)`};
     padding: 0 24px;
