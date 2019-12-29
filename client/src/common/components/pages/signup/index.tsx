@@ -171,12 +171,12 @@ const Border = styled.div`
 `;
 
 const Span = styled.span`
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   background-color: #fff;
-  padding: 0 0.5em;
+  padding: 0 8px;
   position: relative;
   color: #6c7378;
-  top: -0.7em;
+  top: -14px;
 `;
 
 const Error = styled.span`

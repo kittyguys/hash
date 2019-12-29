@@ -7,4 +7,9 @@ export type SettingsAction = {
   payload: { isLoading: boolean };
 };
 
-export type FormData = {};
+export type Data = {
+  user_name?: string;
+  display_name?: string;
+  email?: string;
+  profile_image_url?: any;
+};

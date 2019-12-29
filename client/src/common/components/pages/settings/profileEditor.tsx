@@ -1,51 +1,56 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import useForm from "react-hook-form";
+import { updatedDiff } from "deep-object-diff";
 import BaseAvatar from "@src/common/components/shared/Avatar";
 import { updateProfile } from "@src/features/settings/operations";
 
 const ProfileEditor = () => {
   const dispatch = useDispatch();
-  const [imgURL, setimgURL] = useState(null);
+  const profile = useSelector((state: any) => state.profile);
+  const [imgURL, setImgURL] = useState(null);
   const { register, handleSubmit, errors } = useForm();
+  const formData: any = {
+    profile_image_url: null,
+    user_name: "",
+    display_name: "",
+    email: ""
+  };
   const onSubmit = (data: any) => {
-    dispatch(updateProfile(data));
+    const diff = updatedDiff(formData, data);
+    dispatch(updateProfile(diff));
   };
   const changeAvatar = (e: any) => {
     const files = e.target.files;
-    setimgURL(URL.createObjectURL(files[0]));
+    setImgURL(URL.createObjectURL(files[0]));
   };
   return (
     <Wrapper>
       <form onSubmit={handleSubmit(onSubmit)}>
         <LabelBlock>
-          <label htmlFor="profile_image">
+          <label htmlFor="profile_image_url">
             <Avatar imageSrc={imgURL} editable />
           </label>
         </LabelBlock>
         <InputAvatar
           onChange={e => changeAvatar(e)}
-          name="profile_image"
+          name="profile_image_url"
           ref={register}
           type="file"
-          id="profile_image"
+          id="profile_image_url"
         />
         <InputUserName
           name="user_name"
-          placeholder={"test_user"}
+          placeholder={profile.userName}
           ref={register}
         />
         <InputUserName
           name="display_name"
-          placeholder={"test_user"}
+          placeholder={profile.displayName}
           ref={register}
         />
-        <InputEmail
-          name="email"
-          placeholder={"your@example.com"}
-          ref={register}
-        />
+        <InputEmail name="email" placeholder={profile.email} ref={register} />
         <SaveButton type="submit" value="保存" />
       </form>
     </Wrapper>

@@ -10,7 +10,8 @@ export const updateProfileSuccess = (data: any) => {
   const profile = {
     userName: data.user_name,
     displayName: data.display_name,
-    email: data.email
+    email: data.email,
+    profile_image_url: data.profile_image_url
   };
   return { type: UPDATE_PROFILE_SUCCESS, payload: { profile } };
 };
