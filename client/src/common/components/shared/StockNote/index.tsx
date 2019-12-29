@@ -66,7 +66,7 @@ const StockNote: React.FC<Props> = ({
     if (scrollArea.current !== null) {
       const currentScrollBottom =
         scrollArea.current.scrollTop + scrollAreaHeight;
-      if (currentScrollBottom === scrolledAreaHeight) {
+      if (currentScrollBottom >= scrolledAreaHeight) {
         scrollArea.current.scrollTo(0, scrolledAreaHeight);
       }
     }
