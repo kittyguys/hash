@@ -1,5 +1,5 @@
 import Router from "next/router";
-import { FC, useState, useEffect } from "react";
+import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Cookies from "js-cookie";
@@ -10,6 +10,7 @@ type Props = {};
 
 const UserModal: FC<Props> = () => {
   const dispatch = useDispatch();
+  const profile = useSelector((state: any) => state.profile);
   const handleClick = (e: any) => {
     e.stopPropagation();
   };
@@ -17,8 +18,8 @@ const UserModal: FC<Props> = () => {
     Cookies.remove("jwt");
     dispatch(signout());
   };
-  const handleRoute = () => {
-    Router.push("/settings/profile");
+  const handleRoute = (route: any) => {
+    Router.push(`/${route}`);
   };
   return (
     <Modal
@@ -27,10 +28,17 @@ const UserModal: FC<Props> = () => {
       }}
     >
       <Avatar iconSize="96px" />
-      <UserName>山田　貴之</UserName>
-      <Email>your@example.com</Email>
+      <UserName>{profile.userName}</UserName>
+      <Email>{profile.email}</Email>
       <Block>
-        <ProfileButton onClick={handleRoute}>プロフィール</ProfileButton>
+        <ProfileButton onClick={() => handleRoute(profile.userName)}>
+          プロフィール
+        </ProfileButton>
+      </Block>
+      <Block>
+        <ProfileButton onClick={() => handleRoute("settings/profile")}>
+          設定
+        </ProfileButton>
       </Block>
       <Block>
         <Button onClick={handleSignout}>ログアウト</Button>
