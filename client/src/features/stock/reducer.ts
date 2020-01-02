@@ -1,47 +1,60 @@
-type State = {
-  stockValue: string;
-};
+import produce from "immer";
+import { State, Action } from "./types";
 
-type Action = {
-  type: string;
-  payload: { value: string; stocks: initialStockLists };
-};
-
-type initialStockLists = {
-  stocks: [];
-  groupedStocks: [];
-};
-
-const stockList: initialStockLists = {
+const initialState: State = {
+  isNoteEditing: false,
+  isDrawerOpen: false,
   stocks: [],
-  groupedStocks: []
+  notes: []
 };
 
-const initialState: any = {
-  stockValue: "",
-  stockList: stockList
-};
-
-const stockReducer = (state: State = initialState, action: Action) => {
+const stocks = produce((state = initialState, action: Action) => {
   switch (action.type) {
-    case "SET_STOCK_VALUE": {
-      const { value } = action.payload;
-      return {
-        ...state,
-        stockValue: value
-      };
+    case "stocks/toggleNoteComponent": {
+      state.isNoteEditing = !state.isNoteEditing;
+      return state;
     }
-    case "SET_STOCK_LIST": {
-      const { value, stocks } = action.payload;
-      return {
-        ...state,
-        stockValue: value,
-        stockList: stocks
-      };
+    case "stocks/toggleDrawer": {
+      state.isDrawerOpen = !state.isDrawerOpen
+      return state
+    }
+    case "stocks/reorder": {
+      state.stocks = action.payload.stocks;
+      return state;
+    }
+    case "stocks/get/REQUEST": {
+      return state;
+    }
+    case "stocks/get/SUCCESS": {
+      state.stocks = action.payload.stocks;
+      return state;
+    }
+    case "stocks/get/FAIL": {
+      return state;
+    }
+    case "stocks/create/REQUEST": {
+      return state;
+    }
+    case "stocks/create/SUCCESS": {
+      state.stocks.push(action.payload.stock);
+      return state;
+    }
+    case "stocks/create/FAIL": {
+      return state;
+    }
+    case "stocks/add/REQUEST": {
+      return state;
+    }
+    case "stocks/add/SUCCESS": {
+      state.stocks.push(action.payload.stock);
+      return state;
+    }
+    case "stocks/add/FAIL": {
+      return state;
     }
     default:
       return state;
   }
-};
+});
 
-export default stockReducer;
+export default stocks;

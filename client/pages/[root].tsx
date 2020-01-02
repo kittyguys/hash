@@ -1,54 +1,29 @@
 import { NextPage } from "next";
-import styled from "styled-components";
-import BaseAvatar from "@src/common/components/shared/Avatar";
-import BaseUserName from "@src/common/components/shared/UserName";
+import cookies from "next-cookies";
+import jwt_decode from "jwt-decode";
+import { signinSuccess } from "@src/features/auth/actions";
+import { updateProfileSuccess } from "@src/features/profile/actions";
+import Header from "@src/common/components/shared/Header";
+import UserRoot from "@src/common/components/pages/root";
 
-const User: NextPage = props => {
-  return <></>;
+const Root: NextPage = () => {
+  return (
+    <>
+      <Header route="/stock" />
+      <UserRoot />
+    </>
+  );
 };
 
-const MypageWrapper = styled.div`
-  width: 640px;
-  margin: 120px auto 0;
-  border: 1px solid #dbdbdb;
-  padding: 30px;
-  @media (max-width: 768px) {
-    padding: 0 20px;
-    width: auto;
-    margin: 0;
-    border: none;
+Root.getInitialProps = async (ctx: any) => {
+  const allCookies = cookies(ctx);
+  const token = allCookies.jwt;
+  if (typeof token === "string") {
+    const profile = jwt_decode(token);
+    ctx.store.dispatch(signinSuccess());
+    ctx.store.dispatch(updateProfileSuccess(profile));
   }
-`;
+  return { store: ctx.store };
+};
 
-const MainLayout = styled.div`
-  display: flex;
-`;
-
-const Avatar = styled(BaseAvatar)`
-  width: 90px;
-  height: 90px;
-  @media (max-width: 768px) {
-    width: 60px;
-    height: 60px;
-  }
-`;
-
-const SubLayout = styled.div`
-  display: block;
-  margin-left: 20px;
-  margin-top: 20px;
-`;
-
-const UserName = styled(BaseUserName)`
-  font-size: 30px;
-  font-weight: bold;
-  @media (max-width: 768px) {
-    font-size: 24px;
-  }
-`;
-
-const TagBoxLayout = styled.div`
-  margin-top: 20px;
-`;
-
-export default User;
+export default Root;

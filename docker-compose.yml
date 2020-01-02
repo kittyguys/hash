@@ -11,20 +11,18 @@ services:
     networks:
       - api-default
     command: npm run dev
-
   api:
-    build: "./api"
+    build: "./server"
     ports:
       - "8080:8080"
     volumes:
-      - "./api:/app"
-    working_dir: "/app"
+      - "./server:/usr/src/app"
+      - /user/src/app/node_modules
     env_file:
       - ./env/db.env
     networks:
       - api-default
-    command: ["./shell/wait-for-it.sh", "fresh"]
-
+    command: ["./shell/wait-for-it.sh", "mysql:3306", "--", "npm", "run", "dev"]
   mysql:
     build: "./mysql"
     restart: always
@@ -34,10 +32,29 @@ services:
       - "mysql-data:/var/lib/mysql"
       - "./mysql/init:/docker-entrypoint-initdb.d"
     env_file:
-      - ./env/db.env
+      - ./env/mysql.env
     networks:
       - api-default
-
+  redis:
+    build: "./redis"
+    ports:
+      - "6379:6379"
+    networks:
+      - api-default
+    volumes:
+      - redis-data:/data
+  # api:
+  #   build: "./api"
+  #   ports:
+  #     - "8080:8080"
+  #   volumes:
+  #     - "./api:/app"
+  #   working_dir: "/app"
+  #   env_file:
+  #     - ./env/db.env
+  #   networks:
+  #     - api-default
+  #   command: ["./shell/wait-for-it.sh", "fresh"]
   # json-server:
   #   build: ./json-server
   #   ports:
@@ -51,3 +68,4 @@ networks:
 
 volumes:
   mysql-data:
+  redis-data:

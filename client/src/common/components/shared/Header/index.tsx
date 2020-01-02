@@ -1,33 +1,22 @@
-import { AppContext } from "next/app";
-import { NextPageContext, NextPage } from "next";
+import { NextPage } from "next";
 import { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import Router from "next/router";
-import BaseAvatar from "../Avatar";
 import { IoIosSearch } from "react-icons/io";
 import BaseMainInputForm, {
   MainInput as BaseMainInput
-} from "@src/common/components/shared/Form/MainInput";
+} from "@src/common/components/shared/StockInput";
+import BaseAvatar from "../Avatar";
 import BaseLogo from "../Logo";
-import BaseNormalButton from "../Button/NormalButton";
-import BaseUserName from "../UserName";
 import { useSelector } from "react-redux";
+import Nav from "./_nav";
 import { UserModal } from "@src/common/components/shared/Modals";
 import Color from "@src/common/constants/color";
 
 type Props = {
   route?: string;
 };
-
-interface NextContext extends NextPageContext {
-  store: any;
-  isServer: boolean;
-}
-
-interface NextAppContext extends AppContext {
-  ctx: NextContext;
-}
 
 const Header: NextPage<Props> = ({ route }) => {
   const isSignin = useSelector((state: any) => state.auth.isSignin);
@@ -41,15 +30,12 @@ const Header: NextPage<Props> = ({ route }) => {
   };
 
   let linkContents: JSX.Element;
-
   if (isSignin === true) {
     linkContents = (
       <>
-        <Link key="stock" href="/stock" as="stock">
-          <NormalLink>Stock</NormalLink>
-        </Link>
+        <Nav route={route} />
         <Icon onClick={onButtonClick}>
-          <Avatar1 />
+          <Avatar />
         </Icon>
       </>
     );
@@ -88,13 +74,12 @@ const Header: NextPage<Props> = ({ route }) => {
 };
 
 const HeaderWrapper = styled.div<{ route: string }>`
+  grid-area: Header;
   display: flex;
   align-items: center;
   width: 100%;
   height: 84px;
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: relative;
   z-index: 9999;
   background-color: ${Color.White};
   box-shadow: ${({ route }) =>
@@ -102,8 +87,8 @@ const HeaderWrapper = styled.div<{ route: string }>`
 `;
 
 const MainInputForm = styled(BaseMainInputForm)`
-  width: 582px;
-  height: 44px;
+  width: 400px;
+  height: 36px;
   margin-left: 48px;
   position: relative;
 `;
@@ -178,26 +163,19 @@ const StyledLink = styled.a`
   }
 `;
 
-const Avatar1 = styled(BaseAvatar)`
+const Icon = styled.button`
+  border: 0;
+  outline: 0;
+`;
+
+const Avatar = styled(BaseAvatar)`
   width: 32px;
-  height: 32px;
-  @media (max-width: 768px) {
-    width: 40px;
-    height: 40px;
-  }
+  height: 31px;
 `;
 
 const Logo = styled(BaseLogo)`
   margin-left: 20px;
-  font-size: 40px;
-  @media (max-width: 768px) {
-    font-size: 30px;
-  }
-`;
-
-const Icon = styled.button`
-  border: 0;
-  outline: 0;
+  font-size: 32px;
 `;
 
 export default Header;

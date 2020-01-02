@@ -19,7 +19,7 @@ Twitter: @rich_clark
   fieldset, form, label, legend,
   table, caption, tbody, tfoot, thead, tr, th, td,
   article, aside, canvas, details, figcaption, figure,
-  footer, header, hgroup, menu, nav, section, summary,
+  footer, header, hnote, menu, nav, section, summary,
   time, mark, audio, video {
     margin:0;
     padding:0;
@@ -35,7 +35,7 @@ Twitter: @rich_clark
   }
 
   article,aside,details,figcaption,figure,
-  footer,header,hgroup,menu,nav,section {
+  footer,header,hnote,menu,nav,section {
     display:block;
   }
 
@@ -116,6 +116,8 @@ Twitter: @rich_clark
     font-family: 'Lato', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ W3', 'Hiragino Sans', '游ゴシック体', YuGothic, '游ゴシック Medium', 'Yu Gothic Medium', '游ゴシック', 'Yu Gothic', 'メイリオ', 'ＭＳ Ｐゴシック', sans-serif;
     font-size: 62.5%;
     line-height: 1.5;
+    overscroll-behavior: none;
+    color: #555;
   }
   a, button, input[type="submit"] {
     cursor: pointer;
@@ -130,8 +132,12 @@ Twitter: @rich_clark
   }
   .ql-container {
     border-radius: 0 0 4px 4px;
+    padding: 12px 16px;
   }
   .ql-editor {
+    background: none;
+    padding: 0;
+    max-height: 24rem;
     p {
       font-size: 1.6rem;
     }
