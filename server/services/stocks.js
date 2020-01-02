@@ -91,7 +91,7 @@ export const reorderStock = async (req, res, next) => {
   let connection;
   try {
     connection = await pool.getConnection();
-    const client = await redis.createClient();
+    const client = await redis.createClient(6379, "redis");
     const { id } = req.user;
     const { stocks } = req.body;
     const temp = stocks.map((item, i) => {
