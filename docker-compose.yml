@@ -55,13 +55,6 @@ services:
   #   networks:
   #     - api-default
   #   command: ["./shell/wait-for-it.sh", "fresh"]
-  # json-server:
-  #   build: ./json-server
-  #   ports:
-  #     - "5000:3000"
-  #   volumes:
-  #     - ./json-server/db.json:/data/db.json
-  #   command: json-server --watch db.json --host 0.0.0.0
 
 networks:
   api-default:
