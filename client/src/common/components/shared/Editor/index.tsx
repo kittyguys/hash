@@ -59,7 +59,6 @@ const Editor: React.FC<Props> = ({
     setValue(value);
     onChangeCallback();
   };
-  const isDisabled = true;
   return (
     <MainInputForm handleSubmit={handleSubmit}>
       <ReactQuill
@@ -69,7 +68,9 @@ const Editor: React.FC<Props> = ({
         formats={formats}
       />
       <SubmitButtonWrap>
-        <SubmitButton onClick={onClickSubmit} disabled={isDisabled}>送信</SubmitButton>
+        <SubmitButton onClick={onClickSubmit} disabled={!(value.length > 0)}>
+          送信
+        </SubmitButton>
       </SubmitButtonWrap>
     </MainInputForm>
   );
@@ -109,12 +110,11 @@ const SubmitButton = styled.button`
     box-shadow: none;
     background-color: ${Color.Brand[200]};
   }
-  &:disabled{
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24);
+  &:disabled {
+    box-shadow: none;
     background-color: ${Color.Gray};
     cursor: auto;
   }
-
 `;
 
 export default Editor;
