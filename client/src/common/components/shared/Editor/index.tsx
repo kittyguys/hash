@@ -68,7 +68,9 @@ const Editor: React.FC<Props> = ({
         formats={formats}
       />
       <SubmitButtonWrap>
-        <SubmitButton onClick={onClickSubmit}>送信</SubmitButton>
+        <SubmitButton onClick={onClickSubmit} disabled={!(value.length > 0)}>
+          送信
+        </SubmitButton>
       </SubmitButtonWrap>
     </MainInputForm>
   );
@@ -107,6 +109,11 @@ const SubmitButton = styled.button`
   &:active {
     box-shadow: none;
     background-color: ${Color.Brand[200]};
+  }
+  &:disabled {
+    box-shadow: none;
+    background-color: ${Color.Gray};
+    cursor: auto;
   }
 `;
 
