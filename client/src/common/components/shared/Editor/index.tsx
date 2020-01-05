@@ -1,4 +1,4 @@
-import React, { RefObject } from "react";
+import React, { RefObject, useRef, useState } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import styled from "styled-components";
 import Color from "@src/common/constants/color";
@@ -55,20 +55,28 @@ const Editor: React.FC<Props> = ({
   value,
   setValue
 }) => {
+  const reactQuill = useRef<ReactQuill>();
+  const [innerText, setInnerText] = useState("");
   const handleChange = (value: string) => {
     setValue(value);
+    setInnerText(reactQuill.current.getEditor().root.innerText);
     onChangeCallback();
   };
   return (
     <MainInputForm handleSubmit={handleSubmit}>
       <ReactQuill
+        ref={reactQuill}
         value={value}
         onChange={handleChange}
         modules={modules}
         formats={formats}
       />
       <SubmitButtonWrap>
-        <SubmitButton onClick={onClickSubmit} disabled={!(value.length > 0)}>
+        <SubmitButton
+          onClick={onClickSubmit}
+          //quillが謎の改行コードを生成してしまうので以下のコードで対応
+          disabled={/^(|\n)$/.test(innerText)}
+        >
           送信
         </SubmitButton>
       </SubmitButtonWrap>
