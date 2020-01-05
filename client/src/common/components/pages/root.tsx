@@ -50,9 +50,7 @@ const StockNoteCreate: React.FC = () => {
   };
 
   useEffect(() => {
-    if (stocks.length < 1) {
-      dispatch(getStocksAsync());
-    }
+    dispatch(getStocksAsync());
   }, []);
 
   const [editorWrapHeight, setEditorWrapHeight] = useState(121);

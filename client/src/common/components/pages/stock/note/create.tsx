@@ -37,10 +37,9 @@ const StockNoteCreate: React.FC = () => {
 
   const [stockLists, setStockLists] = useState(initialStockLists);
   const [inputValue, setInputValue] = useState("");
-  const [isDiffAfterDrag, setIsDiffAfterDrag] = useState(false);
   const dispatch = useDispatch();
-  const isNoteOpen = useSelector((state: any) => state.stock.isNoteEditing);
   const stocks = useSelector((state: any) => state.stock.stocks);
+  const noteStocks = useSelector((state: any) => state.stock.stocks);
 
   const id2List: {
     [index: string]: string;
@@ -60,6 +59,9 @@ const StockNoteCreate: React.FC = () => {
     }
 
     if (source.droppableId === destination.droppableId) {
+      if (source.index === destination.index) {
+        return;
+      }
       const stocks = reorder(
         getList(source.droppableId),
         source.index,
@@ -71,6 +73,7 @@ const StockNoteCreate: React.FC = () => {
         ...stockLists,
         ...state
       });
+      dispatch(reorderStocksAsync({ noteId: "stocks", stocks: stocks }));
     } else {
       const result = move(
         getList(source.droppableId),
@@ -78,23 +81,18 @@ const StockNoteCreate: React.FC = () => {
         source,
         destination
       );
-
-      setStockLists({
-        stocks: result.droppable,
-        noteStocks: result.droppable2
-      });
+      dispatch(
+        reorderStocksAsync({ noteId: "stocks", stocks: result.droppable2 })
+      );
+      dispatch(
+        reorderStocksAsync({ noteId: "noteStocks", stocks: result.droppable })
+      );
     }
   };
 
   useEffect(() => {
-    if (stocks.length < 1) {
-      dispatch(getStocksAsync());
-    }
-    if (isDiffAfterDrag) {
-      dispatch(reorderStocksAsync(stocks));
-      setIsDiffAfterDrag(false);
-    }
-  }, [isDiffAfterDrag]);
+    dispatch(getStocksAsync());
+  }, []);
 
   const [editorWrapHeight, setEditorWrapHeight] = useState(121);
   const editorWrap = useRef(null);
@@ -122,7 +120,7 @@ const StockNoteCreate: React.FC = () => {
             <StockNote
               noteName="Your Group Name"
               noteID="droppable"
-              stocks={stocks}
+              stocks={noteStocks}
               editorWrapHeight={editorWrapHeight}
               note
             />

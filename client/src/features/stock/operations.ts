@@ -93,14 +93,16 @@ export const reorderStocksAsync = (
 ): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
-    const stocks = data.map((item: any) => {
+    console.log(data.stocks);
+    const stocks = data.stocks.map((item: any) => {
       return item.id;
     });
+    const noteId = stocks.noteId;
     dispatch(reorderStocksRequest());
     axios
       .patch(
         "http://localhost:8080/api/stocks/reorder",
-        { stocks },
+        { noteId: noteId, stocks },
         {
           headers: {
             Authorization: `Bearer ${token}`
