@@ -56,10 +56,22 @@ const Editor: React.FC<Props> = ({
   setValue
 }) => {
   const reactQuill = useRef<ReactQuill>();
-  const [innerText, setInnerText] = useState("");
-  const handleChange = (value: string) => {
+  const [isDisabled, setIsDisabled] = useState(true);
+  const handleChange = (
+    value: string,
+    _delta: any, // ReactQuill で型定義が export されていなかった
+    _source: any,
+    editor: any
+  ) => {
     setValue(value);
-    setInnerText(reactQuill.current.getEditor().root.innerText);
+    setIsDisabled(
+      // 全ての行が空文字の時に true
+      !editor.getContents().ops.some(
+        (op: any) =>
+          // 何も入力していなくても改行コードが挿入されるので以下のコードで対応
+          !/^(|\n*)$/.test(op.insert)
+      )
+    );
     onChangeCallback();
   };
   return (
@@ -72,11 +84,7 @@ const Editor: React.FC<Props> = ({
         formats={formats}
       />
       <SubmitButtonWrap>
-        <SubmitButton
-          onClick={onClickSubmit}
-          //quillが謎の改行コードを生成してしまうので以下のコードで対応
-          disabled={/^(|\n)$/.test(innerText)}
-        >
+        <SubmitButton onClick={onClickSubmit} disabled={isDisabled}>
           送信
         </SubmitButton>
       </SubmitButtonWrap>
