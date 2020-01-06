@@ -71,3 +71,22 @@ export const addStock = async (req, res, next) => {
     next(err);
   }
 };
+
+export const renameNote = async (req, res, next) => {
+  try {
+    const connection = await pool.getConnection();
+    const { note_id } = req.params;
+    const { title } = req.body;
+    const columns = {
+      title
+    };
+    await connection
+      .query("UPDATE notes SET ? where id = ?", [columns, note_id])
+      .catch(err => {
+        next(err);
+      });
+    return res.send(200);
+  } catch (err) {
+    next(err);
+  }
+};
