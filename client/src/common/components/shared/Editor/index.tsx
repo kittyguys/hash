@@ -1,4 +1,4 @@
-import React, { RefObject, useRef, useState } from "react";
+import React, { useState } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import styled from "styled-components";
 import Color from "@src/common/constants/color";
@@ -43,7 +43,6 @@ const formats = [
 type Props = {
   onClickSubmit?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   handleSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
-  onChangeCallback?: () => void;
   value: string;
   setValue: (value: string) => any;
 };
@@ -51,11 +50,9 @@ type Props = {
 const Editor: React.FC<Props> = ({
   onClickSubmit,
   handleSubmit,
-  onChangeCallback,
   value,
   setValue
 }) => {
-  const reactQuill = useRef<ReactQuill>();
   const [isDisabled, setIsDisabled] = useState(true);
   const handleChange = (
     value: string,
@@ -72,12 +69,10 @@ const Editor: React.FC<Props> = ({
           !/^(|\n*)$/.test(op.insert)
       )
     );
-    onChangeCallback();
   };
   return (
     <MainInputForm handleSubmit={handleSubmit}>
       <ReactQuill
-        ref={reactQuill}
         value={value}
         onChange={handleChange}
         modules={modules}

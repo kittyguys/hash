@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import {
@@ -97,13 +97,17 @@ const StockNoteCreate: React.FC = () => {
   }, [isDiffAfterDrag]);
 
   const [editorWrapHeight, setEditorWrapHeight] = useState(121);
-  const editorWrap = useRef(null);
-
-  const heightAdjust = () => {
-    if (editorWrap.current.clientHeight !== null) {
-      setEditorWrapHeight(editorWrap.current.clientHeight);
-    }
-  };
+  const editorWrap = useCallback(
+    node => {
+      if (node !== null) {
+        const _editorWrapHeight = node.getBoundingClientRect().height;
+        if (_editorWrapHeight > 0) {
+          setEditorWrapHeight(_editorWrapHeight);
+        }
+      }
+    },
+    [inputValue]
+  );
 
   return (
     <>
@@ -136,7 +140,6 @@ const StockNoteCreate: React.FC = () => {
             e.preventDefault();
           }}
           handleSubmit={e => e.preventDefault}
-          onChangeCallback={heightAdjust}
           value={inputValue}
           setValue={setInputValue}
         />
