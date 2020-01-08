@@ -63,10 +63,9 @@ const Editor: React.FC<Props> = ({
     setValue(value);
     setIsDisabled(
       // 全ての行が空文字の時に true
-      !editor.getContents().ops.some(
-        (op: any) =>
-          // 何も入力していなくても改行コードが挿入されるので以下のコードで対応
-          !/^(|\n*)$/.test(op.insert)
+      editor.getContents().ops.every((op: any) =>
+        // 何も入力していなくても改行コードが挿入されるので以下のコードで対応
+        /^(|\n*)$/.test(op.insert)
       )
     );
   };
