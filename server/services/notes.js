@@ -50,25 +50,45 @@ export const createNote = async (req, res, next) => {
 };
 
 export const addStock = async (req, res, next) => {
+  let connection;
   try {
-    const connection = await pool.getConnection();
+    connection = await pool.getConnection();
+    await connection.beginTransaction();
     const { note_id } = req.params;
     const { stock_id } = req.body;
     const query = {
       note_id,
       stock_id
     };
-    await connection
+    const rows = await connection
       .query("INSERT INTO notes_stocks SET ?", query)
+      .then(data => {
+        console.log(data);
+
+        return data[0];
+      })
+      .catch(err => {
+        throw err;
+      });
+
+    await connection
+      .query("UPDATE notes_stocks SET stock_order = ? WHERE stock_id = ?", [
+        rows.insertId,
+        stock_id
+      ])
       .then(data => {
         return data[0];
       })
       .catch(err => {
         throw err;
       });
-    return res.send(200);
+    await connection.commit();
+    return res.sendStatus(200);
   } catch (err) {
+    await connection.rollback();
     next(err);
+  } finally {
+    connection.release();
   }
 };
 
@@ -85,8 +105,49 @@ export const renameNote = async (req, res, next) => {
       .catch(err => {
         next(err);
       });
-    return res.send(200);
+    return res.sendStatus(200);
   } catch (err) {
     next(err);
+  }
+};
+
+export const reorderStocks = async (req, res, next) => {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+    const client = await redis.createClient(6379, "redis");
+    const { id } = req.user;
+    const { stocks } = req.body;
+    const temp = stocks.map((item, i) => {
+      return [i, item];
+    });
+    const values = temp.flat();
+    values.unshift("uid" + id);
+
+    client.zadd(values, function(err, response) {
+      if (err) throw err;
+    });
+
+    var args1 = ["uid" + id, 0, -1];
+    const result = await client.zrangeAsync(args1).then(value => {
+      return value;
+    });
+    for (let i = 0; i < result.length; i++) {
+      const updatedStock = await connection
+        .query("UPDATE stocks SET stock_order = ? WHERE id = ?", [i, result[i]])
+        .then(data => {
+          return data[0];
+        })
+        .catch(err => {
+          throw err;
+        });
+    }
+
+    res.json({ status: "ok" });
+  } catch (err) {
+    await connection.rollback();
+    next(err);
+  } finally {
+    connection.release();
   }
 };
