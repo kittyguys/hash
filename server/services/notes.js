@@ -1,4 +1,5 @@
 import pool from "../configs/mysql";
+import redis from "redis";
 
 export const getNote = async (req, res, next) => {
   try {
@@ -63,14 +64,11 @@ export const addStock = async (req, res, next) => {
     const rows = await connection
       .query("INSERT INTO notes_stocks SET ?", query)
       .then(data => {
-        console.log(data);
-
         return data[0];
       })
       .catch(err => {
         throw err;
       });
-
     await connection
       .query("UPDATE notes_stocks SET stock_order = ? WHERE stock_id = ?", [
         rows.insertId,
@@ -117,24 +115,30 @@ export const reorderStocks = async (req, res, next) => {
     connection = await pool.getConnection();
     const client = await redis.createClient(6379, "redis");
     const { id } = req.user;
+    const { note_id } = req.params;
     const { stocks } = req.body;
     const temp = stocks.map((item, i) => {
       return [i, item];
     });
     const values = temp.flat();
-    values.unshift("uid" + id);
+    const key = "uid" + id + "notes" + note_id;
+    values.unshift(key);
 
     client.zadd(values, function(err, response) {
       if (err) throw err;
     });
 
-    var args1 = ["uid" + id, 0, -1];
-    const result = await client.zrangeAsync(args1).then(value => {
+    const q = [key, 0, -1];
+    const result = await client.zrangeAsync(q).then(value => {
       return value;
     });
+
     for (let i = 0; i < result.length; i++) {
-      const updatedStock = await connection
-        .query("UPDATE stocks SET stock_order = ? WHERE id = ?", [i, result[i]])
+      await connection
+        .query("UPDATE notes_stocks SET stock_order = ? WHERE stock_id = ?", [
+          i,
+          result[i]
+        ])
         .then(data => {
           return data[0];
         })
@@ -143,7 +147,7 @@ export const reorderStocks = async (req, res, next) => {
         });
     }
 
-    res.json({ status: "ok" });
+    res.sendStatus(200);
   } catch (err) {
     await connection.rollback();
     next(err);
