@@ -108,8 +108,9 @@ export const reorderStock = async (req, res, next) => {
     const result = await client.zrangeAsync(args1).then(value => {
       return value;
     });
+
     for (let i = 0; i < result.length; i++) {
-      const updatedStock = await connection
+      await connection
         .query("UPDATE stocks SET stock_order = ? WHERE id = ?", [i, result[i]])
         .then(data => {
           return data[0];
@@ -119,7 +120,7 @@ export const reorderStock = async (req, res, next) => {
         });
     }
 
-    res.json({ status: "ok" });
+    res.sendStatus(200);
   } catch (err) {
     await connection.rollback();
     next(err);

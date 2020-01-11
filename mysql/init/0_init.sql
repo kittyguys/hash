@@ -26,3 +26,24 @@ IF NOT EXISTS hachet.stocks
   created_at datetime default current_timestamp,
   updated_at timestamp default current_timestamp on update current_timestamp
 );
+
+CREATE TABLE
+IF NOT EXISTS hachet.notes
+(
+  id int PRIMARY KEY AUTO_INCREMENT,
+  user_id int NOT NULL,
+  title varchar(50) NOT NULL,
+  created_at datetime default current_timestamp,
+  updated_at timestamp default current_timestamp on update current_timestamp
+);
+
+CREATE TABLE
+IF NOT EXISTS hachet.notes_stocks
+(
+  id int PRIMARY KEY AUTO_INCREMENT,
+  note_id int NOT NULL,
+  stock_id int NOT NULL,
+  stock_order int,
+  created_at datetime default current_timestamp,
+  updated_at timestamp default current_timestamp on update current_timestamp
+);
