@@ -116,3 +116,4 @@ api/config/config.yaml
 
 env/
 server/configs/aws.js
+server/configs/mysql.js
