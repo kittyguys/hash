@@ -1,4 +1,4 @@
-import { Stock, Stocks } from "./types";
+import { Stock } from "./types";
 
 export const TOGGLE_NOTE = "stocks/toggleNoteComponent";
 export const GET_STOCKS_REQUEST = "stocks/get/REQUEST";
