@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import Color from "@src/common/constants/color";
 
 const GlobalStyle = createGlobalStyle`
 /*
@@ -141,6 +142,74 @@ Twitter: @rich_clark
     p {
       font-size: 1.6rem;
     }
+    ul {
+      padding-left:0;
+    }
+    strong{
+      font-weight: bold;
+    }
+    blockquote {
+      position: relative;
+      padding-left: 16px;
+    }
+    em {
+      font-style: italic;
+    }
+    ol {
+      counter-reset: item;
+      list-style-type: none;
+    }
+
+    /* ol ol {
+      padding-left: 1em;
+    } */
+
+    ol li {
+      text-indent: -1.3em;
+      padding-left: 1.3em;
+    }
+
+    ol li ::before {
+      counter-increment:item;
+      content: counters(item);
+      padding-right: 0.5em;
+      font-weight: bold;
+    }
+  }
+
+  .ql-snow .ql-editor pre.ql-syntax, pre {
+    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
+    font-family: Monaco,Menlo,Consolas,Courier New,monospace!important;
+    font-size: 12px;
+    line-height: 1.50001;
+    font-variant-ligatures: none;
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: normal;
+    -webkit-tab-size: 4;
+    -moz-tab-size: 4;
+    tab-size: 4;
+}
+
+  .ql-snow .ql-editor pre.ql-syntax {
+    padding: 2px 3px 1px;
+    border: 1px solid var(--saf-0);
+    border-radius: 3px;
+    background-color: rgba(var(--sk_foreground_min,29,28,29),.04);
+    color: #e01e5a;
+    width: fit-content;
+  } 
+
+  .ql-snow .ql-picker-options{
+    background-color: #fff;
+    min-width: 100%;
+    display:none;
+    padding: 4px 8px;
+    position: absolute;
+    top: 0;
+    transform: translate(0, -100%);
+    white-space: nowrap;
   }
 `;
 
