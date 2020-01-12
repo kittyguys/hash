@@ -1,7 +1,6 @@
 export type State = {
-  isNoteEditing: boolean;
-  isDrawerOpen: boolean;
-  stocks: [];
+  notes: [];
+  note: any;
 };
 
 export type Action = {
@@ -16,4 +15,8 @@ export type FormData = {
 export type Stock = {
   id: number;
   content: string;
+};
+
+export type Note = {
+  stocks: Stock[];
 };

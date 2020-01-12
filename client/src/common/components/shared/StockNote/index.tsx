@@ -15,7 +15,7 @@ type Props = {
   note?: boolean;
 };
 
-type Stock = { id: string; content: string };
+type Stock = { id: string; content: string; created_at: Date | string };
 
 const StockNote: React.FC<Props> = ({
   stocks,
@@ -88,12 +88,15 @@ const StockNote: React.FC<Props> = ({
         {provided => {
           return (
             <div className="scrollArea" ref={scrollArea}>
-              <div ref={provided.innerRef} {...provided.droppableProps}>
+              <DroppableInner
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
                 <div ref={scrolledArea}>
                   <StockList stocks={stocks} note={note} />
                   {provided.placeholder}
                 </div>
-              </div>
+              </DroppableInner>
             </div>
           );
         }}
@@ -110,6 +113,10 @@ const NoteName = styled.h2`
   font-weight: bold;
   font-size: 2rem;
   margin: 0 24px;
+`;
+
+const DroppableInner = styled.div`
+  height: 100%;
 `;
 
 const IconDrawerOpen = styled(BaseIconDrawerOpen)`

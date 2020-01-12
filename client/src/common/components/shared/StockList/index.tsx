@@ -3,7 +3,7 @@ import styled from "styled-components";
 import StockCassette from "../StockCassette";
 
 // TODO 型定義を types ファイルにまとめたい
-type Stock = { id: string; content: string };
+type Stock = { id: string; content: string; created_at: Date | string };
 
 type Props = {
   stocks: Stock[];

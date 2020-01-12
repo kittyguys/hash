@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import dynamic from "next/dynamic";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import {
@@ -149,14 +149,18 @@ const Stock: NextPage<Props> = () => {
     dispatch(getStocksAsync());
   }, []);
 
-  const [editorWrapHeight, setMainInputWrapHeight] = useState(121);
-  const editorWrap = useRef(null);
-
-  const heightAdjust = () => {
-    if (editorWrap.current.clientHeight !== null) {
-      setMainInputWrapHeight(editorWrap.current.clientHeight);
-    }
-  };
+  const [editorWrapHeight, setEditorWrapHeight] = useState(121);
+  const editorWrap = useCallback(
+    node => {
+      if (node !== null) {
+        const _editorWrapHeight = node.getBoundingClientRect().height;
+        if (_editorWrapHeight > 0) {
+          setEditorWrapHeight(_editorWrapHeight);
+        }
+      }
+    },
+    [inputValue]
+  );
 
   const onSubmit = (e: any) => {
     const data = { content: inputValue };
@@ -197,7 +201,6 @@ const Stock: NextPage<Props> = () => {
       <div ref={editorWrap}>
         <Editor
           handleSubmit={onSubmit}
-          onChangeCallback={heightAdjust}
           value={inputValue}
           setValue={setInputValue}
         />
