@@ -28,7 +28,7 @@ const modules = {
       },
       arrowdown: {
         format: ["code-block"],
-        key: 40,
+        key: 13,
         handler: function(range: any, context: any) {
           //code-block内で↓が効かない
           var delta = this.quill.getContents();
