@@ -178,11 +178,7 @@ Twitter: @rich_clark
   }
 
   .ql-snow .ql-editor code{
-    padding:8px;
-    width:200px;
-  }
-
-  .ql-snow .ql-editor pre.ql-syntax, pre {
+    padding:2px;
     --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
     font-family: Monaco,Menlo,Consolas,Courier New,monospace!important;
     font-size: 12px;
@@ -195,15 +191,16 @@ Twitter: @rich_clark
     -webkit-tab-size: 4;
     -moz-tab-size: 4;
     tab-size: 4;
-}
+    color:rgb(224, 30, 90);
+    border: solid 1px #d8d6d6;
+  }
 
   .ql-snow .ql-editor pre.ql-syntax {
-    padding: 2px 3px 1px;
-    border: 1px solid var(--saf-0);
+    padding: 8px 8px 8px;
+    border: solid 1px #d8d6d6;
     border-radius: 3px;
-    background-color: rgba(var(--sk_foreground_min,29,28,29),.04);
-    color: #e01e5a;
-    width: fit-content;
+    background-color: rgba(var(--sk_foreground_min,29,28,29),.06);
+    color: #000;
   } 
 
   .ql-snow .ql-picker-options{

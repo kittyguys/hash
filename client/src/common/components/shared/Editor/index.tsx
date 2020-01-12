@@ -4,20 +4,44 @@ import ReactQuill, { Quill } from "react-quill";
 import styled from "styled-components";
 import Color from "@src/common/constants/color";
 import BaseMainInputForm from "@src/common/components/shared/StockInput";
-import { IoMdCodeWorking } from "react-icons/io";
+import { IoMdCodeWorking, IoMdCode } from "react-icons/io";
 
 // QuillEditorでMarkdownを使えるようにするモジュール
 const MarkdownShortcuts = require("quill-markdown-shortcuts");
 Quill.register("modules/markdownShortcuts", MarkdownShortcuts);
 
 const icons = Quill.import("ui/icons");
-icons["code"] = ReactDomServer.renderToString(<IoMdCodeWorking size="20px" />);
-
-console.log(icons);
+icons["code-block"] = ReactDomServer.renderToString(
+  <IoMdCodeWorking size="20px" />
+);
+icons["code"] = ReactDomServer.renderToString(<IoMdCode size="20px" />);
 
 const modules = {
-  toolbar: [
-    [
+  keyboard: {
+    bindings: {
+      custom: {
+        format: ["code"],
+        key: 39,
+        handler: function(range: any, context: any) {
+          this.quill.format("code", false);
+        }
+      },
+      arrowdown: {
+        format: ["code-block"],
+        key: 40,
+        handler: function(range: any, context: any) {
+          this.quill.format("code-block", true);
+          var text = this.quill.getText(0, 10);
+          this.quill.insertText(text.length, "\n");
+          //今のままだと一度抜けて、再度code-blockに入って抜けるとバグる(true,falseの関係で)
+          //今のままだとなんども改行を作りだすので×
+          this.quill.format("code-block", false);
+        }
+      }
+    }
+  },
+  toolbar: {
+    container: [
       { header: [1, 2, 3, 4, 5, 6] },
       "bold",
       "italic",
@@ -29,7 +53,7 @@ const modules = {
       { list: "ordered" },
       { list: "bullet" }
     ]
-  ],
+  },
   markdownShortcuts: {}
 };
 
