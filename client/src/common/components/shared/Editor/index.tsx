@@ -1,12 +1,19 @@
 import React, { RefObject, useRef, useState } from "react";
+import ReactDomServer from "react-dom/server";
 import ReactQuill, { Quill } from "react-quill";
 import styled from "styled-components";
 import Color from "@src/common/constants/color";
 import BaseMainInputForm from "@src/common/components/shared/StockInput";
+import { IoMdCodeWorking } from "react-icons/io";
 
 // QuillEditorでMarkdownを使えるようにするモジュール
 const MarkdownShortcuts = require("quill-markdown-shortcuts");
 Quill.register("modules/markdownShortcuts", MarkdownShortcuts);
+
+const icons = Quill.import("ui/icons");
+icons["code"] = ReactDomServer.renderToString(<IoMdCodeWorking size="20px" />);
+
+console.log(icons);
 
 const modules = {
   toolbar: [
@@ -18,6 +25,7 @@ const modules = {
       "strike",
       "blockquote",
       "code-block",
+      "code",
       { list: "ordered" },
       { list: "bullet" }
     ]
@@ -37,7 +45,8 @@ const formats = [
   "indent",
   "link",
   "image",
-  "code-block"
+  "code-block",
+  "code"
 ];
 
 type Props = {

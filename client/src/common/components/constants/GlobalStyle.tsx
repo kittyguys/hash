@@ -174,7 +174,12 @@ Twitter: @rich_clark
       content: counters(item);
       padding-right: 0.5em;
       font-weight: bold;
-    }
+    }   
+  }
+
+  .ql-snow .ql-editor code{
+    padding:8px;
+    width:200px;
   }
 
   .ql-snow .ql-editor pre.ql-syntax, pre {
