@@ -160,9 +160,9 @@ Twitter: @rich_clark
       list-style-type: none;
     }
 
-    /* ol ol {
+    ol ol {
       padding-left: 1em;
-    } */
+    }
 
     ol li {
       text-indent: -1.3em;
