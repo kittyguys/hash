@@ -22,6 +22,28 @@ const Drawer: FC<Props> = ({}) => {
           }}
         />
       </Title>
+      <DrawerWrapper>
+        <DrawerItems isCurrent={true}>
+          <Anchor>
+            <Span>#</Span>general
+          </Anchor>
+        </DrawerItems>
+        <DrawerItems isCurrent={false}>
+          <Anchor>
+            <Span>#</Span>yasuda thread
+          </Anchor>
+        </DrawerItems>
+        <DrawerItems isCurrent={false}>
+          <Anchor>
+            <Span>#</Span>karube thread
+          </Anchor>
+        </DrawerItems>
+        <DrawerItems isCurrent={false}>
+          <Anchor>
+            <Span>#</Span>tokunaga thread
+          </Anchor>
+        </DrawerItems>
+      </DrawerWrapper>
     </Root>
   );
 };
@@ -63,6 +85,28 @@ const IconDrawerClose = styled(BaseIconDrawerClose)`
     transform: scale(0.92);
     transition: 0.04s ease;
   }
+`;
+
+const DrawerWrapper = styled.ul`
+  margin-top: 16px;
+  list-style: none;
+`;
+
+const DrawerItems = styled.li<{ isCurrent: Boolean }>`
+  line-height: 1.4;
+  background-color: ${({ isCurrent }) => (isCurrent ? `aqua` : ``)};
+`;
+
+const Span = styled.span`
+  padding-right: 8px;
+`;
+
+const Anchor = styled.a`
+  font-size: 2rem;
+  font-weight: 100;
+  display: block;
+  padding: 2px 24px;
+  text-decoration: inherit;
 `;
 
 export default Drawer;
