@@ -30,12 +30,14 @@ const modules = {
         format: ["code-block"],
         key: 40,
         handler: function(range: any, context: any) {
-          this.quill.format("code-block", true);
-          var text = this.quill.getText(0, 10);
-          this.quill.insertText(text.length, "\n");
-          //今のままだと一度抜けて、再度code-blockに入って抜けるとバグる(true,falseの関係で)
-          //今のままだとなんども改行を作りだすので×
-          this.quill.format("code-block", false);
+          //code-block内で↓が効かない
+          var delta = this.quill.getContents();
+          if (this.quill.root.innerHTML.indexOf("<p><br></p>") === -1) {
+            var newLine = `<p><br/></p>`;
+            var result = this.quill.root.innerHTML + newLine;
+            this.quill.format("code-block", true);
+            this.quill.root.innerHTML = result;
+          }
         }
       }
     }
