@@ -1,4 +1,4 @@
-import React, { RefObject, useRef, useState } from "react";
+import React, { useState } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import styled from "styled-components";
 import Color from "@src/common/constants/color";
@@ -43,7 +43,6 @@ const formats = [
 type Props = {
   onClickSubmit?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   handleSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
-  onChangeCallback?: () => void;
   value: string;
   setValue: (value: string) => any;
 };
@@ -51,32 +50,35 @@ type Props = {
 const Editor: React.FC<Props> = ({
   onClickSubmit,
   handleSubmit,
-  onChangeCallback,
   value,
   setValue
 }) => {
-  const reactQuill = useRef<ReactQuill>();
-  const [innerText, setInnerText] = useState("");
-  const handleChange = (value: string) => {
+  const [isDisabled, setIsDisabled] = useState(true);
+  const handleChange = (
+    value: string,
+    _delta: any, // ReactQuill で型定義が export されていなかった
+    _source: any,
+    editor: any
+  ) => {
     setValue(value);
-    setInnerText(reactQuill.current.getEditor().root.innerText);
-    onChangeCallback();
+    setIsDisabled(
+      // 全ての行が空文字の時に true
+      editor.getContents().ops.every((op: any) =>
+        // 何も入力していなくても改行コードが挿入されるので以下のコードで対応
+        /^(|\n*)$/.test(op.insert)
+      )
+    );
   };
   return (
     <MainInputForm handleSubmit={handleSubmit}>
       <ReactQuill
-        ref={reactQuill}
         value={value}
         onChange={handleChange}
         modules={modules}
         formats={formats}
       />
       <SubmitButtonWrap>
-        <SubmitButton
-          onClick={onClickSubmit}
-          //quillが謎の改行コードを生成してしまうので以下のコードで対応
-          disabled={/^(|\n)$/.test(innerText)}
-        >
+        <SubmitButton onClick={onClickSubmit} disabled={isDisabled}>
           送信
         </SubmitButton>
       </SubmitButtonWrap>
