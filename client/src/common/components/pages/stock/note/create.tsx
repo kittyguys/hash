@@ -16,6 +16,7 @@ import {
   createStockAsync,
   reorderStocksAsync
 } from "@src/features/stock/operations";
+import { getNoteAsync, createNoteAsync } from "@src/features/notes/operations";
 import Drawer from "./_drawer";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
@@ -24,11 +25,13 @@ const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
 
 // TODO Redux データの配列を map する予定
 const initialStockLists: StockLists = {
-  stocks: Array.from({ length: 10 }, (v, k) => k).map(k => ({
-    id: `id-${k}`,
-    content: `Stock ${k}`
-  })),
+  stocks: [],
   noteStocks: []
+  // noteStocks: Array.from({ length: 10 }, (v, k) => k).map(k => ({
+  //   id: `id-${k}`,
+  //   content: `Stock ${k}`,
+  //   created_at: new Date()
+  // }))
 };
 
 const StockNoteCreate: React.FC = () => {
@@ -37,16 +40,14 @@ const StockNoteCreate: React.FC = () => {
 
   const [stockLists, setStockLists] = useState(initialStockLists);
   const [inputValue, setInputValue] = useState("");
-  const [isDiffAfterDrag, setIsDiffAfterDrag] = useState(false);
   const dispatch = useDispatch();
-  const isNoteOpen = useSelector((state: any) => state.stock.isNoteEditing);
   const stocks = useSelector((state: any) => state.stock.stocks);
 
   const id2List: {
     [index: string]: string;
   } = {
-    droppable: "stocks",
-    droppable2: "noteStocks"
+    droppable2: "stocks",
+    droppable: "noteStocks"
   };
 
   const getList = (id: string) => stockLists[id2List[id]];
@@ -54,12 +55,14 @@ const StockNoteCreate: React.FC = () => {
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
 
-    // dropped outside the list
     if (!destination) {
       return;
     }
 
     if (source.droppableId === destination.droppableId) {
+      if (result.destination.index === result.source.index) {
+        return;
+      }
       const stocks = reorder(
         getList(source.droppableId),
         source.index,
@@ -72,16 +75,18 @@ const StockNoteCreate: React.FC = () => {
         ...state
       });
     } else {
-      const result = move(
-        getList(source.droppableId),
-        getList(destination.droppableId),
-        source,
-        destination
-      );
+      const preDroppedStocks = getList(destination.droppableId);
+      if (preDroppedStocks.length < 1) {
+        dispatch(createNoteAsync("untitled"));
+      }
+      const result = move(stocks, preDroppedStocks, source, destination);
+      console.log(stocks[source.index].content);
+
+      // dispatch(createStockAsync({ content: "" }));
 
       setStockLists({
-        stocks: result.droppable,
-        noteStocks: result.droppable2
+        stocks: stocks,
+        noteStocks: result.droppable
       });
     }
   };
@@ -90,11 +95,7 @@ const StockNoteCreate: React.FC = () => {
     if (stocks.length < 1) {
       dispatch(getStocksAsync());
     }
-    if (isDiffAfterDrag) {
-      dispatch(reorderStocksAsync(stocks));
-      setIsDiffAfterDrag(false);
-    }
-  }, [isDiffAfterDrag]);
+  }, []);
 
   const [editorWrapHeight, setEditorWrapHeight] = useState(121);
   const editorWrap = useCallback(
@@ -126,7 +127,7 @@ const StockNoteCreate: React.FC = () => {
             <StockNote
               noteName="Your Group Name"
               noteID="droppable"
-              stocks={stocks}
+              stocks={stockLists.noteStocks}
               editorWrapHeight={editorWrapHeight}
               note
             />
