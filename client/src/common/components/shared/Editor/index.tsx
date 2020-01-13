@@ -28,11 +28,9 @@ const modules = {
       },
       arrowdown: {
         format: ["code-block"],
-        key: 13,
+        key: 40,
         handler: function(range: any, context: any) {
-          console.log(this.quill.root.innerHTML);
-
-          if (this.quill.root.innerHTML.substr(-3, 3) !== "</p>") {
+          if (this.quill.root.innerHTML.substr(-4, 4) !== "</p>") {
             var newLine = `<p><br/></p>`;
             var result = this.quill.root.innerHTML + newLine;
             this.quill.format("code-block", true);
