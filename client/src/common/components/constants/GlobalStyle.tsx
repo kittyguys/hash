@@ -120,86 +120,92 @@ Twitter: @rich_clark
     overscroll-behavior: none;
     color: #555;
   }
+
   a, button, input[type="submit"] {
     cursor: pointer;
   }
+
   .quill {
     width: 100%;
     height: 100%;
   }
+
   .ql-toolbar {
     background-color: #eee;
     border-radius: 4px 4px 0 0;
   }
+
   .ql-container {
     border-radius: 0 0 4px 4px;
     padding: 12px 16px;
   }
+
   .ql-editor {
     background: none;
     padding: 0;
-    max-height: 24rem;
-    p {
-      font-size: 1.6rem;
-    }
-    ul {
-      padding-left:0;
-    }
-    strong{
-      font-weight: bold;
-    }
-    blockquote {
-      position: relative;
-      padding-left: 16px;
-    }
-    em {
-      font-style: italic;
-    }
-    ol {
-      counter-reset: item;
-      list-style-type: none;
-    }
-
-    ol ol {
-      padding-left: 1em;
-    }
-
-    ol li {
-      text-indent: -1.3em;
-      padding-left: 1.3em;
-    }
-
-    ol li ::before {
-      counter-increment:item;
-      content: counters(item);
-      padding-right: 0.5em;
-      font-weight: bold;
-    }   
+    max-height: 24rem; 
   }
 
+  .ql-editor p {
+    font-size: 1.6rem;
+  }
+
+  .ql-editor ul {
+    padding-left: 0;
+  }
+
+  .ql-editor strong{
+    font-weight: bold;
+  }
+
+  .ql-editor blockquote {
+    position: relative;
+    padding-left: 16px;
+  }
+
+  .ql-editor　em {
+    font-style: italic;
+   }
+
+  .ql-editor　ol {
+    counter-reset: item;
+    list-style-type: none;
+  }
+  
+  .ql-editor　ol ol {
+    padding-left: 1em;
+ }
+
+  .ql-editor　ol li {
+    text-indent: -1.3em;
+    padding-left: 1.3em;
+  }
+
+  .ql-editor　ol li ::before {
+    counter-increment:item;
+    content: counters(item);
+    padding-right: 0.5em;
+    font-weight: bold;
+  }  
+
   .ql-snow .ql-editor code{
-    padding:2px;
-    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
+    padding: 2px;
     font-family: Monaco,Menlo,Consolas,Courier New,monospace!important;
-    font-size: 12px;
-    line-height: 1.50001;
-    font-variant-ligatures: none;
-    white-space: pre;
+    font-size: 1.2rem;
+    line-height: 1.5;
     white-space: pre-wrap;
     word-wrap: break-word;
     word-break: normal;
-    -webkit-tab-size: 4;
-    -moz-tab-size: 4;
     tab-size: 4;
-    color:rgb(224, 30, 90);
+    color: rgb(224, 30, 90);
     border: solid 1px #d8d6d6;
   }
 
   .ql-snow .ql-editor pre.ql-syntax {
-    padding: 8px 8px 8px;
+    padding: 8px;
     border: solid 1px #d8d6d6;
     border-radius: 3px;
-    background-color: rgba(var(--sk_foreground_min,29,28,29),.06);
+    background-color: rgba(29,28,29,0.06);
     color: #000;
   } 
 

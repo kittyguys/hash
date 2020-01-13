@@ -30,9 +30,9 @@ const modules = {
         format: ["code-block"],
         key: 13,
         handler: function(range: any, context: any) {
-          //code-block内で↓が効かない
-          var delta = this.quill.getContents();
-          if (this.quill.root.innerHTML.indexOf("<p><br></p>") === -1) {
+          console.log(this.quill.root.innerHTML);
+
+          if (this.quill.root.innerHTML.substr(-3, 3) !== "</p>") {
             var newLine = `<p><br/></p>`;
             var result = this.quill.root.innerHTML + newLine;
             this.quill.format("code-block", true);
