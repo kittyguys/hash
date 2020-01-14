@@ -19,25 +19,55 @@ icons["code"] = ReactDomServer.renderToString(<IoMdCode size="20px" />);
 const modules = {
   keyboard: {
     bindings: {
-      custom: {
+      exitCode: {
         format: ["code"],
-        key: 39,
-        handler: function(range: any, context: any) {
+        key: 39, // →キー
+        handler: function(_range: any, context: any) {
+          if (context.suffix !== "") {
+            return true;
+          }
           this.quill.format("code", false);
+          const cursorPosition = this.quill.getSelection().index;
+          if (
+            /./.test(this.quill.getText(cursorPosition, cursorPosition + 2))
+          ) {
+            return true;
+          }
+          this.quill.insertText(cursorPosition, " ");
         }
       },
-      arrowdown: {
+      exitCodeBlockUpward: {
         format: ["code-block"],
-        key: 13,
-        handler: function(range: any, context: any) {
-          //code-block内で↓が効かない
-          var delta = this.quill.getContents();
-          if (this.quill.root.innerHTML.indexOf("<p><br></p>") === -1) {
-            var newLine = `<p><br/></p>`;
-            var result = this.quill.root.innerHTML + newLine;
-            this.quill.format("code-block", true);
-            this.quill.root.innerHTML = result;
+        key: 38, // ↑キー
+        handler: function(_range: any, context: any) {
+          if (!/^(|\n)$/.test(context.prefix)) {
+            return true;
           }
+          const cursorPosition = this.quill.getSelection().index;
+          if (cursorPosition === 0) {
+            this.quill.setContents([
+              { insert: "\n" },
+              ...this.quill.getContents().ops
+            ]);
+          }
+          return true;
+        }
+      },
+      exitCodeBlockDownward: {
+        format: ["code-block"],
+        key: 40, // ↓キー
+        handler: function(_range: any, context: any) {
+          if (!/^(|\n)$/.test(context.suffix)) {
+            return true;
+          }
+          const cursorPosition = this.quill.getSelection().index;
+          if (
+            this.quill.getLine(cursorPosition + 1)[0].statics.name ===
+            "SyntaxCodeBlock"
+          ) {
+            this.quill.insertText(cursorPosition + 1, "\n");
+          }
+          return true;
         }
       }
     }
