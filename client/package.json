@@ -14,7 +14,7 @@
     "date-fns": "^2.8.1",
     "deep-object-diff": "^1.1.0",
     "formik": "^2.0.7",
-    "immer": "^5.0.0",
+    "immer": "^8.0.1",
     "js-cookie": "^2.2.1",
     "jwt-decode": "^2.2.0",
     "marked": "^0.7.0",
